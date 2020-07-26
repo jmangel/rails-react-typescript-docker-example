@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './App.css';
+import scalesForChord from './ChordMapper'
 
 const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://backend.localhost';
 
@@ -14,6 +15,11 @@ const fetchContent = async (updateContent: (content: string) => void) => {
   updateContent(data.content);
 };
 
+const chords = [
+  ['A', '-'],
+  ['A', '^'],
+]
+
 const App: React.FC = () => {
   const [content, updateContent] = React.useState('Waiting for a response from Rails...');
 
@@ -27,6 +33,14 @@ const App: React.FC = () => {
         <p>
           {content}
         </p>
+        {
+          chords.map((chord) => (
+            <Fragment>
+              <h3>{chord}</h3>
+              {scalesForChord(chord[0], chord[1]).map((array) => {return <p>{array.join(',')}</p>})}
+            </Fragment>
+          ))
+        }
       </header>
     </div>
   );
