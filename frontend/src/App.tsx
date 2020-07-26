@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import './App.css';
-import scalesForChord from './ChordMapper'
+import scalesForChord, { NamedScale } from './ChordMapper'
 
 const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://backend.localhost';
 
@@ -36,8 +36,10 @@ const App: React.FC = () => {
         {
           chords.map((chord) => (
             <Fragment>
-              <h3>{chord}</h3>
-              {scalesForChord(chord[0], chord[1]).map((array) => {return <p>{array.join(',')}</p>})}
+              <h4>{chord}</h4>
+              {scalesForChord(chord[0], chord[1]).map((namedScale: NamedScale) => {return (
+                <p>{chord} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}</p>
+              )})}
             </Fragment>
           ))
         }
