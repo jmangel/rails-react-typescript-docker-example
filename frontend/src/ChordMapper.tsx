@@ -23,6 +23,16 @@ const NAMED_NOTES = [
   'G',
 ]
 
+const NOTE_SEMITONES = {
+  'A': 2,
+  'B': 2,
+  'C': 1,
+  'D': 2,
+  'E': 2,
+  'F': 1,
+  'G': 2,
+}
+
 interface Interval {
   degree: number;
   quality: string;
@@ -401,7 +411,11 @@ const enharmonicNoteIndex = (note: string, enharmonicNotes: Array<Array<string>>
   return enharmonicNotes.findIndex((enharmonics: Array<string>): boolean => enharmonics.includes(note));
 }
 
-const scalesForChord = (chordNote: string, chordQuality: string): Array<Array<string>> => {
+export interface NamedScale {
+  scaleName: string;
+  scaleNotes: Array<string>;
+}
+const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedScale> => {
   const chordNoteIndex = enharmonicNoteIndex(chordNote, CHROMATIC_NOTES)
   const rotatedChromaticNotes = arrayRotate(CHROMATIC_NOTES, chordNoteIndex)
 
@@ -410,12 +424,12 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<Array<st
 
   const possibleModes = CHORD_MAPPINGS.find((chord: ChordMapping) => chord.quality == chordQuality)?.possibleModes || []
 
-  return possibleModes.map((possibleMode: {name: string, offset: number}) => {
+  return possibleModes.map((possibleMode: {name: string, offset: number}): NamedScale => {
     const mode = MODES.find((mode: Mode) => mode.name == possibleMode.name);
-    if (mode == undefined) return [];
+    if (mode == undefined) throw new Error('mode not found');
 
     const primaryScale = PRIMARY_SCALES.find((scale: Scale) => scale.name == mode.relatedScale.name)
-    if (primaryScale == undefined) return [];
+    if (primaryScale == undefined) throw new Error('primaryScale not found');
 
     const startingDegree = mode.relatedScale.startingDegree
 
@@ -436,20 +450,28 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<Array<st
 
     startingSemitones = modeIntervalsSemitones[0]
 
-    // const scaleNotes: Array<string> = []
-    return rotatedNamedNotes.map((namedNote, index) => {
-      const desiredSemitones = modeIntervalsSemitones[index]
-      console.log('desiredSemitones')
-      console.log(desiredSemitones)
+    let previousSharps = 0
+    let cumulativeSemitones = 0
+    return {
+      scaleName: possibleMode.name,
+      scaleNotes: rotatedNamedNotes.map((namedNote: 'A'|'B'|'C'|'D'|'E'|'F'|'G', index) => {
+        if (index == 0) {
+          previousSharps = (chordNote.split('#').length - chordNote.split('b').length)
+          return chordNote;
+        }
 
-      const enharmonicNote = rotatedChromaticNotes[desiredSemitones]
+        const desiredSemitones = modeIntervalsSemitones[index]
 
-      console.log('enharmonicNote')
-      console.log(enharmonicNote)
+        const naturalSemitones = NOTE_SEMITONES[namedNote];
 
-      return (enharmonicNote.find((noteName: string): boolean => noteName.includes(namedNote)))
-    })
-    // return scaleNotes;
+        previousSharps = previousSharps + (desiredSemitones - (cumulativeSemitones + naturalSemitones))
+        cumulativeSemitones = desiredSemitones
+
+        let accidental: string = (previousSharps < 0) ? 'b' : '#'
+        let accidentals: number = Math.abs(previousSharps)
+        return namedNote.concat(accidental.repeat(accidentals))
+      })
+    }
   })
 }
 
