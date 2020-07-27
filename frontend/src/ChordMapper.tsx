@@ -499,10 +499,15 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
     let previousSharps = 0
     let cumulativeSemitones = 0
 
-    const scaleNotes = rotatedNamedNotes.map((namedNote: 'A'|'B'|'C'|'D'|'E'|'F'|'G', index) => {
+    let index = 0
+    let scaleNotes: Array<string> = []
+    rotatedNamedNotes.forEach((namedNote: 'A'|'B'|'C'|'D'|'E'|'F'|'G') => {
       if (index == 0) {
         previousSharps = (chordNote.split('#').length - chordNote.split('b').length)
-        return chordNote;
+
+        index += 1;
+        scaleNotes.push(chordNote)
+        return
       }
 
       const desiredSemitones = modeIntervalsSemitones[index]
@@ -514,7 +519,9 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
 
       let accidental: string = (previousSharps < 0) ? 'b' : '#'
       let accidentals: number = Math.abs(previousSharps)
-      return namedNote.concat(accidental.repeat(accidentals))
+
+      index += 1;
+      scaleNotes.push(namedNote + accidental.repeat(accidentals))
     })
 
     return {
