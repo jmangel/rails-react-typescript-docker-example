@@ -23,6 +23,9 @@ const chords = [
 const App: React.FC = () => {
   const [content, updateContent] = React.useState('Waiting for a response from Rails...');
 
+  const [chordNote, setChordNote] = React.useState('A');
+  const [chordQuality, setChordQuality] = React.useState('-');
+
   React.useEffect(() => {
     fetchContent(updateContent);
   }, []);
@@ -33,16 +36,31 @@ const App: React.FC = () => {
         <p>
           {content}
         </p>
-        {
-          chords.map((chord) => (
-            <Fragment>
-              <h4>{chord}</h4>
-              {scalesForChord(chord[0], chord[1]).map((namedScale: NamedScale) => {return (
-                <p>{chord} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}</p>
-              )})}
-            </Fragment>
-          ))
-        }
+        <form onSubmit={() => {}}>
+          <div>
+            <label>
+              Chord Note:
+              <input
+                type="text"
+                value={chordNote}
+                onChange={e => setChordNote(e.target.value)}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Chord:
+              <input
+                type="text"
+                value={chordQuality}
+                onChange={e => setChordQuality(e.target.value)}
+              />
+            </label>
+          </div>
+        </form>
+          {chordNote && chordQuality && scalesForChord(chordNote, chordQuality).map((namedScale: NamedScale, index: number) => {return (
+            <p key={`scale-${index}`}>{chordNote}{chordQuality} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}</p>
+          )})}
       </header>
     </div>
   );
