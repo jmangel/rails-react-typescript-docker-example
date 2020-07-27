@@ -76,6 +76,24 @@ describe('diminished chord', () => {
     ])
   })
 })
+
+describe('7#5 chord', () => {
+  let dominantAugmentedScales: Array<NamedScale>;
+
+  beforeEach(() => {
+    dominantAugmentedScales = scalesForChord('G', '7#5')
+  })
+
+  it('gives whole-tone', () => {
+    const wholeToneScale = dominantAugmentedScales[0]
+
+    expect(wholeToneScale.scaleName).toEqual('whole-tone')
+    expect(wholeToneScale.scaleNotes).toEqual([
+      'G','A','B','C#','D#','F',
+    ])
+  })
+})
+
 describe('rootScale', () => {
   it('returns major for major modes', () => {
     const majorScales = scalesForChord('A', '^')

@@ -118,7 +118,7 @@ const INTERVALS = [
 
 interface ScaleDegree {
   degree: number;
-  quality: string;
+  quality: string | null;
 }
 interface Scale {
   name: string;
@@ -259,6 +259,39 @@ const PRIMARY_SCALES = [
       {
         degree: 7,
         quality: 'major',
+      },
+    ],
+  },
+  {
+    name: 'whole-tone',
+    degrees: [
+      {
+        degree: 1,
+        quality: 'perfect',
+      },
+      {
+        degree: 2,
+        quality: 'major',
+      },
+      {
+        degree: 3,
+        quality: 'major',
+      },
+      {
+        degree: 4,
+        quality: 'augmented',
+      },
+      {
+        degree: 5,
+        quality: 'augmented',
+      },
+      {
+        degree: 6,
+        quality: null,
+      },
+      {
+        degree: 7,
+        quality: 'minor',
       },
     ],
   },
@@ -451,6 +484,15 @@ const CHORD_MAPPINGS = [
     ]
   },
   {
+    quality: '7#5',
+    possibleModes: [
+      {
+        name: 'whole-tone',
+        offset: 0,
+      },
+    ]
+  },
+  {
     quality: '7alt',
     possibleModes: [
       {
@@ -506,6 +548,8 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
     const modeDegrees = arrayRotate(primaryScale.degrees, (startingDegree - 1))
     let startingSemitones: number | null = null;
     const modeIntervalsSemitones = modeDegrees.map((modeDegree) => {
+      if (modeDegree.quality === null) return null;
+
       const semitones = INTERVALS.find((interval: Interval): boolean => {
         return interval.degree === modeDegree.degree && interval.quality === modeDegree.quality
       })?.semitones
@@ -540,6 +584,10 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
       const modeDegreeNotes = modeDegrees.filter((extraModeDegree) => extraModeDegree.degree === modeDegree.degree)
       modeDegreeNotes.forEach(() => {
         const desiredSemitones = modeIntervalsSemitones[index]
+        if (desiredSemitones === null) {
+          cumulativeSemitones += naturalSemitones
+          return index += 1;
+        }
 
         previousSharps = previousSharps + (desiredSemitones - (cumulativeSemitones + naturalSemitones))
         cumulativeSemitones = desiredSemitones
