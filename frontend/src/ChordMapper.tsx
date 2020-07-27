@@ -101,6 +101,11 @@ const INTERVALS = [
   },
   {
     degree: 7,
+    quality: 'diminished',
+    semitones: 9,
+  },
+  {
+    degree: 7,
     quality: 'minor',
     semitones: 10,
   },
@@ -120,6 +125,7 @@ interface Scale {
   degrees: Array<ScaleDegree>;
 }
 const PRIMARY_SCALES = [
+
   {
     name: 'major',
     degrees: [
@@ -212,6 +218,43 @@ const PRIMARY_SCALES = [
       {
         degree: 6,
         quality: 'minor',
+      },
+      {
+        degree: 7,
+        quality: 'major',
+      },
+    ],
+  },
+  {
+    name: 'diminished',
+    degrees: [
+      {
+        degree: 1,
+        quality: 'perfect',
+      },
+      {
+        degree: 2,
+        quality: 'major',
+      },
+      {
+        degree: 3,
+        quality: 'minor',
+      },
+      {
+        degree: 4,
+        quality: 'perfect',
+      },
+      {
+        degree: 5,
+        quality: 'diminished',
+      },
+      {
+        degree: 6,
+        quality: 'minor',
+      },
+      {
+        degree: 7,
+        quality: 'dimished',
       },
       {
         degree: 7,

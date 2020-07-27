@@ -1,4 +1,4 @@
-import scalesForChord from '../ChordMapper'
+import scalesForChord, { NamedScale } from '../ChordMapper'
 
 it('gets double sharp', () => {
   expect(
@@ -24,6 +24,32 @@ it('gives dorian and aeolian for minor', () => {
     'A','B','C','D','E','F#','G'
   ])
 });
+
+describe.only('7b9 chord', () => {
+  let dominantFlatNineScales: Array<NamedScale>;
+
+  beforeEach(() => {
+    dominantFlatNineScales = scalesForChord('G', '7b9')
+  })
+
+  it('gives phrygian dominant', () => {
+    const phrygianDominantScale = dominantFlatNineScales[0]
+
+    expect(phrygianDominantScale.scaleName).toEqual('phrygian dominant')
+    expect(phrygianDominantScale.scaleNotes).toEqual([
+      'G','Ab','B','C','D','Eb','F',
+    ])
+  })
+
+  it('gives h/w diminished', () => {
+    const halfWholeDiminishedScale = dominantFlatNineScales[1]
+
+    expect(halfWholeDiminishedScale.scaleName).toEqual('h/w diminished')
+    expect(halfWholeDiminishedScale.scaleNotes).toEqual([
+      'G','Ab','A#','B','C#','D','E','F'
+    ])
+  })
+})
 
 describe('rootScale', () => {
   it('returns major for major modes', () => {
