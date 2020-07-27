@@ -337,7 +337,7 @@ const MODES = [
   {
     name: 'h/w diminished',
     relatedScale: {
-      name: 'diminshed',
+      name: 'diminished',
       startingDegree: 2,
     },
   },
@@ -414,6 +414,8 @@ const enharmonicNoteIndex = (note: string, enharmonicNotes: Array<Array<string>>
 export interface NamedScale {
   scaleName: string;
   scaleNotes: Array<string>;
+  rootScale: string;
+  rootScaleNote: string;
 }
 const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedScale> => {
   const chordNoteIndex = enharmonicNoteIndex(chordNote, CHROMATIC_NOTES)
@@ -429,9 +431,10 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
     if (mode == undefined) throw new Error('mode not found');
 
     const primaryScale = PRIMARY_SCALES.find((scale: Scale) => scale.name == mode.relatedScale.name)
-    if (primaryScale == undefined) throw new Error('primaryScale not found');
+    if (primaryScale == undefined) throw new Error(`primaryScale not found ${mode.relatedScale.name}`);
 
     const startingDegree = mode.relatedScale.startingDegree
+    const rootDegree = [1,7,6,5,4,3,2][startingDegree - 1]
 
     const modeDegrees = arrayRotate(primaryScale.degrees, (startingDegree - 1))
     let startingSemitones: number | null = null;
@@ -452,25 +455,30 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
 
     let previousSharps = 0
     let cumulativeSemitones = 0
+
+    const scaleNotes = rotatedNamedNotes.map((namedNote: 'A'|'B'|'C'|'D'|'E'|'F'|'G', index) => {
+      if (index == 0) {
+        previousSharps = (chordNote.split('#').length - chordNote.split('b').length)
+        return chordNote;
+      }
+
+      const desiredSemitones = modeIntervalsSemitones[index]
+
+      const naturalSemitones = NOTE_SEMITONES[namedNote];
+
+      previousSharps = previousSharps + (desiredSemitones - (cumulativeSemitones + naturalSemitones))
+      cumulativeSemitones = desiredSemitones
+
+      let accidental: string = (previousSharps < 0) ? 'b' : '#'
+      let accidentals: number = Math.abs(previousSharps)
+      return namedNote.concat(accidental.repeat(accidentals))
+    })
+
     return {
       scaleName: possibleMode.name,
-      scaleNotes: rotatedNamedNotes.map((namedNote: 'A'|'B'|'C'|'D'|'E'|'F'|'G', index) => {
-        if (index == 0) {
-          previousSharps = (chordNote.split('#').length - chordNote.split('b').length)
-          return chordNote;
-        }
-
-        const desiredSemitones = modeIntervalsSemitones[index]
-
-        const naturalSemitones = NOTE_SEMITONES[namedNote];
-
-        previousSharps = previousSharps + (desiredSemitones - (cumulativeSemitones + naturalSemitones))
-        cumulativeSemitones = desiredSemitones
-
-        let accidental: string = (previousSharps < 0) ? 'b' : '#'
-        let accidentals: number = Math.abs(previousSharps)
-        return namedNote.concat(accidental.repeat(accidentals))
-      })
+      scaleNotes,
+      rootScale: mode.relatedScale.name,
+      rootScaleNote: scaleNotes[rootDegree - 1]
     }
   })
 }

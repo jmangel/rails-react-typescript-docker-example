@@ -58,9 +58,14 @@ const App: React.FC = () => {
             </label>
           </div>
         </form>
-          {chordNote && chordQuality && scalesForChord(chordNote, chordQuality).map((namedScale: NamedScale, index: number) => {return (
-            <p key={`scale-${index}`}>{chordNote}{chordQuality} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}</p>
-          )})}
+          {chordNote && chordQuality && scalesForChord(chordNote, chordQuality).map(
+            (namedScale: NamedScale, index: number) => (
+              <div key={`scale-${index}`}>
+                <p>{chordNote}{chordQuality} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}</p>
+                <small>{namedScale.rootScaleNote} {namedScale.rootScale}</small>
+              </div>
+            )
+          )}
       </header>
     </div>
   );
