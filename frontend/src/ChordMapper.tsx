@@ -254,7 +254,7 @@ const PRIMARY_SCALES = [
       },
       {
         degree: 7,
-        quality: 'dimished',
+        quality: 'diminished',
       },
       {
         degree: 7,
@@ -364,7 +364,7 @@ const MODES = [
     },
   },
   {
-    name: 'Alt dom bb7',
+    name: 'alt dom bb7',
     relatedScale: {
       name: 'harmonic minor',
       startingDegree: 7,
@@ -381,7 +381,7 @@ const MODES = [
     name: 'h/w diminished',
     relatedScale: {
       name: 'diminished',
-      startingDegree: 2,
+      startingDegree: 6,
     },
   },
   {
@@ -437,6 +437,28 @@ const CHORD_MAPPINGS = [
       }
     ]
   },
+  {
+    quality: 'o',
+    possibleModes: [
+      {
+        name: 'w/h diminished',
+        offset: 0,
+      },
+      {
+        name: 'alt dom bb7',
+        offset: 0,
+      }
+    ]
+  },
+  {
+    quality: '7alt',
+    possibleModes: [
+      {
+        name: 'altered',
+        offset: 0,
+      },
+    ]
+  },
 ]
 
 const arrayRotate = (arr: Array<any>, index: number): Array<any> => {
@@ -471,12 +493,17 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
 
   return possibleModes.map((possibleMode: {name: string, offset: number}): NamedScale => {
     const mode = MODES.find((mode: Mode) => mode.name == possibleMode.name);
-    if (mode == undefined) throw new Error('mode not found');
+    if (mode == undefined) throw new Error(`primaryScale not found ${possibleMode.name}`);
 
     const primaryScale = PRIMARY_SCALES.find((scale: Scale) => scale.name == mode.relatedScale.name)
     if (primaryScale == undefined) throw new Error(`primaryScale not found ${mode.relatedScale.name}`);
 
     const startingDegree = mode.relatedScale.startingDegree
+
+    // does not need to support whole-tone because it has only one mode
+    // TODO: support diminished for breaking starting degrees?
+    // currently doesn't "need" to support diminished because it has no
+    // breaking modes
     const rootDegree = [1,7,6,5,4,3,2][startingDegree - 1]
 
     const modeDegrees = arrayRotate(primaryScale.degrees, (startingDegree - 1))
@@ -485,7 +512,7 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
       const semitones = INTERVALS.find((interval: Interval): boolean => {
         return interval.degree === modeDegree.degree && interval.quality === modeDegree.quality
       })?.semitones
-      if (semitones == undefined) return 0;
+      if (semitones == undefined) throw new Error(`semitones not found ${modeDegree.degree}${modeDegree.quality}`);
 
       startingSemitones = startingSemitones == null ? semitones : startingSemitones;
 
@@ -510,18 +537,28 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
         return
       }
 
-      const desiredSemitones = modeIntervalsSemitones[index]
+      let naturalSemitones = NOTE_SEMITONES[namedNote];
 
-      const naturalSemitones = NOTE_SEMITONES[namedNote];
+      const modeDegree = modeDegrees[index]
+      const modeDegreeNotes = modeDegrees.filter((extraModeDegree) => extraModeDegree.degree === modeDegree.degree)
+      modeDegreeNotes.forEach(() => {
+        const desiredSemitones = modeIntervalsSemitones[index]
 
-      previousSharps = previousSharps + (desiredSemitones - (cumulativeSemitones + naturalSemitones))
-      cumulativeSemitones = desiredSemitones
+        previousSharps = previousSharps + (desiredSemitones - (cumulativeSemitones + naturalSemitones))
+        cumulativeSemitones = desiredSemitones
 
-      let accidental: string = (previousSharps < 0) ? 'b' : '#'
-      let accidentals: number = Math.abs(previousSharps)
+        // naturalSemitones is meant to capture the difference from the
+        // previous degree; if naturalSemitones is used again in this scope,
+        // it will be because we are on another quality of the same degree,
+        // so the difference is 0
+        naturalSemitones = 0
 
-      index += 1;
-      scaleNotes.push(namedNote + accidental.repeat(accidentals))
+        let accidental: string = (previousSharps < 0) ? 'b' : '#'
+        let accidentals: number = Math.abs(previousSharps)
+
+        index += 1;
+        scaleNotes.push(namedNote + accidental.repeat(accidentals))
+      })
     })
 
     return {

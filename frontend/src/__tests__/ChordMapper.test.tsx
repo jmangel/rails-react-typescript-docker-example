@@ -25,7 +25,7 @@ it('gives dorian and aeolian for minor', () => {
   ])
 });
 
-describe.only('7b9 chord', () => {
+describe('7b9 chord', () => {
   let dominantFlatNineScales: Array<NamedScale>;
 
   beforeEach(() => {
@@ -51,6 +51,31 @@ describe.only('7b9 chord', () => {
   })
 })
 
+describe('diminished chord', () => {
+  let diminishedScales: Array<NamedScale>;
+
+  beforeEach(() => {
+    diminishedScales = scalesForChord('G', 'o')
+  })
+
+  it('gives w/h diminished', () => {
+    const phrygianDominantScale = diminishedScales[0]
+
+    expect(phrygianDominantScale.scaleName).toEqual('w/h diminished')
+    expect(phrygianDominantScale.scaleNotes).toEqual([
+      'G','A','Bb','C','Db','Eb','Fb','F#',
+    ])
+  })
+
+  it('gives alt dom bb7', () => {
+    const alteredDominantFlatFlatSevenScale = diminishedScales[1]
+
+    expect(alteredDominantFlatFlatSevenScale.scaleName).toEqual('alt dom bb7')
+    expect(alteredDominantFlatFlatSevenScale.scaleNotes).toEqual([
+      'G','Ab','Bb','Cb','Db','Eb','Fb',
+    ])
+  })
+})
 describe('rootScale', () => {
   it('returns major for major modes', () => {
     const majorScales = scalesForChord('A', '^')
@@ -66,28 +91,30 @@ describe('rootScale', () => {
     expect(dorianScale.rootScale).toEqual('major')
   })
 
-  // TODO: 7b9 requires diminished primary scale, not yet implemented
-  // it('returns melodic minor for melodic minor modes', () => {
-  //   const dominantFlatNineScales = scalesForChord('A', '7b9')
+  it('returns melodic minor for melodic minor modes', () => {
+    const dominantFlatNineScales = scalesForChord('A', '7alt')
 
-  //   const phrygianDominantScale = dominantFlatNineScales[0]
-  //   expect(phrygianDominantScale.rootScale).toEqual('melodic minor')
-  // })
+    const alteredScale = dominantFlatNineScales[0]
+    expect(alteredScale.rootScale).toEqual('melodic minor')
+  })
 
   it('returns harmonic minor for harmonic minor modes', () => {
     const majorScales = scalesForChord('A', '^')
+    const dominantFlatNineScales = scalesForChord('A', '7b9')
 
     const lydianSharpTwoScale = majorScales[1]
     expect(lydianSharpTwoScale.rootScale).toEqual('harmonic minor')
+
+    const phrygianDominantScale = dominantFlatNineScales[0]
+    expect(phrygianDominantScale.rootScale).toEqual('harmonic minor')
   })
 
-  // TODO: 7b9 requires diminished primary scale, not yet implemented
-  // it('returns diminished for diminished modes', () => {
-  //   const dominantFlatNineScales = scalesForChord('A', '7b9')
+  it('returns diminished for diminished modes', () => {
+    const dominantFlatNineScales = scalesForChord('A', '7b9')
 
-  //   const halfWholeDiminishedScale = dominantFlatNineScales[1]
-  //   expect(halfWholeDiminishedScale.rootScale).toEqual('diminished')
-  // })
+    const halfWholeDiminishedScale = dominantFlatNineScales[1]
+    expect(halfWholeDiminishedScale.rootScale).toEqual('diminished')
+  })
 })
 
 describe('rootScaleNote', () => {
