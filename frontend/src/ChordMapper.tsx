@@ -483,9 +483,6 @@ export interface NamedScale {
   rootScaleNote: string;
 }
 const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedScale> => {
-  const chordNoteIndex = enharmonicNoteIndex(chordNote, CHROMATIC_NOTES)
-  const rotatedChromaticNotes = arrayRotate(CHROMATIC_NOTES, chordNoteIndex)
-
   const namedNoteIndex = NAMED_NOTES.findIndex((note: string): boolean => chordNote.includes(note))
   const rotatedNamedNotes = arrayRotate(NAMED_NOTES, namedNoteIndex)
 
