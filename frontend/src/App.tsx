@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container, Row, Col } from 'reactstrap';
 import './App.css';
 import scalesForChord, { NamedScale } from './ChordMapper'
 
@@ -37,36 +38,47 @@ const App: React.FC = () => {
           {content}
         </p>
       </header>
-      <form onSubmit={() => {}}>
-        <div>
-          <label>
-            Chord Note:
-            <input
-              type="text"
-              value={chordNote}
-              onChange={e => setChordNote(e.target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Chord:
-            <input
-              type="text"
-              value={chordQuality}
-              onChange={e => setChordQuality(e.target.value)}
-            />
-          </label>
-        </div>
-      </form>
-      {chordNote && chordQuality && scalesForChord(chordNote, chordQuality).map(
-        (namedScale: NamedScale, index: number) => (
-          <div key={`scale-${index}`}>
-            <p>{chordNote}{chordQuality} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}</p>
-            <small>{namedScale.rootScaleNote} {namedScale.rootScale}</small>
-          </div>
-        )
-      )}
+      <Container>
+        <Row>
+          <Col>
+            <form onSubmit={() => {}}>
+              <div>
+                <label>
+                  Chord Note:
+                  <input
+                    type="text"
+                    value={chordNote}
+                    onChange={e => setChordNote(e.target.value)}
+                  />
+                </label>
+              </div>
+              <div>
+                <label>
+                  Chord:
+                  <input
+                    type="text"
+                    value={chordQuality}
+                    onChange={e => setChordQuality(e.target.value)}
+                  />
+                </label>
+              </div>
+            </form>
+          </Col>
+          <Col>
+            {chordNote && chordQuality && scalesForChord(chordNote, chordQuality).map(
+              (namedScale: NamedScale, index: number) => (
+                <div key={`scale-${index}`}>
+                  <p>
+                    {chordNote}{chordQuality} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
+                    <br />
+                    <small>{namedScale.rootScaleNote} {namedScale.rootScale}</small>
+                  </p>
+                </div>
+              )
+            )}
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
