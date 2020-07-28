@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, FormGroup, Label, Input } from 'reactstrap';
 import './App.css';
 import scalesForChord, { NamedScale } from './ChordMapper'
 
@@ -30,6 +30,8 @@ const App: React.FC = () => {
   React.useEffect(() => {
     fetchContent(updateContent);
   }, []);
+
+  const scales = (chordNote && chordQuality && scalesForChord(chordNote, chordQuality)) || [];
 
   return (
     <div className="App">
@@ -65,7 +67,7 @@ const App: React.FC = () => {
             </form>
           </Col>
           <Col>
-            {chordNote && chordQuality && scalesForChord(chordNote, chordQuality).map(
+            {scales.map(
               (namedScale: NamedScale, index: number) => (
                 <div key={`scale-${index}`}>
                   <p>
@@ -76,6 +78,21 @@ const App: React.FC = () => {
                 </div>
               )
             )}
+          </Col>
+          <Col>
+            <FormGroup>
+              <Label for="exampleSelect">Select</Label>
+              <Input type="select" name="select" id="exampleSelect">
+                <option>--</option>
+                {scales.map(
+                  (namedScale: NamedScale, index: number) => (
+                    <option key={`option--scale-${index}`}>
+                      {namedScale.rootScaleNote} {namedScale.rootScale}: {chordNote} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
+                    </option>
+                  )
+                )}
+              </Input>
+            </FormGroup>
           </Col>
         </Row>
       </Container>
