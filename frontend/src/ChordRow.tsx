@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import scalesForChord, { NamedScale } from './ChordMapper'
 
 const ChordRow: React.FC = () => {
@@ -11,28 +11,26 @@ const ChordRow: React.FC = () => {
   return (
     <Row className="border">
       <Col>
-        <form onSubmit={() => {}}>
-          <div>
-            <label>
-              Chord Note:
-              <input
-                type="text"
-                value={chordNote}
-                onChange={e => setChordNote(e.target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Chord Quality:
-              <input
-                type="text"
-                value={chordQuality}
-                onChange={e => setChordQuality(e.target.value)}
-              />
-            </label>
-          </div>
-        </form>
+        <Form>
+          <FormGroup>
+            <Label for="exampleEmail">Chord Note:</Label>
+            <Input
+              type="text"
+              name="chordNote"
+              value={chordNote}
+              onChange={e => setChordNote(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="exampleEmail">Chord Quality:</Label>
+            <Input
+              type="text"
+              name="chordQuality"
+              value={chordQuality}
+              onChange={e => setChordQuality(e.target.value)}
+            />
+          </FormGroup>
+        </Form>
       </Col>
       <Col>
         {scales.map(
