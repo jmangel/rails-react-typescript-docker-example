@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Button, Card, CardBody, CardText, Input } from 'reactstrap';
+import { Container, Button, Row, Input } from 'reactstrap';
 import './App.css';
 import ChordRow from './ChordRow'
 
@@ -39,23 +39,19 @@ const App: React.FC = () => {
       </header>
       <Container>
         {[...Array(chordRows)].map(() => <ChordRow></ChordRow>)}
-      </Container>
-      <Card className='w-25 mx-auto'>
-        <CardBody>
-          <CardText>
-            Add
-            <Input
-              type="number"
-              name="newChordRows"
-              value={newChordRows}
-              onChange={e => setNewChordRows(parseInt(e.target.value))}
-              className='w-25 mx-auto'
-            />
-            Row(s)
-          </CardText>
+        <Row className='w-25 mx-auto border'>
           <Button onClick={() => setChordRows(chordRows + newChordRows)}>Add</Button>
-        </CardBody>
-      </Card>
+          <Input
+            type="number"
+            name="newChordRows"
+            value={newChordRows}
+            onChange={e => setNewChordRows(parseInt(e.target.value))}
+            className='w-25 mx-2'
+            inline
+          />
+          Row(s)
+        </Row>
+      </Container>
     </div>
   );
 }
