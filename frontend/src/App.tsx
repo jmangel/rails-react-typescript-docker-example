@@ -44,9 +44,8 @@ const App: React.FC = () => {
         </p>
       </header>
       <Container>
-        {chordRowObjects.map(({ chordNote, chordQuality }, rowIndex) => <ChordRow
-          chordNote={chordNote}
-          chordQuality={chordQuality}
+        {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
+          chordRowObject={chordRowObject}
           onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
         />)}
         <Row className='w-25 mx-auto border'>

@@ -8,14 +8,14 @@ export interface ChordRowObject {
 }
 
 const ChordRow: React.FC<{
-  chordNote: string,
-  chordQuality: string,
+  chordRowObject: ChordRowObject,
   onRowChange: (newValue: string, key: keyof ChordRowObject) => void,
 }> = ({
-  chordNote,
-  chordQuality,
+  chordRowObject,
   onRowChange,
 }) => {
+
+  const { chordNote, chordQuality } = chordRowObject
 
   const scales = (chordNote && chordQuality && scalesForChord(chordNote, chordQuality)) || [];
 
