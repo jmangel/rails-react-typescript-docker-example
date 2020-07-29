@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Button, Row, Input } from 'reactstrap';
 import './App.css';
-import ChordRow, { ChordRowProp } from './ChordRow'
+import ChordRow, { ChordRowObject } from './ChordRow'
 
 const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://backend.localhost';
 
@@ -16,20 +16,20 @@ const fetchContent = async (updateContent: (content: string) => void) => {
   updateContent(data.content);
 };
 
-const createChordRow = (): ChordRowProp => {
-  return {} as ChordRowProp;
+const createChordRowObject = (): ChordRowObject => {
+  return {} as ChordRowObject;
 }
 
 const App: React.FC = () => {
   const [content, updateContent] = React.useState('Waiting for a response from Rails...');
 
-  const [chordRows, setChordRows] = React.useState([createChordRow()]);
+  const [chordRowObjects, setChordRowObjects] = React.useState([createChordRowObject()]);
   const [newChordRows, setNewChordRows] = React.useState(1);
 
-  const handleRowChange = (rowIndex: number, newValue: string, key: keyof ChordRowProp): void => {
-    let newChordRows = chordRows.slice()
+  const handleRowChange = (rowIndex: number, newValue: string, key: keyof ChordRowObject): void => {
+    let newChordRows = chordRowObjects.slice()
     newChordRows[rowIndex][key] = newValue
-    setChordRows(newChordRows)
+    setChordRowObjects(newChordRows)
   }
 
   React.useEffect(() => {
@@ -44,18 +44,18 @@ const App: React.FC = () => {
         </p>
       </header>
       <Container>
-        {chordRows.map(({ chordNote, chordQuality }, rowIndex) => <ChordRow
+        {chordRowObjects.map(({ chordNote, chordQuality }, rowIndex) => <ChordRow
           chordNote={chordNote}
           chordQuality={chordQuality}
-          onRowChange={(newValue: string, key: keyof ChordRowProp) => handleRowChange(rowIndex, newValue, key)}
+          onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
         />)}
         <Row className='w-25 mx-auto border'>
           <Button onClick={() => {
             if (newChordRows < 0) {
-              setChordRows(chordRows => chordRows.slice(0,newChordRows))
+              setChordRowObjects(chordRowObjects => chordRowObjects.slice(0,newChordRows))
             } else {
-              const newChordRowsArray: Array<ChordRowProp> = [...Array(newChordRows)].map(() => createChordRow())
-              setChordRows(chordRows => [...chordRows, ...newChordRowsArray])
+              const newChordRowsArray: Array<ChordRowObject> = [...Array(newChordRows)].map(() => createChordRowObject())
+              setChordRowObjects(chordRowObjects => [...chordRowObjects, ...newChordRowsArray])
             }
           }}>Add</Button>
           <Input
