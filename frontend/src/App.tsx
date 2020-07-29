@@ -16,15 +16,34 @@ const fetchContent = async (updateContent: (content: string) => void) => {
   updateContent(data.content);
 };
 
+interface ChordRowProp {
+  chordNote: string;
+  chordQuality: string;
+}
+const createChordRow = (): ChordRowProp => {
+  return {
+    chordNote: '',
+    chordQuality: '',
+  }
+}
+
 const App: React.FC = () => {
   const [content, updateContent] = React.useState('Waiting for a response from Rails...');
 
-  const [chordRows, setChordRows] = React.useState(1);
+  const [chordRows, setChordRows] = React.useState([createChordRow()]);
   const [newChordRows, setNewChordRows] = React.useState(1);
 
-  React.useEffect(() => {
-    fetchContent(updateContent);
-  }, []);
+  const handleRowChordNoteChange = (rowIndex: number, newChordNote: string) => {
+    let newChordRows = chordRows.slice()
+    newChordRows[rowIndex].chordNote = newChordNote
+    setChordRows(newChordRows)
+  }
+
+  const handleRowChordQualityChange = (rowIndex: number, newChordQuality: string) => {
+    let newChordRows = chordRows.slice()
+    newChordRows[rowIndex].chordQuality = newChordQuality
+    setChordRows(newChordRows)
+  }
 
   React.useEffect(() => {
     fetchContent(updateContent);
@@ -38,9 +57,21 @@ const App: React.FC = () => {
         </p>
       </header>
       <Container>
-        {[...Array(chordRows)].map(() => <ChordRow></ChordRow>)}
+        {chordRows.map(({ chordNote, chordQuality }, rowIndex) => <ChordRow
+          chordNote={chordNote}
+          chordQuality={chordQuality}
+          onChordNoteChange={(newChordNote: string) => handleRowChordNoteChange(rowIndex, newChordNote)}
+          onChordQualityChange={(newChordQuality: string) => handleRowChordQualityChange(rowIndex, newChordQuality)}
+        />)}
         <Row className='w-25 mx-auto border'>
-          <Button onClick={() => setChordRows(chordRows + newChordRows)}>Add</Button>
+          <Button onClick={() => {
+            if (newChordRows < 0) {
+              setChordRows(chordRows => chordRows.slice(0,newChordRows))
+            } else {
+              const newChordRowsArray: Array<ChordRowProp> = [...Array(newChordRows)].map(() => createChordRow())
+              setChordRows(chordRows => [...chordRows, ...newChordRowsArray])
+            }
+          }}>Add</Button>
           <Input
             type="number"
             name="newChordRows"
