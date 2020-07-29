@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Button, Row, Input } from 'reactstrap';
 import './App.css';
-import ChordRow from './ChordRow'
+import ChordRow, { ChordRowProp } from './ChordRow'
 
 const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://backend.localhost';
 
@@ -16,15 +16,8 @@ const fetchContent = async (updateContent: (content: string) => void) => {
   updateContent(data.content);
 };
 
-interface ChordRowProp {
-  chordNote: string;
-  chordQuality: string;
-}
 const createChordRow = (): ChordRowProp => {
-  return {
-    chordNote: '',
-    chordQuality: '',
-  }
+  return {} as ChordRowProp;
 }
 
 const App: React.FC = () => {
@@ -33,15 +26,9 @@ const App: React.FC = () => {
   const [chordRows, setChordRows] = React.useState([createChordRow()]);
   const [newChordRows, setNewChordRows] = React.useState(1);
 
-  const handleRowChordNoteChange = (rowIndex: number, newChordNote: string) => {
+  const handleRowChange = (rowIndex: number, newValue: string, key: keyof ChordRowProp): void => {
     let newChordRows = chordRows.slice()
-    newChordRows[rowIndex].chordNote = newChordNote
-    setChordRows(newChordRows)
-  }
-
-  const handleRowChordQualityChange = (rowIndex: number, newChordQuality: string) => {
-    let newChordRows = chordRows.slice()
-    newChordRows[rowIndex].chordQuality = newChordQuality
+    newChordRows[rowIndex][key] = newValue
     setChordRows(newChordRows)
   }
 
@@ -60,8 +47,7 @@ const App: React.FC = () => {
         {chordRows.map(({ chordNote, chordQuality }, rowIndex) => <ChordRow
           chordNote={chordNote}
           chordQuality={chordQuality}
-          onChordNoteChange={(newChordNote: string) => handleRowChordNoteChange(rowIndex, newChordNote)}
-          onChordQualityChange={(newChordQuality: string) => handleRowChordQualityChange(rowIndex, newChordQuality)}
+          onRowChange={(newValue: string, key: keyof ChordRowProp) => handleRowChange(rowIndex, newValue, key)}
         />)}
         <Row className='w-25 mx-auto border'>
           <Button onClick={() => {

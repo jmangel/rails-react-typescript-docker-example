@@ -2,16 +2,19 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import scalesForChord, { NamedScale } from './ChordMapper'
 
+export interface ChordRowProp {
+  chordNote: string;
+  chordQuality: string;
+}
+
 const ChordRow: React.FC<{
   chordNote: string,
   chordQuality: string,
-  onChordNoteChange: (newChordNote: string) => void,
-  onChordQualityChange: (newChordQuality: string) => void,
+  onRowChange: (newValue: string, key: keyof ChordRowProp) => void,
 }> = ({
   chordNote,
   chordQuality,
-  onChordNoteChange,
-  onChordQualityChange,
+  onRowChange,
 }) => {
 
   const scales = (chordNote && chordQuality && scalesForChord(chordNote, chordQuality)) || [];
@@ -26,7 +29,7 @@ const ChordRow: React.FC<{
               type="text"
               name="chordNote"
               value={chordNote}
-              onChange={e => onChordNoteChange(e.target.value)}
+              onChange={e => onRowChange(e.target.value, 'chordNote')}
             />
           </FormGroup>
           <FormGroup>
@@ -35,7 +38,7 @@ const ChordRow: React.FC<{
               type="text"
               name="chordQuality"
               value={chordQuality}
-              onChange={e => onChordQualityChange(e.target.value)}
+              onChange={e => onRowChange(e.target.value, 'chordQuality')}
             />
           </FormGroup>
         </Form>
