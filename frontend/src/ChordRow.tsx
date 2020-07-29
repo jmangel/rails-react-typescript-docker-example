@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import scalesForChord, { NamedScale } from './ChordMapper'
 
-export interface ChordRowProp {
+export interface ChordRowObject {
   chordNote: string;
   chordQuality: string;
 }
@@ -10,7 +10,7 @@ export interface ChordRowProp {
 const ChordRow: React.FC<{
   chordNote: string,
   chordQuality: string,
-  onRowChange: (newValue: string, key: keyof ChordRowProp) => void,
+  onRowChange: (newValue: string, key: keyof ChordRowObject) => void,
 }> = ({
   chordNote,
   chordQuality,
