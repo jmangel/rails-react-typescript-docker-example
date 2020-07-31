@@ -159,4 +159,8 @@ describe('rootScaleNote', () => {
     expect(scalesForChord('D', '^')[2].rootScaleNote).toEqual('F#')
     expect(scalesForChord('Bbb', '^')[2].rootScaleNote).toEqual('Db')
   })
+
+  it('returns second for 7b9 chords', () => {
+    expect(scalesForChord('G', '7b9')[1].rootScaleNote).toEqual('Ab')
+  })
 })
