@@ -576,7 +576,10 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
     // TODO: support diminished for breaking starting degrees?
     // currently doesn't "need" to support diminished because it has no
     // breaking modes
-    const rootDegree = [1,7,6,5,4,3,2][startingDegree - 1]
+    const rootDegreeFinderArray: Array<number> = [...Array(primaryScale.degrees.length).keys()].map((i) => i + 1)
+    rootDegreeFinderArray.push(rootDegreeFinderArray.shift() as number)
+    rootDegreeFinderArray.reverse()
+    const rootDegree = rootDegreeFinderArray[startingDegree - 1]
 
     const modeDegrees = arrayRotate(primaryScale.degrees, (startingDegree - 1))
     let startingSemitones: number | null = null;
