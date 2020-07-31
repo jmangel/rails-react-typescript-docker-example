@@ -17,7 +17,7 @@ const ChordRow: React.FC<{
 
   const { chordNote, chordQuality } = chordRowObject
 
-  const scales = (chordNote && chordQuality && scalesForChord(chordNote, chordQuality)) || [];
+  const scales = (chordNote && scalesForChord(chordNote, chordQuality)) || [];
 
   return (
     <Row className="border">

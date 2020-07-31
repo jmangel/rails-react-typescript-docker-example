@@ -430,6 +430,20 @@ interface ChordMapping {
   quality: string;
   possibleModes: Array<{name: string, offset: number}>;
 }
+const MAJOR_MODES = [
+  {
+    name: 'ionian',
+    offset: 0,
+  },
+  {
+    name: 'lydian',
+    offset: 0,
+  },
+  {
+    name: 'lydian #2',
+    offset: 0,
+  },
+]
 const CHORD_MAPPINGS = [
   {
     quality: '-',
@@ -446,16 +460,11 @@ const CHORD_MAPPINGS = [
   },
   {
     quality: '^',
-    possibleModes: [
-      {
-        name: 'ionian',
-        offset: 0,
-      },
-      {
-        name: 'lydian #2',
-        offset: 0,
-      },
-    ]
+    possibleModes: MAJOR_MODES,
+  },
+  {
+    quality: '',
+    possibleModes: MAJOR_MODES,
   },
   {
     quality: '7b9',
