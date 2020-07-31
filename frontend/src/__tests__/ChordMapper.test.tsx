@@ -2,7 +2,7 @@ import scalesForChord, { NamedScale } from '../ChordMapper'
 
 it('gets double sharp', () => {
   expect(
-    scalesForChord('E', '^')[1].scaleNotes
+    scalesForChord('E', '^')[2].scaleNotes
   ).toEqual([
     'E', 'F##', 'G#', 'A#', 'B', 'C#', 'D#'
   ])
@@ -120,7 +120,7 @@ describe('rootScale', () => {
     const majorScales = scalesForChord('A', '^')
     const dominantFlatNineScales = scalesForChord('A', '7b9')
 
-    const lydianSharpTwoScale = majorScales[1]
+    const lydianSharpTwoScale = majorScales[2]
     expect(lydianSharpTwoScale.rootScale).toEqual('harmonic minor')
 
     const phrygianDominantScale = dominantFlatNineScales[0]
@@ -155,8 +155,8 @@ describe('rootScaleNote', () => {
   })
 
   it('returns third for lydian #2 modes', () => {
-    expect(scalesForChord('Ab', '^')[1].rootScaleNote).toEqual('C')
-    expect(scalesForChord('D', '^')[1].rootScaleNote).toEqual('F#')
-    expect(scalesForChord('Bbb', '^')[1].rootScaleNote).toEqual('Db')
+    expect(scalesForChord('Ab', '^')[2].rootScaleNote).toEqual('C')
+    expect(scalesForChord('D', '^')[2].rootScaleNote).toEqual('F#')
+    expect(scalesForChord('Bbb', '^')[2].rootScaleNote).toEqual('Db')
   })
 })
