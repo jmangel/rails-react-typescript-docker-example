@@ -161,6 +161,10 @@ describe('rootScaleNote', () => {
   })
 
   it('returns second for 7b9 chords', () => {
-    expect(scalesForChord('G', '7b9')[1].rootScaleNote).toEqual('Ab')
+    expect(scalesForChord('G', '7b9')[1].rootScaleNote).toEqual('B')
+  })
+
+  it('returns first for whole-tone modes', () => {
+    expect(scalesForChord('G', '7#5')[0].rootScaleNote).toEqual('G')
   })
 })
