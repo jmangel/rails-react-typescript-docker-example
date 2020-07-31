@@ -12,10 +12,15 @@ const createChordRowObject = (): ChordRowObject => {
 
 interface Song {
   title: string;
+  music: {
+    measures: Array<Array<string>>;
+  };
 };
 const createSongObject = (): Song => {
   return {} as Song;
 }
+
+const chordParserRegex = /(^[A-G]+[b|#]*)([^/]*)(\/?[A-G]+[b|#]*)?$/gm;
 
 const App: React.FC = () => {
   const [chordRowObjects, setChordRowObjects] = React.useState([createChordRowObject()]);
@@ -39,9 +44,35 @@ const App: React.FC = () => {
         }
         const playlist = iRealReader(evt.target?.result);
 
-        const newSong = playlist.songs[0]
-        if (newSong) setSong(newSong);
-        else alert('no song found');
+        const newSong: Song = playlist.songs[0];
+        if (newSong) {
+          setSong(newSong);
+          const newChordRows = newSong.music.measures.flatMap((measures) => {
+            return measures.map((measure) => {
+              let m;
+              let chordNote = '';
+              let chordQuality = '';
+
+              while ((m = chordParserRegex.exec(measure)) !== null) {
+                // This is necessary to avoid infinite loops with zero-width matches
+                if (m.index === chordParserRegex.lastIndex) {
+                  chordParserRegex.lastIndex++;
+                }
+
+                // The result can be accessed through the `m`-variable.
+                chordNote = m[1] || '';
+                chordQuality = m[2] || '';
+                // TODO: get root from m[3]
+              }
+
+              return {
+                chordNote,
+                chordQuality
+              }
+            });
+          })
+          setChordRowObjects(newChordRows)
+        } else alert('no song found');
       }
       reader.onerror = () => {
         alert('error reading file');
