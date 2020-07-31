@@ -383,6 +383,13 @@ const MODES = [
     },
   },
   {
+    name: 'dorian #4',
+    relatedScale: {
+      name: 'harmonic minor',
+      startingDegree: 4,
+    },
+  },
+  {
     name: 'phrygian dominant',
     relatedScale: {
       name: 'harmonic minor',
@@ -430,6 +437,24 @@ interface ChordMapping {
   quality: string;
   possibleModes: Array<{name: string, offset: number}>;
 }
+const MINOR_MODES = [
+  {
+    name: 'aeolian',
+    offset: 0,
+  },
+  {
+    name: 'dorian',
+    offset: 0,
+  },
+  {
+    name: 'phrygian',
+    offset: 0,
+  },
+  {
+    name: 'dorian #4',
+    offset: 0,
+  },
+];
 const MAJOR_MODES = [
   {
     name: 'ionian',
@@ -447,16 +472,15 @@ const MAJOR_MODES = [
 const CHORD_MAPPINGS = [
   {
     quality: '-',
-    possibleModes: [
-      {
-        name: 'aeolian',
-        offset: 0,
-      },
-      {
-        name: 'dorian',
-        offset: 0,
-      }
-    ]
+    possibleModes: MINOR_MODES
+  },
+  {
+    quality: '-7',
+    possibleModes: MINOR_MODES
+  },
+  {
+    quality: '-11',
+    possibleModes: MINOR_MODES.filter(({ name }) => name !== 'dorian #4')
   },
   {
     quality: '^',
