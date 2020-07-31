@@ -1,5 +1,8 @@
 import React, { ChangeEvent } from 'react';
 import { Container, Button, Row, Input } from 'reactstrap';
+
+const iRealReader = require('ireal-reader');
+
 import './App.css';
 import ChordRow, { ChordRowObject } from './ChordRow'
 
@@ -20,11 +23,20 @@ const createChordRowObject = (): ChordRowObject => {
   return {} as ChordRowObject;
 }
 
+interface Song {
+  title: string;
+};
+const createSongObject = (): Song => {
+  return {} as Song;
+}
+
 const App: React.FC = () => {
   const [content, updateContent] = React.useState('Waiting for a response from Rails...');
 
   const [chordRowObjects, setChordRowObjects] = React.useState([createChordRowObject()]);
   const [newChordRows, setNewChordRows] = React.useState(1);
+
+  const [song, setSong] = React.useState(createSongObject());
 
   const handleRowChange = (rowIndex: number, newValue: string, key: keyof ChordRowObject): void => {
     let newChordRows = chordRowObjects.slice()
@@ -34,8 +46,21 @@ const App: React.FC = () => {
 
   const handleFiles = (event: ChangeEvent<HTMLInputElement>) => {
     Array.from((event.target as HTMLInputElement).files as FileList).forEach((file: File) => {
-      console.warn('we have a file!');
-      console.warn(file);
+      var reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (evt: ProgressEvent<FileReader>) => {
+        if (!evt.target?.result) {
+          return alert('error reading file: no result')
+        }
+        const playlist = iRealReader(evt.target?.result);
+
+        const newSong = playlist.songs[0]
+        if (newSong) setSong(newSong);
+        else alert('no song found');
+      }
+      reader.onerror = () => {
+        alert('error reading file');
+      }
     })
   }
 
@@ -47,7 +72,7 @@ const App: React.FC = () => {
     <div className="App">
       <header className="App-header">
         <p>
-          {content}
+          {song.title}
         </p>
       </header>
       <Container>
