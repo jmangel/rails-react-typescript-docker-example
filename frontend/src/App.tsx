@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Container, Button, Row, Input } from 'reactstrap';
 import './App.css';
 import ChordRow, { ChordRowObject } from './ChordRow'
@@ -32,6 +32,13 @@ const App: React.FC = () => {
     setChordRowObjects(newChordRows)
   }
 
+  const handleFiles = (event: ChangeEvent<HTMLInputElement>) => {
+    Array.from((event.target as HTMLInputElement).files as FileList).forEach((file: File) => {
+      console.warn('we have a file!');
+      console.warn(file);
+    })
+  }
+
   React.useEffect(() => {
     fetchContent(updateContent);
   }, []);
@@ -44,6 +51,14 @@ const App: React.FC = () => {
         </p>
       </header>
       <Container>
+        <Row className='w-25 mx-auto border'>
+          <Input
+            type="file"
+            name="irealImportFile"
+            id="irealImportFile"
+            onChange={handleFiles}
+          />
+        </Row>
         {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
           chordRowObject={chordRowObject}
           onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
