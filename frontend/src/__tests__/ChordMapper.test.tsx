@@ -8,92 +8,6 @@ it('gets double sharp', () => {
   ])
 });
 
-it('gives dorian and aeolian for minor', () => {
-  const minorScales = scalesForChord('A', '-')
-
-  const aeolianScale = minorScales[0]
-  const dorianScale = minorScales[1]
-
-  expect(aeolianScale.scaleName).toEqual('aeolian')
-  expect(aeolianScale.scaleNotes).toEqual([
-    'A','B','C','D','E','F','G'
-  ])
-
-  expect(dorianScale.scaleName).toEqual('dorian')
-  expect(dorianScale.scaleNotes).toEqual([
-    'A','B','C','D','E','F#','G'
-  ])
-});
-
-describe('7b9 chord', () => {
-  let dominantFlatNineScales: Array<NamedScale>;
-
-  beforeEach(() => {
-    dominantFlatNineScales = scalesForChord('G', '7b9')
-  })
-
-  it('gives phrygian dominant', () => {
-    const phrygianDominantScale = dominantFlatNineScales[0]
-
-    expect(phrygianDominantScale.scaleName).toEqual('phrygian dominant')
-    expect(phrygianDominantScale.scaleNotes).toEqual([
-      'G','Ab','B','C','D','Eb','F',
-    ])
-  })
-
-  it('gives h/w diminished', () => {
-    const halfWholeDiminishedScale = dominantFlatNineScales[1]
-
-    expect(halfWholeDiminishedScale.scaleName).toEqual('h/w diminished')
-    expect(halfWholeDiminishedScale.scaleNotes).toEqual([
-      'G','Ab','A#','B','C#','D','E','F'
-    ])
-  })
-})
-
-describe('diminished chord', () => {
-  let diminishedScales: Array<NamedScale>;
-
-  beforeEach(() => {
-    diminishedScales = scalesForChord('G', 'o')
-  })
-
-  it('gives w/h diminished', () => {
-    const phrygianDominantScale = diminishedScales[0]
-
-    expect(phrygianDominantScale.scaleName).toEqual('w/h diminished')
-    expect(phrygianDominantScale.scaleNotes).toEqual([
-      'G','A','Bb','C','Db','Eb','Fb','F#',
-    ])
-  })
-
-  it('gives alt dom bb7', () => {
-    const alteredDominantFlatFlatSevenScale = diminishedScales[1]
-
-    expect(alteredDominantFlatFlatSevenScale.scaleName).toEqual('alt dom bb7')
-    expect(alteredDominantFlatFlatSevenScale.scaleNotes).toEqual([
-      'G','Ab','Bb','Cb','Db','Eb','Fb',
-    ])
-  })
-})
-
-describe('7#5 chord', () => {
-  let dominantAugmentedScales: Array<NamedScale>;
-
-  beforeEach(() => {
-    dominantAugmentedScales = scalesForChord('G', '7#5')
-  })
-
-  it('gives whole-tone', () => {
-    const wholeToneScale = dominantAugmentedScales[0]
-
-    expect(wholeToneScale.scaleName).toEqual('whole-tone')
-    expect(wholeToneScale.scaleNotes).toEqual([
-      'G','A','B','C#','D#','F',
-    ])
-  })
-})
-
 describe('rootScale', () => {
   it('returns major for major modes', () => {
     const majorScales = scalesForChord('A', '^')
@@ -166,5 +80,106 @@ describe('rootScaleNote', () => {
 
   it('returns first for whole-tone modes', () => {
     expect(scalesForChord('G', '7#5')[0].rootScaleNote).toEqual('G')
+  })
+})
+
+describe('chords', () => {
+  it('gives dorian and aeolian for minor', () => {
+    const minorScales = scalesForChord('A', '-')
+
+    const aeolianScale = minorScales[0]
+    const dorianScale = minorScales[1]
+
+    expect(aeolianScale.scaleName).toEqual('aeolian')
+    expect(aeolianScale.scaleNotes).toEqual([
+      'A','B','C','D','E','F','G'
+    ])
+
+    expect(dorianScale.scaleName).toEqual('dorian')
+    expect(dorianScale.scaleNotes).toEqual([
+      'A','B','C','D','E','F#','G'
+    ])
+  });
+
+  describe('7b9 chord', () => {
+    let dominantFlatNineScales: Array<NamedScale>;
+
+    beforeEach(() => {
+      dominantFlatNineScales = scalesForChord('G', '7b9')
+    })
+
+    it('gives phrygian dominant', () => {
+      const phrygianDominantScale = dominantFlatNineScales[0]
+
+      expect(phrygianDominantScale.scaleName).toEqual('phrygian dominant')
+      expect(phrygianDominantScale.scaleNotes).toEqual([
+        'G','Ab','B','C','D','Eb','F',
+      ])
+    })
+
+    it('gives h/w diminished', () => {
+      const halfWholeDiminishedScale = dominantFlatNineScales[1]
+
+      expect(halfWholeDiminishedScale.scaleName).toEqual('h/w diminished')
+      expect(halfWholeDiminishedScale.scaleNotes).toEqual([
+        'G','Ab','A#','B','C#','D','E','F'
+      ])
+    })
+  })
+
+  describe('diminished chord', () => {
+    let diminishedScales: Array<NamedScale>;
+
+    beforeEach(() => {
+      diminishedScales = scalesForChord('G', 'o')
+    })
+
+    it('gives w/h diminished', () => {
+      const phrygianDominantScale = diminishedScales[0]
+
+      expect(phrygianDominantScale.scaleName).toEqual('w/h diminished')
+      expect(phrygianDominantScale.scaleNotes).toEqual([
+        'G','A','Bb','C','Db','Eb','Fb','F#',
+      ])
+    })
+
+    it('gives alt dom bb7', () => {
+      const alteredDominantFlatFlatSevenScale = diminishedScales[1]
+
+      expect(alteredDominantFlatFlatSevenScale.scaleName).toEqual('alt dom bb7')
+      expect(alteredDominantFlatFlatSevenScale.scaleNotes).toEqual([
+        'G','Ab','Bb','Cb','Db','Eb','Fb',
+      ])
+    })
+  })
+
+  describe('7#5 chord', () => {
+    let dominantAugmentedScales: Array<NamedScale>;
+
+    beforeEach(() => {
+      dominantAugmentedScales = scalesForChord('G', '7#5')
+    })
+
+    it('gives whole-tone', () => {
+      const wholeToneScale = dominantAugmentedScales[0]
+
+      expect(wholeToneScale.scaleName).toEqual('whole-tone')
+      expect(wholeToneScale.scaleNotes).toEqual([
+        'G','A','B','C#','D#','F',
+      ])
+    })
+
+    it('gives altered with note', () => {
+      const alteredScale = dominantAugmentedScales[1]
+
+      expect(alteredScale.scaleName).toEqual('altered')
+      expect(alteredScale.scaleNotes).toEqual([
+        'G','Ab','Bb','Cb','Db','Eb','F',
+      ])
+
+      expect(alteredScale.notes).toEqual([
+        'musicians often prefer to substitute alt chord',
+      ])
+    })
   })
 })
