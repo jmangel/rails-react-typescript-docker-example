@@ -158,6 +158,50 @@ describe('chords', () => {
     })
   })
 
+  describe('half diminished chords', () => {
+    let halfDiminishedChordsScales: Array<Array<NamedScale>>;
+
+    beforeEach(() => {
+      halfDiminishedChordsScales = [
+        scalesForChord('B', 'h7'),
+        scalesForChord('B', '-7b5'),
+      ]
+    })
+
+    it('gives locrian', () => {
+      halfDiminishedChordsScales.forEach((chordScales) => {
+        const locrianScale = chordScales[0]
+
+        expect(locrianScale.scaleName).toEqual('locrian')
+        expect(locrianScale.scaleNotes).toEqual([
+          'B','C','D','E','F','G','A'
+        ])
+      })
+    })
+
+    it('gives locrian 2/half-dim', () => {
+      halfDiminishedChordsScales.forEach((chordScales) => {
+        const locrianTwoScale = chordScales[1]
+
+        expect(locrianTwoScale.scaleName).toEqual('locrian 2/half-dim')
+        expect(locrianTwoScale.scaleNotes).toEqual([
+          'B','C#','D','E','F','G','A'
+        ])
+      })
+    })
+
+    it('gives locrian #6', () => {
+      halfDiminishedChordsScales.forEach((chordScales) => {
+        const locrianNaturalSixScale = chordScales[2]
+
+        expect(locrianNaturalSixScale.scaleName).toEqual('locrian #6')
+        expect(locrianNaturalSixScale.scaleNotes).toEqual([
+          'B','C','D','E','F','G#','A'
+        ])
+      })
+    })
+  })
+
   describe('7b9 chord', () => {
     let dominantFlatNineScales: Array<NamedScale>;
 
