@@ -153,6 +153,41 @@ describe('chords', () => {
     })
   })
 
+  describe('7b13 chord', () => {
+    let dominantFlatThirteenScales: Array<NamedScale>;
+
+    beforeEach(() => {
+      dominantFlatThirteenScales = scalesForChord('G', '7b13')
+    })
+
+    it('gives mixolydian b13', () => {
+      const phrygianDominantScale = dominantFlatThirteenScales[0]
+
+      expect(phrygianDominantScale.scaleName).toEqual('mixolydian b13')
+      expect(phrygianDominantScale.scaleNotes).toEqual([
+        'G','A','B','C','D','Eb','F',
+      ])
+    })
+
+    it('gives whole-tone', () => {
+      const wholeToneScale = dominantFlatThirteenScales[1]
+
+      expect(wholeToneScale.scaleName).toEqual('whole-tone')
+      expect(wholeToneScale.scaleNotes).toEqual([
+        'G','A','B','C#','D#','F',
+      ])
+    })
+
+    it('gives altered', () => {
+      const alteredScale = dominantFlatThirteenScales[2]
+
+      expect(alteredScale.scaleName).toEqual('altered')
+      expect(alteredScale.scaleNotes).toEqual([
+        'G','Ab','Bb','Cb','Db','Eb','F'
+      ])
+    })
+  })
+
   describe('diminished chord', () => {
     let diminishedScales: Array<NamedScale>;
 
