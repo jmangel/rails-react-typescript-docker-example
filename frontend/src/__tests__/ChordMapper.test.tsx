@@ -169,21 +169,30 @@ describe('chords', () => {
       ])
     })
 
-    it('gives whole-tone', () => {
+    it('gives whole-tone with note', () => {
       const wholeToneScale = dominantFlatThirteenScales[1]
 
       expect(wholeToneScale.scaleName).toEqual('whole-tone')
       expect(wholeToneScale.scaleNotes).toEqual([
         'G','A','B','C#','D#','F',
       ])
+
+      expect(wholeToneScale.notes).toEqual([
+        '7b13 sometimes dangerously used to notate a 7#5',
+      ])
     })
 
-    it('gives altered', () => {
+    it('gives altered with notes', () => {
       const alteredScale = dominantFlatThirteenScales[2]
 
       expect(alteredScale.scaleName).toEqual('altered')
       expect(alteredScale.scaleNotes).toEqual([
         'G','Ab','Bb','Cb','Db','Eb','F'
+      ])
+
+      expect(alteredScale.notes).toEqual([
+        'musicians often prefer to substitute alt chord',
+        '7b13 sometimes dangerously used to notate a 7#5',
       ])
     })
   })
