@@ -518,6 +518,20 @@ const AUGMENTED_MODES: Array<RelativeMode> = [
     ]
   },
 ]
+const HALF_DIMINISHED_MODES: Array<RelativeMode> = [
+  {
+    name: 'locrian',
+    offset: 0,
+  },
+  {
+    name: 'locrian 2/half-dim',
+    offset: 0,
+  },
+  {
+    name: 'locrian #6',
+    offset: 0,
+  },
+]
 const CHORD_MAPPINGS = [
   {
     quality: '-',
@@ -573,6 +587,14 @@ const CHORD_MAPPINGS = [
         offset: 0,
       },
     ]
+  },
+  {
+    quality: 'h7',
+    possibleModes: HALF_DIMINISHED_MODES
+  },
+  {
+    quality: '-7b5',
+    possibleModes: HALF_DIMINISHED_MODES
   },
   {
     quality: '-^7',
