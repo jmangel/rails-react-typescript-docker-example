@@ -113,21 +113,48 @@ describe('chords', () => {
     })
   });
 
-  it('gives dorian and aeolian for minor', () => {
-    const minorScales = scalesForChord('A', '-')
+  describe('minor', () => {
+    let minorScales: Array<NamedScale>;
 
-    const aeolianScale = minorScales[0]
-    const dorianScale = minorScales[1]
+    beforeEach(() => {
+      minorScales = scalesForChord('A', '-')
+    })
 
-    expect(aeolianScale.scaleName).toEqual('aeolian')
-    expect(aeolianScale.scaleNotes).toEqual([
-      'A','B','C','D','E','F','G'
-    ])
+    it('aeolian', () => {
+      const aeolianScale = minorScales[0]
 
-    expect(dorianScale.scaleName).toEqual('dorian')
-    expect(dorianScale.scaleNotes).toEqual([
-      'A','B','C','D','E','F#','G'
-    ])
+      expect(aeolianScale.scaleName).toEqual('aeolian')
+      expect(aeolianScale.scaleNotes).toEqual([
+        'A','B','C','D','E','F','G'
+      ])
+    });
+
+    it('dorian', () => {
+      const dorianScale = minorScales[1]
+
+      expect(dorianScale.scaleName).toEqual('dorian')
+      expect(dorianScale.scaleNotes).toEqual([
+        'A','B','C','D','E','F#','G'
+      ])
+    });
+
+    it('phrygian', () => {
+      const phrygianScale = minorScales[2]
+
+      expect(phrygianScale.scaleName).toEqual('phrygian')
+      expect(phrygianScale.scaleNotes).toEqual([
+        'A','Bb','C','D','E','F','G'
+      ])
+    });
+
+    it('dorian #4', () => {
+      const dorianSharpFourScale = minorScales[3]
+
+      expect(dorianSharpFourScale.scaleName).toEqual('dorian #4')
+      expect(dorianSharpFourScale.scaleNotes).toEqual([
+        'A','B','C','D#','E','F#','G'
+      ])
+    });
   });
 
   describe('7 chord', () => {
