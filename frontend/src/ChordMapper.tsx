@@ -362,7 +362,7 @@ const MODES = [
     },
   },
   {
-    name: 'mixolydian b6',
+    name: 'mixolydian b13',
     relatedScale: {
       name: 'melodic minor',
       startingDegree: 5,
@@ -546,6 +546,25 @@ const CHORD_MAPPINGS = [
         name: 'h/w diminished',
         offset: 0,
       }
+    ]
+  },
+  {
+    quality: '7b13',
+    possibleModes: [
+      {
+        name: 'mixolydian b13',
+        offset: 0,
+      },
+      {
+        name: 'whole-tone',
+        offset: 0,
+        notes: '7b13 sometimes dangerously used to notate a 7#5'
+      },
+      {
+        name: 'altered',
+        offset: 0,
+        notes: '7b13 sometimes dangerously used to notate a 7#5'
+      },
     ]
   },
   {
