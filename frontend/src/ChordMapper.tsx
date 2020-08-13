@@ -376,6 +376,13 @@ const MODES = [
     },
   },
   {
+    name: 'lydian dominant',
+    relatedScale: {
+      name: 'melodic minor',
+      startingDegree: 4,
+    },
+  },
+  {
     name: 'mixolydian b13',
     relatedScale: {
       name: 'melodic minor',
@@ -629,6 +636,15 @@ const CHORD_MAPPINGS = [
         name: 'major #5',
         offset: 0,
       }
+    ]
+  },
+  {
+    quality: '7#11',
+    possibleModes: [
+      {
+        name: 'lydian dominant',
+        offset: 0,
+      },
     ]
   },
   {
