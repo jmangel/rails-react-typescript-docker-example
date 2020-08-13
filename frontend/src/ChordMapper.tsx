@@ -362,6 +362,13 @@ const MODES = [
     },
   },
   {
+    name: 'dorian b9',
+    relatedScale: {
+      name: 'melodic minor',
+      startingDegree: 2,
+    },
+  },
+  {
     name: 'mixolydian b13',
     relatedScale: {
       name: 'melodic minor',
@@ -550,6 +557,19 @@ const CHORD_MAPPINGS = [
     possibleModes: [
       {
         name: 'mixolydian',
+        offset: 0,
+      },
+    ]
+  },
+  {
+    quality: 'susb9',
+    possibleModes: [
+      {
+        name: 'phrygian',
+        offset: 0,
+      },
+      {
+        name: 'dorian b9',
         offset: 0,
       },
     ]

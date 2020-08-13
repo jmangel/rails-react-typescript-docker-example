@@ -138,6 +138,26 @@ describe('chords', () => {
     })
   })
 
+  describe('susb9 chord', () => {
+    it('gives phrygian', () => {
+      const phrygianScale = scalesForChord('E', 'susb9')[0]
+
+      expect(phrygianScale.scaleName).toEqual('phrygian')
+      expect(phrygianScale.scaleNotes).toEqual([
+        'E','F','G','A','B','C','D'
+      ])
+    })
+
+    it('gives dorian b9', () => {
+      const dorianFlatNineScale = scalesForChord('D', 'susb9')[1]
+
+      expect(dorianFlatNineScale.scaleName).toEqual('dorian b9')
+      expect(dorianFlatNineScale.scaleNotes).toEqual([
+        'D','Eb','F','G','A','B','C'
+      ])
+    })
+  })
+
   describe('7b9 chord', () => {
     let dominantFlatNineScales: Array<NamedScale>;
 
