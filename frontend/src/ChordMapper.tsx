@@ -369,6 +369,13 @@ const MODES = [
     },
   },
   {
+    name: 'lydian augmented',
+    relatedScale: {
+      name: 'melodic minor',
+      startingDegree: 3,
+    },
+  },
+  {
     name: 'mixolydian b13',
     relatedScale: {
       name: 'melodic minor',
@@ -401,6 +408,13 @@ const MODES = [
     relatedScale: {
       name: 'harmonic minor',
       startingDegree: 2,
+    },
+  },
+  {
+    name: 'major #5',
+    relatedScale: {
+      name: 'harmonic minor',
+      startingDegree: 3,
     },
   },
   {
@@ -603,6 +617,19 @@ const CHORD_MAPPINGS = [
   {
     quality: '-^',
     possibleModes: MINOR_MAJOR_MODES
+  },
+  {
+    quality: '^#5',
+    possibleModes: [
+      {
+        name: 'lydian augmented',
+        offset: 0,
+      },
+      {
+        name: 'major #5',
+        offset: 0,
+      }
+    ]
   },
   {
     quality: '7b9',

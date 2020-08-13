@@ -360,4 +360,30 @@ describe('chords', () => {
       })
     })
   })
+
+  describe('^#5 chord', () => {
+    let majorSharpFiveScales: Array<NamedScale>;
+
+    beforeEach(() => {
+      majorSharpFiveScales = scalesForChord('Eb', '^#5')
+    })
+
+    it('gives lydian augmented', () => {
+      const wholeToneScale = majorSharpFiveScales[0]
+
+      expect(wholeToneScale.scaleName).toEqual('lydian augmented')
+      expect(wholeToneScale.scaleNotes).toEqual([
+        'Eb','F','G','A','B','C','D'
+      ])
+    })
+
+    it('gives major #5', () => {
+      const majorSharpFiveScale = majorSharpFiveScales[1]
+
+      expect(majorSharpFiveScale.scaleName).toEqual('major #5')
+      expect(majorSharpFiveScale.scaleNotes).toEqual([
+        'Eb','F','G','Ab','B','C','D'
+      ])
+    })
+  })
 })
