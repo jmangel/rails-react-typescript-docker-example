@@ -447,9 +447,14 @@ const MODES = [
   },
 ]
 
+interface RelativeMode {
+  name: string;
+  offset: number;
+  notes?: Array<string>;
+}
 interface ChordMapping {
   quality: string;
-  possibleModes: Array<{name: string, offset: number}>;
+  possibleModes: Array<RelativeMode>;
 }
 const MINOR_MODES = [
   {
@@ -491,6 +496,19 @@ const MINOR_MAJOR_MODES = [
   {
     name: 'harmonic minor',
     offset: 0,
+  },
+]
+const AUGMENTED_MODES: Array<RelativeMode> = [
+  {
+    name: 'whole-tone',
+    offset: 0,
+  },
+  {
+    name: 'altered',
+    offset: 0,
+    notes: [
+      'musicians often prefer to substitute alt chord',
+    ]
   },
 ]
 const CHORD_MAPPINGS = [
@@ -555,17 +573,20 @@ const CHORD_MAPPINGS = [
         name: 'mixolydian b13',
         offset: 0,
       },
-      {
-        name: 'whole-tone',
-        offset: 0,
-        notes: '7b13 sometimes dangerously used to notate a 7#5'
-      },
-      {
-        name: 'altered',
-        offset: 0,
-        notes: '7b13 sometimes dangerously used to notate a 7#5'
-      },
+      ...AUGMENTED_MODES.map((possibleMode) => {
+        return {
+          ...possibleMode,
+          notes: (possibleMode.notes || [])
+            .concat(
+              '7b13 sometimes dangerously used to notate a 7#5'
+            ),
+        }
+      }),
     ]
+  },
+  {
+    quality: '7#5',
+    possibleModes: AUGMENTED_MODES
   },
   {
     quality: 'o',
@@ -578,15 +599,6 @@ const CHORD_MAPPINGS = [
         name: 'alt dom bb7',
         offset: 0,
       }
-    ]
-  },
-  {
-    quality: '7#5',
-    possibleModes: [
-      {
-        name: 'whole-tone',
-        offset: 0,
-      },
     ]
   },
   {
@@ -620,6 +632,7 @@ export interface NamedScale {
   scaleNotes: Array<string>;
   rootScale: string;
   rootScaleNote: string;
+  notes: Array<string>;
 }
 const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedScale> => {
   const namedNoteIndex = NAMED_NOTES.findIndex((note: string): boolean => chordNote.includes(note))
@@ -627,7 +640,7 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
 
   const possibleModes = CHORD_MAPPINGS.find((chord: ChordMapping) => chord.quality == chordQuality)?.possibleModes || []
 
-  return possibleModes.map((possibleMode: {name: string, offset: number}): NamedScale => {
+  return possibleModes.map((possibleMode: RelativeMode): NamedScale => {
     const mode = MODES.find((mode: Mode) => mode.name == possibleMode.name);
     if (mode == undefined) throw new Error(`primaryScale not found ${possibleMode.name}`);
 
@@ -710,7 +723,8 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
       scaleName: possibleMode.name,
       scaleNotes,
       rootScale: mode.relatedScale.name,
-      rootScaleNote: scaleNotes[rootDegree - 1]
+      rootScaleNote: scaleNotes[rootDegree - 1],
+      notes: possibleMode.notes || [],
     }
   })
 }
