@@ -575,6 +575,10 @@ const CHORD_MAPPINGS = [
     possibleModes: MAJOR_MODES,
   },
   {
+    quality: '^7',
+    possibleModes: MAJOR_MODES,
+  },
+  {
     quality: '7',
     possibleModes: [
       {
