@@ -453,4 +453,15 @@ describe('chords', () => {
       ])
     })
   })
+
+  describe('7alt', () => {
+    it('gives altered', () => {
+      const alteredScale = scalesForChord('G', '7alt')[0]
+
+      expect(alteredScale.scaleName).toEqual('altered')
+      expect(alteredScale.scaleNotes).toEqual([
+        'G','Ab','Bb','Cb','Db','Eb','F',
+      ])
+    })
+  })
 })
