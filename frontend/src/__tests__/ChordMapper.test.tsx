@@ -101,6 +101,32 @@ describe('chords', () => {
     ])
   });
 
+  describe('7 chord', () => {
+    let dominantScales: Array<NamedScale>;
+
+    beforeEach(() => {
+      dominantScales = scalesForChord('G', '7')
+    })
+
+    it('gives mixolydian', () => {
+      const halfWholeDiminishedScale = dominantScales[0]
+
+      expect(halfWholeDiminishedScale.scaleName).toEqual('mixolydian')
+      expect(halfWholeDiminishedScale.scaleNotes).toEqual([
+        'G','A','B','C','D','E','F'
+      ])
+    })
+
+    it('gives phrygian dominant', () => {
+      const phrygianDominantScale = dominantScales[1]
+
+      expect(phrygianDominantScale.scaleName).toEqual('phrygian dominant')
+      expect(phrygianDominantScale.scaleNotes).toEqual([
+        'G','Ab','B','C','D','Eb','F',
+      ])
+    })
+  })
+
   describe('7b9 chord', () => {
     let dominantFlatNineScales: Array<NamedScale>;
 
@@ -180,6 +206,39 @@ describe('chords', () => {
       expect(alteredScale.notes).toEqual([
         'musicians often prefer to substitute alt chord',
       ])
+    })
+  })
+
+  describe('minor major chord', () => {
+    let minorMajorChordScales: Array<Array<NamedScale>>;
+
+    beforeEach(() => {
+      minorMajorChordScales = [
+        scalesForChord('C', '-^'),
+        scalesForChord('C', '-^7'),
+      ]
+    })
+
+    it('gives melodic minor', () => {
+      minorMajorChordScales.forEach((chordScales) => {
+        const melodicMinorScale = chordScales[0]
+
+        expect(melodicMinorScale.scaleName).toEqual('melodic minor')
+        expect(melodicMinorScale.scaleNotes).toEqual([
+          'C','D','Eb','F','G','A','B',
+        ])
+      })
+    })
+
+    it('gives harmonic minor', () => {
+      minorMajorChordScales.forEach((chordScales) => {
+        const harmonicMinorScale = chordScales[1]
+
+        expect(harmonicMinorScale.scaleName).toEqual('harmonic minor')
+        expect(harmonicMinorScale.scaleNotes).toEqual([
+          'C','D','Eb','F','G','Ab','B',
+        ])
+      })
     })
   })
 })
