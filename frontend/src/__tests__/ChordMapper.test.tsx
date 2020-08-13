@@ -84,6 +84,35 @@ describe('rootScaleNote', () => {
 })
 
 describe('chords', () => {
+  describe('major chords', () => {
+    it('gives ionian', () => {
+      const majorScale = scalesForChord('C', '^')[0]
+
+      expect(majorScale.scaleName).toEqual('ionian')
+      expect(majorScale.scaleNotes).toEqual([
+        'C','D','E','F','G','A','B'
+      ])
+    })
+
+    it('gives lydian', () => {
+      const phrygianDominantScale = scalesForChord('F', '^')[1]
+
+      expect(phrygianDominantScale.scaleName).toEqual('lydian')
+      expect(phrygianDominantScale.scaleNotes).toEqual([
+        'F','G','A','B','C','D','E'
+      ])
+    })
+
+    it('gives lydian #2', () => {
+      const phrygianDominantScale = scalesForChord('F', '^')[2]
+
+      expect(phrygianDominantScale.scaleName).toEqual('lydian #2')
+      expect(phrygianDominantScale.scaleNotes).toEqual([
+        'F','G#','A','B','C','D','E'
+      ])
+    })
+  });
+
   it('gives dorian and aeolian for minor', () => {
     const minorScales = scalesForChord('A', '-')
 
