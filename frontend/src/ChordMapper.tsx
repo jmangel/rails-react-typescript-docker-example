@@ -355,6 +355,13 @@ const MODES = [
     },
   },
   {
+    name: 'melodic minor',
+    relatedScale: {
+      name: 'melodic minor',
+      startingDegree: 1,
+    },
+  },
+  {
     name: 'mixolydian b6',
     relatedScale: {
       name: 'melodic minor',
@@ -373,6 +380,13 @@ const MODES = [
     relatedScale: {
       name: 'melodic minor',
       startingDegree: 7,
+    },
+  },
+  {
+    name: 'harmonic minor',
+    relatedScale: {
+      name: 'harmonic minor',
+      startingDegree: 1,
     },
   },
   {
@@ -469,6 +483,16 @@ const MAJOR_MODES = [
     offset: 0,
   },
 ]
+const MINOR_MAJOR_MODES = [
+  {
+    name: 'melodic minor',
+    offset: 0,
+  },
+  {
+    name: 'harmonic minor',
+    offset: 0,
+  },
+]
 const CHORD_MAPPINGS = [
   {
     quality: '-',
@@ -489,6 +513,27 @@ const CHORD_MAPPINGS = [
   {
     quality: '',
     possibleModes: MAJOR_MODES,
+  },
+  {
+    quality: '7',
+    possibleModes: [
+      {
+        name: 'mixolydian',
+        offset: 0,
+      },
+      {
+        name: 'phrygian dominant',
+        offset: 0,
+      },
+    ]
+  },
+  {
+    quality: '-^7',
+    possibleModes: MINOR_MAJOR_MODES
+  },
+  {
+    quality: '-^',
+    possibleModes: MINOR_MAJOR_MODES
   },
   {
     quality: '7b9',
