@@ -7,7 +7,7 @@ import './App.css';
 import ChordRow, { ChordRowObject } from './ChordRow'
 
 const createChordRowObject = (): ChordRowObject => {
-  return {} as ChordRowObject;
+  return { chordQuality: '' } as ChordRowObject;
 }
 
 interface Song {
