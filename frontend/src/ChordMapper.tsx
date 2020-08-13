@@ -546,6 +546,15 @@ const CHORD_MAPPINGS = [
     ]
   },
   {
+    quality: 'sus',
+    possibleModes: [
+      {
+        name: 'mixolydian',
+        offset: 0,
+      },
+    ]
+  },
+  {
     quality: '-^7',
     possibleModes: MINOR_MAJOR_MODES
   },
