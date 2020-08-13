@@ -127,6 +127,17 @@ describe('chords', () => {
     })
   })
 
+  describe('sus chord', () => {
+    it('gives mixolydian', () => {
+      const halfWholeDiminishedScale = scalesForChord('G', 'sus')[0]
+
+      expect(halfWholeDiminishedScale.scaleName).toEqual('mixolydian')
+      expect(halfWholeDiminishedScale.scaleNotes).toEqual([
+        'G','A','B','C','D','E','F'
+      ])
+    })
+  })
+
   describe('7b9 chord', () => {
     let dominantFlatNineScales: Array<NamedScale>;
 
