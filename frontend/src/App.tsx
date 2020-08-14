@@ -1,5 +1,10 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { Container, Button, Row, Input } from 'reactstrap';
+import {
+  useQueryParams,
+  ArrayParam,
+  withDefault,
+} from 'use-query-params';
 
 const iRealReader = require('ireal-reader');
 
@@ -23,8 +28,26 @@ const createSongObject = (): Song => {
 const chordParserRegex = /(^[A-G]+[b|#]*)([^/]*)(\/?[A-G]+[b|#]*)?$/gm;
 
 const App: React.FC = () => {
-  const [chordRowObjects, setChordRowObjects] = React.useState([createChordRowObject()]);
   const [newChordRows, setNewChordRows] = React.useState(1);
+
+  const [query, setQuery] = useQueryParams({
+    chordRowObjectStrings: withDefault(ArrayParam, [JSON.stringify(createChordRowObject())]),
+  });
+  const { chordRowObjectStrings } = query;
+
+  const [chordRowObjects, setChordRowObjects] = React.useState(
+    (chordRowObjectStrings as Array<string>).map(
+      (stringifiedObject: string): ChordRowObject => JSON.parse(stringifiedObject)
+    )
+  );
+
+  useEffect(() => {
+    setQuery(
+      { chordRowObjectStrings: chordRowObjects.map((newChordRow) => JSON.stringify(newChordRow)) },
+      'push'
+    )
+  }, [chordRowObjects]);
+
 
   const [song, setSong] = React.useState(createSongObject());
 
