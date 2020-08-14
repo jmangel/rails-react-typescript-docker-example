@@ -123,6 +123,8 @@ describe('chords', () => {
         ])
       })
     })
+
+    // TODO: lydian b6?
   });
 
   describe('minor', () => {
