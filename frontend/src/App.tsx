@@ -90,7 +90,8 @@ const App: React.FC = () => {
 
               return {
                 chordNote,
-                chordQuality
+                chordQuality,
+                selectedScale: '',
               }
             });
           })

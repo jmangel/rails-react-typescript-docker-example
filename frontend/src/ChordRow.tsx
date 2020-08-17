@@ -5,6 +5,7 @@ import scalesForChord, { NamedScale } from './ChordMapper'
 export interface ChordRowObject {
   chordNote: string;
   chordQuality: string;
+  selectedScale: string;
 }
 
 const ChordRow: React.FC<{
@@ -15,7 +16,7 @@ const ChordRow: React.FC<{
   onRowChange,
 }) => {
 
-  const { chordNote, chordQuality } = chordRowObject
+  const { chordNote, chordQuality, selectedScale } = chordRowObject
 
   const scales = (chordNote && scalesForChord(chordNote, chordQuality)) || [];
 
@@ -59,11 +60,19 @@ const ChordRow: React.FC<{
       <Col>
         <FormGroup>
           <Label for="exampleSelect">Select</Label>
-          <Input type="select" name="select" id="exampleSelect">
+          <Input type="select"
+            name="select"
+            id="exampleSelect"
+            onChange={e => onRowChange(e.target.value, 'selectedScale')}
+          >
             <option>--</option>
             {scales.map(
               (namedScale: NamedScale, index: number) => (
-                <option key={`option--scale-${index}`}>
+                <option
+                  key={`option--scale-${index}`}
+                  value={namedScale.scaleName}
+                  selected={namedScale.scaleName === selectedScale}
+                >
                   {namedScale.rootScaleNote} {namedScale.rootScale}: {chordNote} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
                 </option>
               )
