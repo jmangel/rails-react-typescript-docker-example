@@ -55,17 +55,17 @@ const App: React.FC = () => {
   const [newChordRows, setNewChordRows] = React.useState(1);
 
   const [query, setQuery] = useQueryParams({
-    qros: withDefault(ArrayParam, [stringifyChordRowObject(createChordRowObject())]),
+    a: withDefault(ArrayParam, [stringifyChordRowObject(createChordRowObject())]),
   });
-  const { qros } = query;
+  const { a } = query;
 
   const [chordRowObjects, setChordRowObjects] = React.useState(
-    (qros as Array<string>).map(parseStringifiedChordRowObject)
+    (a as Array<string>).map(parseStringifiedChordRowObject)
   );
 
   useEffect(() => {
     setQuery(
-      { qros: chordRowObjects.map(stringifyChordRowObject) },
+      { a: chordRowObjects.map(stringifyChordRowObject) },
       'push'
     )
   }, [chordRowObjects]);
