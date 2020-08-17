@@ -25,25 +25,47 @@ const createSongObject = (): Song => {
   return {} as Song;
 }
 
+const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string } = {
+  'chordNote': 'cn',
+  'chordQuality': 'cq',
+  'selectedScale': 'ss',
+}
+
+const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
+  let stringified = JSON.stringify(chordRowObject);
+  Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
+    stringified = stringified.replace(new RegExp(fullKeyName, 'g'), QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject])
+  })
+  return stringified;
+}
+
+const parseStringifiedChordRowObject = (stringifiedObject: string): ChordRowObject => {
+  let parsedObject = JSON.parse(stringifiedObject)
+  Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
+    const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject];
+    parsedObject[fullKeyName] = parsedObject[shortKey];
+    delete parsedObject[shortKey];
+  })
+  return parsedObject;
+}
+
 const chordParserRegex = /(^[A-G]+[b|#]*)([^/]*)(\/?[A-G]+[b|#]*)?$/gm;
 
 const App: React.FC = () => {
   const [newChordRows, setNewChordRows] = React.useState(1);
 
   const [query, setQuery] = useQueryParams({
-    chordRowObjectStrings: withDefault(ArrayParam, [JSON.stringify(createChordRowObject())]),
+    qros: withDefault(ArrayParam, [stringifyChordRowObject(createChordRowObject())]),
   });
-  const { chordRowObjectStrings } = query;
+  const { qros } = query;
 
   const [chordRowObjects, setChordRowObjects] = React.useState(
-    (chordRowObjectStrings as Array<string>).map(
-      (stringifiedObject: string): ChordRowObject => JSON.parse(stringifiedObject)
-    )
+    (qros as Array<string>).map(parseStringifiedChordRowObject)
   );
 
   useEffect(() => {
     setQuery(
-      { chordRowObjectStrings: chordRowObjects.map((newChordRow) => JSON.stringify(newChordRow)) },
+      { qros: chordRowObjects.map(stringifyChordRowObject) },
       'push'
     )
   }, [chordRowObjects]);
