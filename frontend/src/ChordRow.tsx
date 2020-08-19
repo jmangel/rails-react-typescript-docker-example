@@ -8,6 +8,12 @@ export interface ChordRowObject {
   selectedScale: string;
 }
 
+export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string } = {
+  'chordNote': 'cn',
+  'chordQuality': 'cq',
+  'selectedScale': 'ss',
+}
+
 const ChordRow: React.FC<{
   chordRowObject: ChordRowObject,
   onRowChange: (newValue: string, key: keyof ChordRowObject) => void,

@@ -9,7 +9,7 @@ import {
 const iRealReader = require('ireal-reader');
 
 import './App.css';
-import ChordRow, { ChordRowObject } from './ChordRow'
+import ChordRow, { ChordRowObject, QUERY_STRING_KEY_MAPPINGS } from './ChordRow'
 
 const createChordRowObject = (): ChordRowObject => {
   return { chordQuality: '' } as ChordRowObject;
@@ -23,12 +23,6 @@ interface Song {
 };
 const createSongObject = (): Song => {
   return {} as Song;
-}
-
-const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string } = {
-  'chordNote': 'cn',
-  'chordQuality': 'cq',
-  'selectedScale': 'ss',
 }
 
 const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
