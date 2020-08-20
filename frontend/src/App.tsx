@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect } from 'react';
-import { Container, Button, Row, Input } from 'reactstrap';
+import { Button, Container, Input, Row } from 'reactstrap';
 import {
   useQueryParams,
   ArrayParam,
@@ -122,9 +122,22 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          {song.title}
-        </p>
+        {song.title &&
+          <p>
+            {song.title}
+          </p>
+        }
+        <Button
+          className="ml-auto mr-3"
+          color="primary"
+          onClick={() => {
+            const el = document.createElement('textarea');
+            el.value = window.location.href;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }}>Copy Share link to clipboard</Button>
       </header>
       <Container>
         <Row className='w-25 mx-auto border'>
