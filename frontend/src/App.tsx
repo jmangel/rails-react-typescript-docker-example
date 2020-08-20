@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect } from 'react';
-import { Button, Container, Input, Row } from 'reactstrap';
+import { Button, Col, Container, FormText, Input, Label, Row } from 'reactstrap';
 import {
   useQueryParams,
   ArrayParam,
@@ -140,13 +140,21 @@ const App: React.FC = () => {
         }}>Copy Share link to clipboard</Button>
       </header>
       <Container>
-        <Row className='w-25 mx-auto border'>
-          <Input
-            type="file"
-            name="irealImportFile"
-            id="irealImportFile"
-            onChange={handleFiles}
-          />
+        <Row className='mx-auto py-2 mb-3'>
+          <Col>
+            <div className="custom-file">
+              <Label className="custom-file-label" for="irealImportFile">Import song from iReal Pro</Label>
+              <Input
+                type="file"
+                name="irealImportFile"
+                id="irealImportFile"
+                onChange={handleFiles}
+              />
+              <FormText color="muted" className="py-1">
+                Export the song from iReal Pro as HTML and upload here.
+              </FormText>
+            </div>
+          </Col>
         </Row>
         {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
           chordRowObject={chordRowObject}
