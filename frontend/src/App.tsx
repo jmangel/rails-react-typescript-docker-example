@@ -1,5 +1,17 @@
-import React, { ChangeEvent, useEffect } from 'react';
-import { Button, Col, Container, FormText, Input, Label, Row } from 'reactstrap';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import {
+  Button,
+  Col,
+  Container,
+  FormText,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+} from 'reactstrap';
 import {
   useQueryParams,
   ArrayParam,
@@ -47,7 +59,7 @@ const parseStringifiedChordRowObject = (stringifiedObject: string): ChordRowObje
 const chordParserRegex = /(^[A-G]+[b|#]*)([^/]*)(\/?[A-G]+[b|#]*)?$/gm;
 
 const App: React.FC = () => {
-  const [newChordRows, setNewChordRows] = React.useState(1);
+  const [newChordRows, setNewChordRows] = useState(1);
 
   const [query, setQuery] = useQueryParams({
     a: withDefault(ArrayParam, [stringifyChordRowObject(createChordRowObject())]),
@@ -55,7 +67,7 @@ const App: React.FC = () => {
   });
   const { a, t } = query;
 
-  const [chordRowObjects, setChordRowObjects] = React.useState(
+  const [chordRowObjects, setChordRowObjects] = useState(
     (a as Array<string>).map(parseStringifiedChordRowObject)
   );
 
@@ -66,7 +78,7 @@ const App: React.FC = () => {
     )
   }, [chordRowObjects]);
 
-  const [song, setSong] = React.useState(createSongObject(t));
+  const [song, setSong] = useState(createSongObject(t));
 
   useEffect(() => {
     setQuery(
@@ -74,6 +86,14 @@ const App: React.FC = () => {
       'pushIn'
     )
   }, [song]);
+
+  const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
+  const toggle = (rowIndex: number) => {
+    if (expandedRowIndex > -1) setExpandedRowIndex(-1);
+    else setExpandedRowIndex(rowIndex);
+  }
+
+  const expandedChordRow = (expandedRowIndex > -1) && chordRowObjects[expandedRowIndex];
 
   const handleRowChange = (rowIndex: number, newValue: string, key: keyof ChordRowObject): void => {
     let newChordRows = chordRowObjects.slice()
@@ -166,6 +186,7 @@ const App: React.FC = () => {
         </Row>
         {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
           chordRowObject={chordRowObject}
+          onRowExpand={ () => toggle(rowIndex) }
           onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
         />)}
         <Row className='w-25 mx-auto border'>
@@ -188,6 +209,22 @@ const App: React.FC = () => {
           Row(s)
         </Row>
       </Container>
+      {
+        expandedChordRow && (
+          <Modal isOpen={(expandedRowIndex > -1)} className="mw-100">
+            <ModalHeader toggle={() => toggle(-1)}>{expandedChordRow.chordNote}{expandedChordRow.chordQuality}</ModalHeader>
+            <ModalBody>
+              <ChordRow
+                chordRowObject={expandedChordRow}
+                onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(expandedRowIndex, newValue, key)}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={() => toggle(-1)}>Close</Button>
+            </ModalFooter>
+          </Modal>
+        )
+      }
     </div>
   );
 }

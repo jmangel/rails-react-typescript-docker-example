@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import scalesForChord, { NamedScale } from './ChordMapper'
 
 export interface ChordRowObject {
@@ -17,9 +17,11 @@ export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string 
 const ChordRow: React.FC<{
   chordRowObject: ChordRowObject,
   onRowChange: (newValue: string, key: keyof ChordRowObject) => void,
+  onRowExpand?: () => void,
 }> = ({
   chordRowObject,
   onRowChange,
+  onRowExpand,
 }) => {
 
   const { chordNote, chordQuality, selectedScale } = chordRowObject
@@ -28,7 +30,7 @@ const ChordRow: React.FC<{
 
   return (
     <Row className="border">
-      <Col>
+      <Col xs={3}>
         <Form>
           <FormGroup>
             <Label for="exampleEmail">Chord Note:</Label>
@@ -50,7 +52,7 @@ const ChordRow: React.FC<{
           </FormGroup>
         </Form>
       </Col>
-      <Col>
+      <Col xs={4}>
         {scales.map(
           (namedScale: NamedScale, index: number) => (
             <div key={`scale-${index}`}>
@@ -63,7 +65,7 @@ const ChordRow: React.FC<{
           )
         )}
       </Col>
-      <Col>
+      <Col xs={5}>
         <FormGroup>
           <Label for="exampleSelect">Select</Label>
           <Input type="select"
@@ -85,7 +87,12 @@ const ChordRow: React.FC<{
             )}
           </Input>
         </FormGroup>
-      </Col>
+        {
+          onRowExpand && (
+            <Button color="info" onClick={onRowExpand}>Expand</Button>
+          )
+        }
+        </Col>
     </Row>
   );
 }
