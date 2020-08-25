@@ -6,10 +6,6 @@ import {
   FormText,
   Input,
   Label,
-  // Modal,
-  // ModalBody,
-  // ModalFooter,
-  // ModalHeader,
   Row,
 } from 'reactstrap';
 import {
@@ -177,21 +173,6 @@ const App: React.FC = () => {
             onRowChange={handleRowChange}
             toggle={toggle}
           />
-          // <Modal isOpen={(expandedRowIndex > -1)} className="mw-100">
-          //   <ModalHeader toggle={() => toggle(-1)}>{expandedChordRow.chordNote}{expandedChordRow.chordQuality}</ModalHeader>
-          //   <ModalBody>
-          //     <ChordCarousel
-          //       expandedRowIndex={expandedRowIndex}
-          //       chordRowObjects={chordRowObjects}
-          //       setExpandedRowIndex={setExpandedRowIndex}
-          //       onRowChange={handleRowChange}
-          //       toggle={toggle}
-          //     />
-          //   </ModalBody>
-          //   <ModalFooter>
-          //     <Button color="secondary" onClick={() => toggle(-1)}>Close</Button>
-          //   </ModalFooter>
-          // </Modal>
         ) : (
         <Container>
           <Row className='mx-auto py-2 mb-3'>
