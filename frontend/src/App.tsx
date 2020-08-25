@@ -6,10 +6,10 @@ import {
   FormText,
   Input,
   Label,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
+  // Modal,
+  // ModalBody,
+  // ModalFooter,
+  // ModalHeader,
   Row,
 } from 'reactstrap';
 import {
@@ -23,6 +23,7 @@ const iRealReader = require('ireal-reader');
 
 import './App.css';
 import ChordRow, { ChordRowObject, QUERY_STRING_KEY_MAPPINGS } from './ChordRow'
+import ChordCarousel from './ChordCarousel';
 
 const createChordRowObject = (): ChordRowObject => {
   return { chordQuality: '' } as ChordRowObject;
@@ -167,62 +168,73 @@ const App: React.FC = () => {
             document.body.removeChild(el);
         }}>Copy Share link to clipboard</Button>
       </header>
-      <Container>
-        <Row className='mx-auto py-2 mb-3'>
-          <Col>
-            <div className="custom-file">
-              <Label className="custom-file-label" for="irealImportFile">Import song from iReal Pro</Label>
-              <Input
-                type="file"
-                name="irealImportFile"
-                id="irealImportFile"
-                onChange={handleFiles}
-              />
-              <FormText color="muted" className="py-1">
-                Export the song from iReal Pro as HTML and upload here.
-              </FormText>
-            </div>
-          </Col>
-        </Row>
-        {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
-          chordRowObject={chordRowObject}
-          onRowExpand={ () => toggle(rowIndex) }
-          onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
-        />)}
-        <Row className='w-25 mx-auto border'>
-          <Button onClick={() => {
-            if (newChordRows < 0) {
-              setChordRowObjects(chordRowObjects => chordRowObjects.slice(0,newChordRows))
-            } else {
-              const newChordRowsArray: Array<ChordRowObject> = [...Array(newChordRows)].map(() => createChordRowObject())
-              setChordRowObjects(chordRowObjects => [...chordRowObjects, ...newChordRowsArray])
-            }
-          }}>Add</Button>
-          <Input
-            type="number"
-            name="newChordRows"
-            value={newChordRows}
-            onChange={e => setNewChordRows(parseInt(e.target.value))}
-            className='w-25 mx-2'
-            inline
-          />
-          Row(s)
-        </Row>
-      </Container>
       {
-        expandedChordRow && (
-          <Modal isOpen={(expandedRowIndex > -1)} className="mw-100">
-            <ModalHeader toggle={() => toggle(-1)}>{expandedChordRow.chordNote}{expandedChordRow.chordQuality}</ModalHeader>
-            <ModalBody>
-              <ChordRow
-                chordRowObject={expandedChordRow}
-                onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(expandedRowIndex, newValue, key)}
-              />
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={() => toggle(-1)}>Close</Button>
-            </ModalFooter>
-          </Modal>
+        expandedChordRow ? (
+          <ChordCarousel
+            expandedRowIndex={expandedRowIndex}
+            chordRowObjects={chordRowObjects}
+            setExpandedRowIndex={setExpandedRowIndex}
+            onRowChange={handleRowChange}
+            toggle={toggle}
+          />
+          // <Modal isOpen={(expandedRowIndex > -1)} className="mw-100">
+          //   <ModalHeader toggle={() => toggle(-1)}>{expandedChordRow.chordNote}{expandedChordRow.chordQuality}</ModalHeader>
+          //   <ModalBody>
+          //     <ChordCarousel
+          //       expandedRowIndex={expandedRowIndex}
+          //       chordRowObjects={chordRowObjects}
+          //       setExpandedRowIndex={setExpandedRowIndex}
+          //       onRowChange={handleRowChange}
+          //       toggle={toggle}
+          //     />
+          //   </ModalBody>
+          //   <ModalFooter>
+          //     <Button color="secondary" onClick={() => toggle(-1)}>Close</Button>
+          //   </ModalFooter>
+          // </Modal>
+        ) : (
+        <Container>
+          <Row className='mx-auto py-2 mb-3'>
+            <Col>
+              <div className="custom-file">
+                <Label className="custom-file-label" for="irealImportFile">Import song from iReal Pro</Label>
+                <Input
+                  type="file"
+                  name="irealImportFile"
+                  id="irealImportFile"
+                  onChange={handleFiles}
+                />
+                <FormText color="muted" className="py-1">
+                  Export the song from iReal Pro as HTML and upload here.
+                </FormText>
+              </div>
+            </Col>
+          </Row>
+          {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
+            chordRowObject={chordRowObject}
+            onRowExpand={ () => toggle(rowIndex) }
+            onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
+          />)}
+          <Row className='w-25 mx-auto border'>
+            <Button onClick={() => {
+              if (newChordRows < 0) {
+                setChordRowObjects(chordRowObjects => chordRowObjects.slice(0,newChordRows))
+              } else {
+                const newChordRowsArray: Array<ChordRowObject> = [...Array(newChordRows)].map(() => createChordRowObject())
+                setChordRowObjects(chordRowObjects => [...chordRowObjects, ...newChordRowsArray])
+              }
+            }}>Add</Button>
+            <Input
+              type="number"
+              name="newChordRows"
+              value={newChordRows}
+              onChange={e => setNewChordRows(parseInt(e.target.value))}
+              className='w-25 mx-2'
+              inline
+            />
+            Row(s)
+          </Row>
+        </Container>
         )
       }
     </div>
