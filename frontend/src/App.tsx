@@ -3,6 +3,7 @@ import { Button, Col, Container, FormText, Input, Label, Row } from 'reactstrap'
 import {
   useQueryParams,
   ArrayParam,
+  StringParam,
   withDefault,
 } from 'use-query-params';
 
@@ -21,8 +22,8 @@ interface Song {
     measures: Array<Array<string>>;
   };
 };
-const createSongObject = (): Song => {
-  return {} as Song;
+const createSongObject = (title: string | null): Song => {
+  return { title } as Song;
 }
 
 const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
@@ -50,8 +51,9 @@ const App: React.FC = () => {
 
   const [query, setQuery] = useQueryParams({
     a: withDefault(ArrayParam, [stringifyChordRowObject(createChordRowObject())]),
+    t: withDefault(StringParam, ''),
   });
-  const { a } = query;
+  const { a, t } = query;
 
   const [chordRowObjects, setChordRowObjects] = React.useState(
     (a as Array<string>).map(parseStringifiedChordRowObject)
@@ -60,12 +62,18 @@ const App: React.FC = () => {
   useEffect(() => {
     setQuery(
       { a: chordRowObjects.map(stringifyChordRowObject) },
-      'push'
+      'pushIn'
     )
   }, [chordRowObjects]);
 
+  const [song, setSong] = React.useState(createSongObject(t));
 
-  const [song, setSong] = React.useState(createSongObject());
+  useEffect(() => {
+    setQuery(
+      { t: song.title },
+      'pushIn'
+    )
+  }, [song]);
 
   const handleRowChange = (rowIndex: number, newValue: string, key: keyof ChordRowObject): void => {
     let newChordRows = chordRowObjects.slice()
