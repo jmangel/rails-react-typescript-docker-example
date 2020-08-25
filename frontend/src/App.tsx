@@ -11,6 +11,7 @@ import {
 import {
   useQueryParams,
   ArrayParam,
+  NumberParam,
   StringParam,
   withDefault,
 } from 'use-query-params';
@@ -61,8 +62,9 @@ const App: React.FC = () => {
   const [query, setQuery] = useQueryParams({
     a: withDefault(ArrayParam, [stringifyChordRowObject(createChordRowObject())]),
     t: withDefault(StringParam, ''),
+    i: withDefault(NumberParam, -1)
   });
-  const { a, t } = query;
+  const { a, t, i } = query;
 
   const [chordRowObjects, setChordRowObjects] = useState(
     (a as Array<string>).map(parseStringifiedChordRowObject)
@@ -84,11 +86,18 @@ const App: React.FC = () => {
     )
   }, [song]);
 
-  const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
+  const [expandedRowIndex, setExpandedRowIndex] = useState(i);
   const toggle = (rowIndex: number) => {
     if (expandedRowIndex > -1) setExpandedRowIndex(-1);
     else setExpandedRowIndex(rowIndex);
   }
+
+  useEffect(() => {
+    setQuery(
+      { i: expandedRowIndex },
+      'pushIn'
+    )
+  }, [expandedRowIndex]);
 
   const expandedChordRow = (expandedRowIndex > -1) && chordRowObjects[expandedRowIndex];
 

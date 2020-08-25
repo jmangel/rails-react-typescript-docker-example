@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Button,
   Carousel,
   CarouselControl,
   CarouselIndicators,
@@ -48,12 +49,12 @@ const ChordCarousel: React.FC<{
         onExited={() => setAnimating(false)}
         key={`carousel--chord-${rowIndex}`}
       >
-        <Container className="w-75 px-5 pb-4">
+        <Container className="w-75 px-5 pb-5">
           <ChordRow
             chordRowObject={chordRowObject}
             onRowChange={(newValue: string, key: keyof ChordRowObject) => onRowChange(expandedRowIndex, newValue, key)}
           />
-          <Row />
+          <Button className="mt-2" color="info" onClick={() => setExpandedRowIndex(-1)}>Close</Button>
         </Container>
       </CarouselItem>
     );
