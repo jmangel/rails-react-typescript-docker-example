@@ -129,11 +129,11 @@ const App: React.FC = () => {
   }
   return (
     <div className="App">
-      <header className="App-header">
+      <header className="App-header flex-row justify-content-between">
         {song.title &&
-          <p>
+          <span className="ml-3">
             {song.title}
-          </p>
+          </span>
         }
         <Button
           className="ml-auto mr-3"
