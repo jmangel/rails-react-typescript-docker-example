@@ -1,4 +1,4 @@
-const chordParserRegex = /(^[A-G]+[b|#]*)([^/]*)(\/?[A-G]+[b|#]*)?$/gm;
+const chordParserRegex = /(^[A-G]?[b#]*)([^/]*)(\/?[A-G]?[b#]*)?$/gm;
 
 const parseChordString = (chordString: string): [string, string, string] => {
   let match;
