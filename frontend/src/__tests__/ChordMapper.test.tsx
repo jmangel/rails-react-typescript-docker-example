@@ -431,29 +431,35 @@ describe('chords', () => {
     })
   })
 
-  describe('^#5 chord', () => {
+  describe('major #5 chords', () => {
     let majorSharpFiveScales: Array<NamedScale>;
+    let majorSevenSharpFiveScales: Array<NamedScale>;
 
     beforeEach(() => {
       majorSharpFiveScales = scalesForChord('Eb', '^#5')
+      majorSevenSharpFiveScales = scalesForChord('Eb', '^7#5')
     })
 
     it('gives lydian augmented', () => {
-      const wholeToneScale = majorSharpFiveScales[0]
+      [majorSharpFiveScales, majorSevenSharpFiveScales].forEach((scales) => {
+        const wholeToneScale = scales[0]
 
-      expect(wholeToneScale.scaleName).toEqual('lydian augmented')
-      expect(wholeToneScale.scaleNotes).toEqual([
-        'Eb','F','G','A','B','C','D'
-      ])
+        expect(wholeToneScale.scaleName).toEqual('lydian augmented')
+        expect(wholeToneScale.scaleNotes).toEqual([
+          'Eb','F','G','A','B','C','D'
+        ])
+      })
     })
 
     it('gives major #5', () => {
-      const majorSharpFiveScale = majorSharpFiveScales[1]
+      [majorSharpFiveScales, majorSevenSharpFiveScales].forEach((scales) => {
+        const majorSharpFiveScale = scales[1]
 
-      expect(majorSharpFiveScale.scaleName).toEqual('major #5')
-      expect(majorSharpFiveScale.scaleNotes).toEqual([
-        'Eb','F','G','Ab','B','C','D'
-      ])
+        expect(majorSharpFiveScale.scaleName).toEqual('major #5')
+        expect(majorSharpFiveScale.scaleNotes).toEqual([
+          'Eb','F','G','Ab','B','C','D'
+        ])
+      })
     })
   })
 

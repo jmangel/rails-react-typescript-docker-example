@@ -539,6 +539,16 @@ const AUGMENTED_MODES: Array<RelativeMode> = [
     ]
   },
 ]
+const MAJOR_SHARP_FIVE_MODES: Array<RelativeMode> = [
+  {
+    name: 'lydian augmented',
+    offset: 0,
+  },
+  {
+    name: 'major #5',
+    offset: 0,
+  },
+]
 const HALF_DIMINISHED_MODES: Array<RelativeMode> = [
   {
     name: 'locrian',
@@ -631,16 +641,11 @@ const CHORD_MAPPINGS = [
   },
   {
     quality: '^#5',
-    possibleModes: [
-      {
-        name: 'lydian augmented',
-        offset: 0,
-      },
-      {
-        name: 'major #5',
-        offset: 0,
-      }
-    ]
+    possibleModes: MAJOR_SHARP_FIVE_MODES
+  },
+  {
+    quality: '^7#5',
+    possibleModes: MAJOR_SHARP_FIVE_MODES
   },
   {
     quality: '7#11',
