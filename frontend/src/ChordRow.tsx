@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import scalesForChord, { NamedScale } from './ChordMapper'
-
+import parseChordString from './ChordParser'
 export interface ChordRowObject {
   chordNote: string;
   chordQuality: string;
@@ -24,30 +24,31 @@ const ChordRow: React.FC<{
   onRowExpand,
 }) => {
 
-  const { chordNote, chordQuality, selectedScale } = chordRowObject
+  const { chordNote, chordQuality, selectedScale } = chordRowObject;
+
+  const [bassNote, setBassNote] = useState('');
 
   const scales = (chordNote && scalesForChord(chordNote, chordQuality)) || [];
+
+  const handleChordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const parsedChordString = parseChordString(e.target.value);
+
+    onRowChange(parsedChordString[0], 'chordNote');
+    onRowChange(parsedChordString[1], 'chordQuality');
+    setBassNote(parsedChordString[2]);
+  }
 
   return (
     <Row className="border">
       <Col xs={3}>
         <Form>
           <FormGroup>
-            <Label for="exampleEmail">Chord Note:</Label>
+            <Label for="exampleEmail">Chord:</Label>
             <Input
               type="text"
               name="chordNote"
-              value={chordNote}
-              onChange={e => onRowChange(e.target.value, 'chordNote')}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="exampleEmail">Chord Quality:</Label>
-            <Input
-              type="text"
-              name="chordQuality"
-              value={chordQuality}
-              onChange={e => onRowChange(e.target.value, 'chordQuality')}
+              value={`${chordNote || ""}${chordQuality || ""}${bassNote || ""}`}
+              onChange={handleChordChange}
             />
           </FormGroup>
         </Form>

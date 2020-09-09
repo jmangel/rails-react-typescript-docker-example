@@ -21,6 +21,7 @@ const iRealReader = require('ireal-reader');
 import './App.css';
 import ChordRow, { ChordRowObject, QUERY_STRING_KEY_MAPPINGS } from './ChordRow'
 import ChordCarousel from './ChordCarousel';
+import parseChordString from './ChordParser';
 
 const createChordRowObject = (): ChordRowObject => {
   return { chordQuality: '' } as ChordRowObject;
@@ -54,7 +55,6 @@ const parseStringifiedChordRowObject = (stringifiedObject: string): ChordRowObje
   return parsedObject;
 }
 
-const chordParserRegex = /(^[A-G]+[b|#]*)([^/]*)(\/?[A-G]+[b|#]*)?$/gm;
 
 const App: React.FC = () => {
   const [newChordRows, setNewChordRows] = useState(1);
@@ -122,25 +122,12 @@ const App: React.FC = () => {
           setSong(newSong);
           const newChordRows = newSong.music.measures.flatMap((measures) => {
             return measures.map((measure) => {
-              let m;
-              let chordNote = '';
-              let chordQuality = '';
-
-              while ((m = chordParserRegex.exec(measure)) !== null) {
-                // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === chordParserRegex.lastIndex) {
-                  chordParserRegex.lastIndex++;
-                }
-
-                // The result can be accessed through the `m`-variable.
-                chordNote = m[1] || '';
-                chordQuality = m[2] || '';
-                // TODO: get root from m[3]
-              }
+              const parsedChordString = parseChordString(measure);
 
               return {
-                chordNote,
-                chordQuality,
+                chordNote: parsedChordString[0],
+                chordQuality: parsedChordString[1],
+                // bassNote: parsedChordString[2],
                 selectedScale: '',
               }
             });
