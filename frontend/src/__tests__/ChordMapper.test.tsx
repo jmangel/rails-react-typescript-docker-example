@@ -463,6 +463,17 @@ describe('chords', () => {
     })
   })
 
+  describe('^7#11 chord', () => {
+    it('gives lydian', () => {
+      const lydianScale = scalesForChord('F', '^7#11')[0]
+
+      expect(lydianScale.scaleName).toEqual('lydian')
+      expect(lydianScale.scaleNotes).toEqual([
+        'F','G','A','B','C','D','E'
+      ])
+    })
+  })
+
   describe('7#11 chord', () => {
     it('gives lydian dominant', () => {
       const lydianDominantScale = scalesForChord('F', '7#11')[0]

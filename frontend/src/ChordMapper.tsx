@@ -648,6 +648,15 @@ const CHORD_MAPPINGS = [
     possibleModes: MAJOR_SHARP_FIVE_MODES
   },
   {
+    quality: '^7#11',
+    possibleModes: [
+      {
+        name: 'lydian',
+        offset: 0,
+      },
+    ]
+  },
+  {
     quality: '7#11',
     possibleModes: [
       {
