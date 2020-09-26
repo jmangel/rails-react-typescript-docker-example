@@ -127,7 +127,7 @@ const App: React.FC = () => {
               return {
                 chordNote: parsedChordString[0],
                 chordQuality: parsedChordString[1],
-                // bassNote: parsedChordString[2],
+                bassNote: parsedChordString[2],
                 selectedScale: '',
               }
             });

@@ -5,12 +5,14 @@ import parseChordString from './ChordParser'
 export interface ChordRowObject {
   chordNote: string;
   chordQuality: string;
+  bassNote?: string;
   selectedScale: string;
 }
 
 export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string } = {
   'chordNote': 'cn',
   'chordQuality': 'cq',
+  'bassNote': 'bn',
   'selectedScale': 'ss',
 }
 
@@ -24,9 +26,7 @@ const ChordRow: React.FC<{
   onRowExpand,
 }) => {
 
-  const { chordNote, chordQuality, selectedScale } = chordRowObject;
-
-  const [bassNote, setBassNote] = useState('');
+  const { chordNote, chordQuality, bassNote, selectedScale } = chordRowObject;
 
   const scales = (chordNote && scalesForChord(chordNote, chordQuality)) || [];
 
@@ -35,7 +35,7 @@ const ChordRow: React.FC<{
 
     onRowChange(parsedChordString[0], 'chordNote');
     onRowChange(parsedChordString[1], 'chordQuality');
-    setBassNote(parsedChordString[2]);
+    onRowChange(parsedChordString[2], 'bassNote');
   }
 
   return (
