@@ -13,15 +13,24 @@ const CHROMATIC_NOTES = [
   ['G#', 'Ab'],
 ]
 
-const NAMED_NOTES = [
-  'A',
-  'B',
-  'C',
-  'D',
-  'E',
-  'F',
-  'G',
-]
+const enum NamedNote {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+  F = 'F',
+  G = 'G',
+};
+const NAMED_NOTES: Array<NamedNote> = [
+  NamedNote.A,
+  NamedNote.B,
+  NamedNote.C,
+  NamedNote.D,
+  NamedNote.E,
+  NamedNote.F,
+  NamedNote.G,
+];
 
 const NOTE_SEMITONES = {
   'A': 2,
@@ -747,7 +756,7 @@ export interface NamedScale {
   notes: Array<string>;
 }
 const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedScale> => {
-  const namedNoteIndex = NAMED_NOTES.findIndex((note: string): boolean => chordNote.includes(note))
+  const namedNoteIndex = NAMED_NOTES.findIndex((note: NamedNote): boolean => chordNote.includes(note))
   const rotatedNamedNotes = arrayRotate(NAMED_NOTES, namedNoteIndex)
 
   const possibleModes = CHORD_MAPPINGS.find((chord: ChordMapping) => chord.quality == chordQuality)?.possibleModes || []
@@ -794,7 +803,7 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
 
     let index = 0
     let scaleNotes: Array<string> = []
-    rotatedNamedNotes.forEach((namedNote: 'A'|'B'|'C'|'D'|'E'|'F'|'G') => {
+    rotatedNamedNotes.forEach((namedNote: NamedNote) => {
       if (index == 0) {
         previousSharps = (chordNote.split('#').length - chordNote.split('b').length)
 
