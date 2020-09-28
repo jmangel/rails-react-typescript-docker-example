@@ -764,7 +764,7 @@ export const countSemitonesBetween = (rootNote: string, intervalNote: string): n
   return (naturalSemitonesBetween + countSharpsAndFlats(intervalNote) - countSharpsAndFlats(rootNote)) % 12;
 }
 
-const createScaleForMode = (
+const createScaleForRelativeMode = (
   chordNote: string,
   possibleMode: RelativeMode,
   rotatedNamedNotes: Array<NamedNote>,
@@ -804,10 +804,45 @@ const createScaleForMode = (
     return modulodSemitones
   })
 
+  return createScaleForMode(
+    chordNote,
+    possibleMode,
+    mode,
+    modeDegrees,
+    modeIntervalsSemitones,
+    startingSemitones, // TODO: ts says this is always null. why? can we remove?
+    rootDegree,
+    rotatedNamedNotes,
+    bassNote
+  );
+};
+
+const createScaleForMode = (
+  chordNote: string,
+  possibleMode: RelativeMode,
+  mode: Mode,
+  modeDegrees: Array<{degree: number; quality: string | null}>,
+  modeIntervalsSemitones: Array<number | null>,
+  startingSemitones: number | null,
+  rootDegree: number,
+  rotatedNamedNotes: Array<NamedNote>,
+  bassNote?: string
+): NamedScale | null => {
   startingSemitones = modeIntervalsSemitones[0]
 
-  if (bassNote && (modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, bassNote)) < 0)) {
-    return null;
+  let bassNoteScale;
+  if (bassNote) {
+    const bassNoteScaleDegree = modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, bassNote));
+    if (bassNoteScaleDegree < 0) return null;
+
+    // const bassNoteMode = MODES.find((m: Mode) => {
+    //   const relatedScale = mode.relatedScale;
+    //   const bassNoteStartingDegree = (relatedScale.startingDegree + bassNoteScaleDegree) % modeIntervalsSemitones.length
+    //   return m.relatedScale.name == relatedScale.name &&
+    //     m.relatedScale.startingDegree == bassNoteStartingDegree;
+    // })
+
+    // if (bassNoteMode) bassNoteScale = ;
   }
 
   let previousSharps = 0
@@ -873,9 +908,28 @@ const scalesForChord = (chordNote: string, chordQuality: string, bassNote?: stri
   const rotatedNamedNotes: Array<NamedNote> = arrayRotate(NAMED_NOTES, namedNoteIndex);
 
   const possibleModes = CHORD_MAPPINGS.find((chord: ChordMapping) => chord.quality == chordQuality)?.possibleModes || []
+  return possibleModes.map((possibleMode) => {
+    const rootScale = createScaleForRelativeMode(chordNote, possibleMode, rotatedNamedNotes, bassNote);
+    // if (rootScale && bassNote) {
+    //   let bassNoteScale;
+    //   if (bassNote) {
+    //     const bassNoteScaleDegree = modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, bassNote));
+    //     if (bassNoteScaleDegree < 0) return null;
 
-  return possibleModes.map(
-    (possibleMode) => createScaleForMode(chordNote, possibleMode, rotatedNamedNotes, bassNote)
+    //     const bassNoteMode = MODES.find((m: Mode) => {
+    //       const relatedScale = mode.relatedScale;
+    //       const bassNoteStartingDegree = (relatedScale.startingDegree + bassNoteScaleDegree) % modeIntervalsSemitones.length
+    //       return m.relatedScale.name == relatedScale.name &&
+    //         m.relatedScale.startingDegree == bassNoteStartingDegree;
+    //     })
+
+    //     if (bassNoteMode) bassNoteScale = ;
+    //   }
+    //   const bassScale = createScaleForMode(bassNote, bassMode, rotatedNamedNotes, chordNote)
+    //   return [rootScale, bassScale];
+    // }
+    return rootScale;
+  }
   ).filter((element) => element !== null) as Array<NamedScale>;
 }
 
