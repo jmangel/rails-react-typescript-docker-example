@@ -748,6 +748,22 @@ const enharmonicNoteIndex = (note: string, enharmonicNotes: Array<Array<string>>
   return enharmonicNotes.findIndex((enharmonics: Array<string>): boolean => enharmonics.includes(note));
 }
 
+const countSharpsAndFlats = (chordNote: string): number => {
+  return chordNote.split('#').length - chordNote.split('b').length;
+}
+
+export const countSemitonesBetween = (rootNote: string, intervalNote: string): number => {
+  const rootNoteIndex = NAMED_NOTES.findIndex((note) => rootNote.includes(note));
+  const rotatedNamedNotes: Array<NamedNote> = arrayRotate(NAMED_NOTES, rootNoteIndex);
+
+  const interval = rotatedNamedNotes.findIndex((note) => intervalNote.includes(note));
+
+  const intervalsToSum = rotatedNamedNotes.splice(1, interval);
+  const naturalSemitonesBetween = intervalsToSum.reduce((sum, interval) => sum + NOTE_SEMITONES[interval], 0);
+
+  return (naturalSemitonesBetween + countSharpsAndFlats(intervalNote) - countSharpsAndFlats(rootNote)) % 12;
+}
+
 export interface NamedScale {
   scaleName: string;
   scaleNotes: Array<string>;
@@ -755,13 +771,13 @@ export interface NamedScale {
   rootScaleNote: string;
   notes: Array<string>;
 }
-const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedScale> => {
+const scalesForChord = (chordNote: string, chordQuality: string, bassNote?: string): Array<NamedScale> => {
   const namedNoteIndex = NAMED_NOTES.findIndex((note: NamedNote): boolean => chordNote.includes(note))
   const rotatedNamedNotes = arrayRotate(NAMED_NOTES, namedNoteIndex)
 
   const possibleModes = CHORD_MAPPINGS.find((chord: ChordMapping) => chord.quality == chordQuality)?.possibleModes || []
 
-  return possibleModes.map((possibleMode: RelativeMode): NamedScale => {
+  return possibleModes.map((possibleMode: RelativeMode): NamedScale | null => {
     const mode = MODES.find((mode: Mode) => mode.name == possibleMode.name);
     if (mode == undefined) throw new Error(`primaryScale not found ${possibleMode.name}`);
 
@@ -798,6 +814,10 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
 
     startingSemitones = modeIntervalsSemitones[0]
 
+    if (bassNote && (modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, bassNote)) < 0)) {
+      return null;
+    }
+
     let previousSharps = 0
     let cumulativeSemitones = 0
 
@@ -805,7 +825,7 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
     let scaleNotes: Array<string> = []
     rotatedNamedNotes.forEach((namedNote: NamedNote) => {
       if (index == 0) {
-        previousSharps = (chordNote.split('#').length - chordNote.split('b').length)
+        previousSharps = countSharpsAndFlats(chordNote);
 
         index += 1;
         scaleNotes.push(chordNote)
@@ -847,7 +867,7 @@ const scalesForChord = (chordNote: string, chordQuality: string): Array<NamedSca
       rootScaleNote: scaleNotes[rootDegree - 1],
       notes: possibleMode.notes || [],
     }
-  })
+  }).filter((element) => element !== null) as Array<NamedScale>;
 }
 
 export default scalesForChord;

@@ -1,4 +1,4 @@
-import scalesForChord, { NamedScale } from '../ChordMapper'
+import scalesForChord, { NamedScale, countSemitonesBetween } from '../ChordMapper'
 
 it('gets double sharp', () => {
   expect(
@@ -494,5 +494,79 @@ describe('chords', () => {
         'G','Ab','Bb','Cb','Db','Eb','F',
       ])
     })
+  })
+})
+
+describe('bassNote', () => {
+  describe("exclude scales that don't include bassNote", () => {
+    it('-7/6 excludes aeolian, phrygian', () => {
+      const minorScales: Array<NamedScale> = scalesForChord('A', '-', 'F#')
+
+      expect(minorScales.length).toEqual(2);
+
+      const dorianScale = minorScales[0]
+
+      expect(dorianScale.scaleName).toEqual('dorian')
+      expect(dorianScale.scaleNotes).toEqual([
+        'A','B','C','D','E','F#','G'
+      ])
+
+      const dorianSharpFourScale = minorScales[1]
+
+      expect(dorianSharpFourScale.scaleName).toEqual('dorian #4')
+      expect(dorianSharpFourScale.scaleNotes).toEqual([
+        'A','B','C','D#','E','F#','G'
+      ])
+    })
+
+    describe('recognizes enharmonics as equal', () => {
+      it('simple enharmonic', () => {
+        expect(scalesForChord('A', '-', 'B#').length).toEqual(4);
+      });
+
+      it('gets double sharp', () => {
+        expect(scalesForChord('A', '-', 'D##').length).toEqual(4);
+      });
+    })
+  })
+})
+
+describe('countSemitonesBetween', () => {
+  it('natural seconds', () => {
+    expect(countSemitonesBetween('E', 'F')).toEqual(1);
+    expect(countSemitonesBetween('F', 'G')).toEqual(2);
+  })
+
+  it('thirds', () => {
+    expect(countSemitonesBetween('C', 'Eb')).toEqual(3);
+    expect(countSemitonesBetween('C', 'E')).toEqual(4);
+  })
+
+  it('sharp', () => {
+    expect(countSemitonesBetween('E', 'F#')).toEqual(2);
+  })
+
+  it('flat', () => {
+    expect(countSemitonesBetween('Eb', 'F')).toEqual(2);
+  })
+
+  it('sharps', () => {
+    expect(countSemitonesBetween('F#', 'G#')).toEqual(2);
+  })
+
+  it('flats', () => {
+    expect(countSemitonesBetween('Db', 'Eb')).toEqual(2);
+  })
+
+  it('returns 0 for unison', () => {
+    expect(countSemitonesBetween('Ab', 'Ab')).toEqual(0);
+  })
+
+  it('returns 0 for enharmonics', () => {
+    expect(countSemitonesBetween('Ab', 'G#')).toEqual(0);
+  })
+
+  it('returns 0 for enharmonic double sharps', () => {
+    expect(countSemitonesBetween('F#', 'E##')).toEqual(0);
   })
 })
