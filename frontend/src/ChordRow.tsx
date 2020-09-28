@@ -5,7 +5,7 @@ import parseChordString from './ChordParser'
 export interface ChordRowObject {
   chordNote: string;
   chordQuality: string;
-  bassNote?: string;
+  bassNote: string;
   selectedScale: string;
 }
 
@@ -28,7 +28,7 @@ const ChordRow: React.FC<{
 
   const { chordNote, chordQuality, bassNote, selectedScale } = chordRowObject;
 
-  const scales = (chordNote && scalesForChord(chordNote, chordQuality)) || [];
+  const scales = (chordNote && scalesForChord(chordNote, chordQuality, bassNote)) || [];
 
   const handleChordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const parsedChordString = parseChordString(e.target.value);
