@@ -733,8 +733,8 @@ const CHORD_MAPPINGS = [
   },
 ]
 
-const arrayRotate = (arr: Array<any>, index: number): Array<any> => {
-  const emptyArray: Array<any> = [];
+function arrayRotate<T>(arr: Array<T>, index: number): Array<T> {
+  const emptyArray: Array<T> = [];
   const clone = emptyArray.concat(arr)
 
   for (let i = 0; i < index; i++) {
@@ -742,6 +742,12 @@ const arrayRotate = (arr: Array<any>, index: number): Array<any> => {
     if (firstElement) clone.push(firstElement);
   }
   return clone;
+}
+
+const flatten = (arr: Array<any>): Array<any> => {
+  return arr.reduce(function (flat, toFlatten) {
+    return flat.concat(toFlatten);
+  }, []);
 }
 
 const enharmonicNoteIndex = (note: string, enharmonicNotes: Array<Array<string>>): number => {
@@ -754,7 +760,7 @@ const countSharpsAndFlats = (chordNote: string): number => {
 
 export const countSemitonesBetween = (rootNote: string, intervalNote: string): number => {
   const rootNoteIndex = NAMED_NOTES.findIndex((note) => rootNote.includes(note));
-  const rotatedNamedNotes: Array<NamedNote> = arrayRotate(NAMED_NOTES, rootNoteIndex);
+  const rotatedNamedNotes = arrayRotate(NAMED_NOTES, rootNoteIndex);
 
   const interval = rotatedNamedNotes.findIndex((note) => intervalNote.includes(note));
 
@@ -764,12 +770,22 @@ export const countSemitonesBetween = (rootNote: string, intervalNote: string): n
   return (naturalSemitonesBetween + countSharpsAndFlats(intervalNote) - countSharpsAndFlats(rootNote)) % 12;
 }
 
+const findRootDegree = (startingDegree: number, primaryScaleDegrees: Array<any>): number => {
+  // does not need to support whole-tone because it has only one mode
+  // TODO: support diminished for breaking starting degrees?
+  // currently doesn't "need" to support diminished because it has no
+  // breaking modes
+  const rootDegreeFinderArray: Array<number> = [...Array(primaryScaleDegrees.length).keys()].map((i) => i + 1)
+  rootDegreeFinderArray.push(rootDegreeFinderArray.shift() as number)
+  rootDegreeFinderArray.reverse()
+  return rootDegreeFinderArray[startingDegree - 1]
+}
+
 const createScaleForRelativeMode = (
   chordNote: string,
   possibleMode: RelativeMode,
-  rotatedNamedNotes: Array<NamedNote>,
   bassNote?: string
-): NamedScale | null => {
+): Array<NamedScale | null> => {
   const mode = MODES.find((mode: Mode) => mode.name == possibleMode.name);
   if (mode == undefined) throw new Error(`primaryScale not found ${possibleMode.name}`);
 
@@ -778,18 +794,15 @@ const createScaleForRelativeMode = (
 
   const startingDegree = mode.relatedScale.startingDegree
 
-  // does not need to support whole-tone because it has only one mode
-  // TODO: support diminished for breaking starting degrees?
-  // currently doesn't "need" to support diminished because it has no
-  // breaking modes
   const rootDegreeFinderArray: Array<number> = [...Array(primaryScale.degrees.length).keys()].map((i) => i + 1)
   rootDegreeFinderArray.push(rootDegreeFinderArray.shift() as number)
   rootDegreeFinderArray.reverse()
-  const rootDegree = rootDegreeFinderArray[startingDegree - 1]
+
+  const rootDegree = rootDegreeFinderArray[startingDegree - 1] //findRootDegree(startingDegree, primaryScale.degrees)
 
   const modeDegrees = arrayRotate(primaryScale.degrees, (startingDegree - 1))
   let startingSemitones: number | null = null;
-  const modeIntervalsSemitones = modeDegrees.map((modeDegree) => {
+  let modeIntervalsSemitones = modeDegrees.map((modeDegree) => {
     if (modeDegree.quality === null) return null;
 
     const semitones = INTERVALS.find((interval: Interval): boolean => {
@@ -804,45 +817,87 @@ const createScaleForRelativeMode = (
     return modulodSemitones
   })
 
-  return createScaleForMode(
+  const rootScale = createScaleForMode(
     chordNote,
-    possibleMode,
+    possibleMode.name,
+    possibleMode?.notes || [],
     mode,
     modeDegrees,
     modeIntervalsSemitones,
-    startingSemitones, // TODO: ts says this is always null. why? can we remove?
     rootDegree,
-    rotatedNamedNotes,
     bassNote
   );
+  if (rootScale && bassNote) {
+    let bassNoteScale = null;
+    if (bassNote) {
+      const bassNoteScaleDegreeOffset = modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, bassNote));
+
+      if (bassNoteScaleDegreeOffset < 0) return [null];
+
+
+      const relatedScale = mode.relatedScale;
+
+      let bassNoteStartingDegree = (relatedScale.startingDegree + bassNoteScaleDegreeOffset)
+      if (bassNoteStartingDegree > primaryScale.degrees.length) bassNoteStartingDegree -= primaryScale.degrees.length
+
+      const modeDegrees = arrayRotate(primaryScale.degrees, (bassNoteStartingDegree - 1))
+      let startingSemitones: number | null = null;
+      modeIntervalsSemitones = modeDegrees.map((modeDegree) => {
+        if (modeDegree.quality === null) return null;
+
+        const semitones = INTERVALS.find((interval: Interval): boolean => {
+          return interval.degree === modeDegree.degree && interval.quality === modeDegree.quality
+        })?.semitones
+
+        if (semitones == undefined) throw new Error(`semitones not found ${modeDegree.degree}${modeDegree.quality}`);
+
+        startingSemitones = startingSemitones == null ? semitones : startingSemitones;
+
+        let modulodSemitones = (semitones - startingSemitones) % 12
+        if (modulodSemitones < 0) modulodSemitones += 12;
+        return modulodSemitones
+      })
+
+      const bassNoteMode = MODES.find((m: Mode) => {
+        return m.relatedScale.name == relatedScale.name &&
+          m.relatedScale.startingDegree == bassNoteStartingDegree;
+      })
+
+      if (bassNoteMode) bassNoteScale = createScaleForMode(
+        bassNote,
+        bassNoteMode.name,
+        [],
+        bassNoteMode,
+        modeDegrees,
+        modeIntervalsSemitones,
+        bassNoteStartingDegree,
+        chordNote,
+        rootScale.rootScaleNote
+      );
+    }
+    return [rootScale, bassNoteScale];
+  }
+
+  return [rootScale]
 };
 
 const createScaleForMode = (
   chordNote: string,
-  possibleMode: RelativeMode,
+  scaleName: string,
+  notes: Array<string>,
   mode: Mode,
   modeDegrees: Array<{degree: number; quality: string | null}>,
   modeIntervalsSemitones: Array<number | null>,
-  startingSemitones: number | null,
   rootDegree: number,
-  rotatedNamedNotes: Array<NamedNote>,
-  bassNote?: string
+  bassNote?: string,
+  rootScaleNote?: string
 ): NamedScale | null => {
-  startingSemitones = modeIntervalsSemitones[0]
+  const namedNoteIndex = NAMED_NOTES.findIndex((note: NamedNote): boolean => chordNote.includes(note))
+  const rotatedNamedNotes = arrayRotate(NAMED_NOTES, namedNoteIndex);
 
-  let bassNoteScale;
   if (bassNote) {
-    const bassNoteScaleDegree = modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, bassNote));
-    if (bassNoteScaleDegree < 0) return null;
-
-    // const bassNoteMode = MODES.find((m: Mode) => {
-    //   const relatedScale = mode.relatedScale;
-    //   const bassNoteStartingDegree = (relatedScale.startingDegree + bassNoteScaleDegree) % modeIntervalsSemitones.length
-    //   return m.relatedScale.name == relatedScale.name &&
-    //     m.relatedScale.startingDegree == bassNoteStartingDegree;
-    // })
-
-    // if (bassNoteMode) bassNoteScale = ;
+    const bassNoteScaleDegreeOffset = modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, bassNote));
+    if (bassNoteScaleDegreeOffset < 0) return null;
   }
 
   let previousSharps = 0
@@ -873,10 +928,6 @@ const createScaleForMode = (
       previousSharps = previousSharps + (desiredSemitones - (cumulativeSemitones + naturalSemitones))
       cumulativeSemitones = desiredSemitones
 
-      // naturalSemitones is meant to capture the difference from the
-      // previous degree; if naturalSemitones is used again in this scope,
-      // it will be because we are on another quality of the same degree,
-      // so the difference is 0
       naturalSemitones = 0
 
       let accidental: string = (previousSharps < 0) ? 'b' : '#'
@@ -888,11 +939,11 @@ const createScaleForMode = (
   })
 
   return {
-    scaleName: possibleMode.name,
+    scaleName,
     scaleNotes,
     rootScale: mode.relatedScale.name,
-    rootScaleNote: scaleNotes[rootDegree - 1],
-    notes: possibleMode.notes || [],
+    rootScaleNote: rootScaleNote || scaleNotes[rootDegree - 1],
+    notes,
   }
 };
 
@@ -904,33 +955,12 @@ export interface NamedScale {
   notes: Array<string>;
 }
 const scalesForChord = (chordNote: string, chordQuality: string, bassNote?: string): Array<NamedScale> => {
-  const namedNoteIndex = NAMED_NOTES.findIndex((note: NamedNote): boolean => chordNote.includes(note))
-  const rotatedNamedNotes: Array<NamedNote> = arrayRotate(NAMED_NOTES, namedNoteIndex);
-
   const possibleModes = CHORD_MAPPINGS.find((chord: ChordMapping) => chord.quality == chordQuality)?.possibleModes || []
-  return possibleModes.map((possibleMode) => {
-    const rootScale = createScaleForRelativeMode(chordNote, possibleMode, rotatedNamedNotes, bassNote);
-    // if (rootScale && bassNote) {
-    //   let bassNoteScale;
-    //   if (bassNote) {
-    //     const bassNoteScaleDegree = modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, bassNote));
-    //     if (bassNoteScaleDegree < 0) return null;
+  const unflattenedScales = possibleModes.map((possibleMode) => {
+    return createScaleForRelativeMode(chordNote, possibleMode, bassNote);
+  })
 
-    //     const bassNoteMode = MODES.find((m: Mode) => {
-    //       const relatedScale = mode.relatedScale;
-    //       const bassNoteStartingDegree = (relatedScale.startingDegree + bassNoteScaleDegree) % modeIntervalsSemitones.length
-    //       return m.relatedScale.name == relatedScale.name &&
-    //         m.relatedScale.startingDegree == bassNoteStartingDegree;
-    //     })
-
-    //     if (bassNoteMode) bassNoteScale = ;
-    //   }
-    //   const bassScale = createScaleForMode(bassNote, bassMode, rotatedNamedNotes, chordNote)
-    //   return [rootScale, bassScale];
-    // }
-    return rootScale;
-  }
-  ).filter((element) => element !== null) as Array<NamedScale>;
+  return flatten(unflattenedScales).filter((element) => element !== null) as Array<NamedScale>;
 }
 
 export default scalesForChord;

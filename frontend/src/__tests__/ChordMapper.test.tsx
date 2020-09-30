@@ -502,7 +502,7 @@ describe('bassNote', () => {
     it('-7/6 excludes aeolian, phrygian', () => {
       const minorScales: Array<NamedScale> = scalesForChord('A', '-', 'F#')
 
-      expect(minorScales.length).toEqual(2);
+      expect(minorScales.length).toEqual(4);
 
       const dorianScale = minorScales[0]
 
@@ -511,7 +511,7 @@ describe('bassNote', () => {
         'A','B','C','D','E','F#','G'
       ])
 
-      const dorianSharpFourScale = minorScales[1]
+      const dorianSharpFourScale = minorScales[2]
 
       expect(dorianSharpFourScale.scaleName).toEqual('dorian #4')
       expect(dorianSharpFourScale.scaleNotes).toEqual([
@@ -521,12 +521,217 @@ describe('bassNote', () => {
 
     describe('recognizes enharmonics as equal', () => {
       it('simple enharmonic', () => {
-        expect(scalesForChord('A', '-', 'B#').length).toEqual(4);
+        expect(scalesForChord('A', '-', 'B#').length).toEqual(8);
       });
 
       it('gets double sharp', () => {
-        expect(scalesForChord('A', '-', 'D##').length).toEqual(4);
+        expect(scalesForChord('A', '-', 'D##').length).toEqual(8);
       });
+    })
+  })
+
+  describe("includes enharmonic scales based on bassNote", () => {
+    it('-7/6 includes locrian and locrian #6 for bass note', () => {
+      const minorScales: Array<NamedScale> = scalesForChord('A', '-', 'F#')
+
+      expect(minorScales.length).toEqual(4);
+
+      const dorianScale = minorScales[1]
+
+      expect(dorianScale.scaleName).toEqual('locrian')
+      expect(dorianScale.scaleNotes).toEqual([
+        'F#','G','A','B','C','D','E'
+      ])
+
+      const dorianSharpFourScale = minorScales[3]
+
+      expect(dorianSharpFourScale.scaleName).toEqual('locrian #6')
+      expect(dorianSharpFourScale.scaleNotes).toEqual([
+        'F#','G','A','B','C','D#','E'
+      ])
+    })
+
+    it('sus/7 includes lydian for bass note', () => {
+      const susScales: Array<NamedScale> = scalesForChord('G', 'sus', 'F')
+
+      expect(susScales.length).toEqual(2);
+
+      const mixolydianScale = susScales[0]
+
+      expect(mixolydianScale.scaleName).toEqual('mixolydian')
+      expect(mixolydianScale.scaleNotes).toEqual([
+        'G','A','B','C','D','E','F'
+      ])
+
+      const lydianScale = susScales[1]
+
+      expect(lydianScale.scaleName).toEqual('lydian')
+      expect(lydianScale.scaleNotes).toEqual([
+        'F','G','A','B','C','D','E'
+      ])
+    })
+
+    describe('enharmonics', () => {
+      it('simple enharmonic', () => {
+        const minorOverThirdScales = scalesForChord('A', '-', 'B#')
+
+        expect(minorOverThirdScales.length).toEqual(8);
+
+        const aeolianScale = minorOverThirdScales[0]
+        expect(aeolianScale.scaleName).toEqual('aeolian')
+        expect(aeolianScale.scaleNotes).toEqual([
+          'A','B','C','D','E','F','G'
+        ])
+
+        const relativeMajorScale = minorOverThirdScales[1]
+        expect(relativeMajorScale.scaleName).toEqual('ionian')
+        expect(relativeMajorScale.scaleNotes).toEqual([
+          'B#','C##','D##','E#','F##','G##','A##'
+        ])
+
+        const dorianScale = minorOverThirdScales[2]
+        expect(dorianScale.scaleName).toEqual('dorian')
+        expect(dorianScale.scaleNotes).toEqual([
+          'A','B','C','D','E','F#','G'
+        ])
+
+        const relativeLydianScale = minorOverThirdScales[3]
+        expect(relativeLydianScale.scaleName).toEqual('lydian')
+        expect(relativeLydianScale.scaleNotes).toEqual([
+          'B#','C##','D##','E##','F##','G##','A##'
+        ])
+
+        const phrygianScale = minorOverThirdScales[4]
+        expect(phrygianScale.scaleName).toEqual('phrygian')
+        expect(phrygianScale.scaleNotes).toEqual([
+          'A','Bb','C','D','E','F','G'
+        ])
+
+        const relativeMixolydianScale = minorOverThirdScales[5]
+        expect(relativeMixolydianScale.scaleName).toEqual('mixolydian')
+        expect(relativeMixolydianScale.scaleNotes).toEqual([
+          'B#','C##','D##','E#','F##','G##','A#'
+        ])
+
+        const dorianSharpFourScale = minorOverThirdScales[6]
+        expect(dorianSharpFourScale.scaleName).toEqual('dorian #4')
+        expect(dorianSharpFourScale.scaleNotes).toEqual([
+          'A','B','C','D#','E','F#','G'
+        ])
+
+        const relativeLydianSharpTwoScale = minorOverThirdScales[7]
+        expect(relativeLydianSharpTwoScale.scaleName).toEqual('lydian #2')
+        expect(relativeLydianSharpTwoScale.scaleNotes).toEqual([
+          'B#','C###','D##','E##','F##','G##','A##'
+        ])
+      });
+
+      it('gets double sharp', () => {
+        const minorOverEnharmonicFifthScales = scalesForChord('A', '-', 'D##')
+
+        expect(minorOverEnharmonicFifthScales.length).toEqual(8);
+
+        const aeolianScale = minorOverEnharmonicFifthScales[0]
+        expect(aeolianScale.scaleName).toEqual('aeolian')
+        expect(aeolianScale.scaleNotes).toEqual([
+          'A','B','C','D','E','F','G'
+        ])
+
+        const relativePhrygianScale = minorOverEnharmonicFifthScales[1]
+        expect(relativePhrygianScale.scaleName).toEqual('phrygian')
+        expect(relativePhrygianScale.scaleNotes).toEqual([
+          'D##','E#','F##','G##','A##','B#','C##'
+        ])
+
+        const dorianScale = minorOverEnharmonicFifthScales[2]
+        expect(dorianScale.scaleName).toEqual('dorian')
+        expect(dorianScale.scaleNotes).toEqual([
+          'A','B','C','D','E','F#','G'
+        ])
+
+        const relativeAeolianScale = minorOverEnharmonicFifthScales[3]
+        expect(relativeAeolianScale.scaleName).toEqual('aeolian')
+        expect(relativeAeolianScale.scaleNotes).toEqual([
+          'D##','E##','F##','G##','A##','B#','C##'
+        ])
+
+        const phrygianScale = minorOverEnharmonicFifthScales[4]
+        expect(phrygianScale.scaleName).toEqual('phrygian')
+        expect(phrygianScale.scaleNotes).toEqual([
+          'A','Bb','C','D','E','F','G'
+        ])
+
+        const relativeLocrianScale = minorOverEnharmonicFifthScales[5]
+        expect(relativeLocrianScale.scaleName).toEqual('locrian')
+        expect(relativeLocrianScale.scaleNotes).toEqual([
+          'D##','E#','F##','G##','A#','B#','C##'
+        ])
+
+        const dorianSharpFourScale = minorOverEnharmonicFifthScales[6]
+        expect(dorianSharpFourScale.scaleName).toEqual('dorian #4')
+        expect(dorianSharpFourScale.scaleNotes).toEqual([
+          'A','B','C','D#','E','F#','G'
+        ])
+
+        const relativeHarmonicMinorTwoScale = minorOverEnharmonicFifthScales[7]
+        expect(relativeHarmonicMinorTwoScale.scaleName).toEqual('harmonic minor')
+        expect(relativeHarmonicMinorTwoScale.scaleNotes).toEqual([
+          'D##','E##','F##','G##','A##','B#','C###'
+        ])
+      });
+
+      it('enharmonic of root', () => {
+        const minorOverEnharmonicRootScales = scalesForChord('A', '-', 'G##')
+
+        expect(minorOverEnharmonicRootScales.length).toEqual(8);
+
+        const aeolianScale = minorOverEnharmonicRootScales[0]
+        expect(aeolianScale.scaleName).toEqual('aeolian')
+        expect(aeolianScale.scaleNotes).toEqual([
+          'A','B','C','D','E','F','G'
+        ])
+        const enharmonicAeolianScale = minorOverEnharmonicRootScales[1]
+        expect(enharmonicAeolianScale.scaleName).toEqual('aeolian')
+        expect(enharmonicAeolianScale.scaleNotes).toEqual([
+          'G##','A##','B#','C##','D##','E#','F##'
+        ])
+
+        const dorianScale = minorOverEnharmonicRootScales[2]
+        expect(dorianScale.scaleName).toEqual('dorian')
+        expect(dorianScale.scaleNotes).toEqual([
+          'A','B','C','D','E','F#','G'
+        ])
+
+        const enharmonicDorianScale = minorOverEnharmonicRootScales[3]
+        expect(enharmonicDorianScale.scaleName).toEqual('dorian')
+        expect(enharmonicDorianScale.scaleNotes).toEqual([
+          'G##','A##','B#','C##','D##','E##','F##'
+        ])
+
+        const phrygianScale = minorOverEnharmonicRootScales[4]
+        expect(phrygianScale.scaleName).toEqual('phrygian')
+        expect(phrygianScale.scaleNotes).toEqual([
+          'A','Bb','C','D','E','F','G'
+        ])
+
+        const enharmonicPhrygianScale = minorOverEnharmonicRootScales[5]
+        expect(enharmonicPhrygianScale.scaleName).toEqual('phrygian')
+        expect(enharmonicPhrygianScale.scaleNotes).toEqual([
+          'G##','A#','B#','C##','D##','E#','F##'
+        ])
+
+        const dorianSharpFourScale = minorOverEnharmonicRootScales[6]
+        expect(dorianSharpFourScale.scaleName).toEqual('dorian #4')
+        expect(dorianSharpFourScale.scaleNotes).toEqual([
+          'A','B','C','D#','E','F#','G'
+        ])
+
+        const enharmonicDorianSharpFourScale = minorOverEnharmonicRootScales[7]
+        expect(enharmonicDorianSharpFourScale.scaleName).toEqual('dorian #4')
+        expect(enharmonicDorianSharpFourScale.scaleNotes).toEqual([
+          'G##','A##','B#','C###','D##','E##','F##'
+        ])
+      })
     })
   })
 })
