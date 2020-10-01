@@ -49,7 +49,7 @@ const parseStringifiedChordRowObject = (stringifiedObject: string): ChordRowObje
   let parsedObject = JSON.parse(stringifiedObject)
   Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
     const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject];
-    parsedObject[fullKeyName] = parsedObject[shortKey];
+    parsedObject[fullKeyName] = parsedObject[shortKey] || '';
     delete parsedObject[shortKey];
   })
   return parsedObject;
