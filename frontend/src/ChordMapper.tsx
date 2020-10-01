@@ -820,7 +820,6 @@ const createScaleForRelativeMode = (
     let bassNoteScale = null;
     if (bassNote) {
       const bassNoteScaleDegreeOffset = modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, bassNote));
-
       if (bassNoteScaleDegreeOffset < 0) return [null];
 
       const relatedScale = mode.relatedScale;
