@@ -28,7 +28,7 @@ const ChordRow: React.FC<{
 
   const { chordNote, chordQuality, bassNote, selectedScale } = chordRowObject;
 
-  const scales = (chordNote && scalesForChord(chordNote, chordQuality, bassNote)) || [];
+  const scales = (chordNote && scalesForChord(chordNote, chordQuality, bassNote.replace(/\//g,''))) || [];
 
   const handleChordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const parsedChordString = parseChordString(e.target.value);
@@ -58,7 +58,7 @@ const ChordRow: React.FC<{
           (namedScale: NamedScale, index: number) => (
             <div key={`scale-${index}`}>
               <p>
-                {chordNote}{chordQuality} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
+                {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
                 <br />
                 <small>{namedScale.rootScaleNote} {namedScale.rootScale}</small>
               </p>
@@ -82,7 +82,7 @@ const ChordRow: React.FC<{
                   value={namedScale.scaleName}
                   selected={namedScale.scaleName === selectedScale}
                 >
-                  {namedScale.rootScaleNote} {namedScale.rootScale}: {chordNote} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
+                  {namedScale.rootScaleNote} {namedScale.rootScale}: {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
                 </option>
               )
             )}
