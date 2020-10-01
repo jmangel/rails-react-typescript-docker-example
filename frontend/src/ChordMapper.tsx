@@ -766,17 +766,6 @@ export const countSemitonesBetween = (rootNote: string, intervalNote: string): n
   return (naturalSemitonesBetween + countSharpsAndFlats(intervalNote) - countSharpsAndFlats(rootNote)) % 12;
 }
 
-const findRootDegree = (startingDegree: number, primaryScaleDegrees: Array<any>): number => {
-  // does not need to support whole-tone because it has only one mode
-  // TODO: support diminished for breaking starting degrees?
-  // currently doesn't "need" to support diminished because it has no
-  // breaking modes
-  const rootDegreeFinderArray: Array<number> = [...Array(primaryScaleDegrees.length).keys()].map((i) => i + 1)
-  rootDegreeFinderArray.push(rootDegreeFinderArray.shift() as number)
-  rootDegreeFinderArray.reverse()
-  return rootDegreeFinderArray[startingDegree - 1]
-}
-
 const createScaleForRelativeMode = (
   chordNote: string,
   possibleMode: RelativeMode,
@@ -790,11 +779,15 @@ const createScaleForRelativeMode = (
 
   const startingDegree = mode.relatedScale.startingDegree
 
+  // does not need to support whole-tone because it has only one mode
+  // TODO: support diminished for breaking starting degrees?
+  // currently doesn't "need" to support diminished because it has no
+  // breaking modes
   const rootDegreeFinderArray: Array<number> = [...Array(primaryScale.degrees.length).keys()].map((i) => i + 1)
   rootDegreeFinderArray.push(rootDegreeFinderArray.shift() as number)
   rootDegreeFinderArray.reverse()
 
-  const rootDegree = rootDegreeFinderArray[startingDegree - 1] //findRootDegree(startingDegree, primaryScale.degrees)
+  const rootDegree = rootDegreeFinderArray[startingDegree - 1]
 
   const modeDegrees = arrayRotate(primaryScale.degrees, (startingDegree - 1))
   let startingSemitones: number | null = null;
