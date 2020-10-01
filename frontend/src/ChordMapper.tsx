@@ -823,7 +823,6 @@ const createScaleForRelativeMode = (
 
       if (bassNoteScaleDegreeOffset < 0) return [null];
 
-
       const relatedScale = mode.relatedScale;
 
       let bassNoteStartingDegree = (relatedScale.startingDegree + bassNoteScaleDegreeOffset)
