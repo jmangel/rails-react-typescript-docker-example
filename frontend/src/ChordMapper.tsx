@@ -750,10 +750,6 @@ const flatten = (arr: Array<any>): Array<any> => {
   }, []);
 }
 
-const enharmonicNoteIndex = (note: string, enharmonicNotes: Array<Array<string>>): number => {
-  return enharmonicNotes.findIndex((enharmonics: Array<string>): boolean => enharmonics.includes(note));
-}
-
 const countSharpsAndFlats = (chordNote: string): number => {
   return chordNote.split('#').length - chordNote.split('b').length;
 }
