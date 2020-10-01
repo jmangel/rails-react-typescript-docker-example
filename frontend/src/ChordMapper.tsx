@@ -763,7 +763,10 @@ export const countSemitonesBetween = (rootNote: string, intervalNote: string): n
   const intervalsToSum = rotatedNamedNotes.splice(1, interval);
   const naturalSemitonesBetween = intervalsToSum.reduce((sum, interval) => sum + NOTE_SEMITONES[interval], 0);
 
-  return (naturalSemitonesBetween + countSharpsAndFlats(intervalNote) - countSharpsAndFlats(rootNote)) % 12;
+  let semitoneDifference = naturalSemitonesBetween + countSharpsAndFlats(intervalNote) - countSharpsAndFlats(rootNote);
+  if (semitoneDifference < 0) semitoneDifference += 12;
+
+  return semitoneDifference % 12;
 }
 
 const createScaleForRelativeMode = (

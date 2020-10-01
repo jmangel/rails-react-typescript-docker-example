@@ -527,6 +527,10 @@ describe('bassNote', () => {
       it('gets double sharp', () => {
         expect(scalesForChord('A', '-', 'D##').length).toEqual(8);
       });
+
+      it('gets mixed accidentals', () => {
+        expect(scalesForChord('B', '^','Bb').length).toEqual(6);
+      })
     })
   })
 
@@ -773,5 +777,10 @@ describe('countSemitonesBetween', () => {
 
   it('returns 0 for enharmonic double sharps', () => {
     expect(countSemitonesBetween('F#', 'E##')).toEqual(0);
+  })
+
+  it('returns a positive number for accidentals of the same note', () => {
+    expect(countSemitonesBetween('A', 'A#')).toEqual(1);
+    expect(countSemitonesBetween('B', 'Bb')).toEqual(11);
   })
 })
