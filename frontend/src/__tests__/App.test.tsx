@@ -1,9 +1,58 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from '../App';
+import Enzyme, { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
+
+import App, { stringifyChordRowObject, parseStringifiedChordRowObject } from '../App';
+import { ChordRowObject } from '../ChordRow';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  shallow(<App />);
 });
+
+describe('stringifyChordRowObject', () => {
+  it('shortens each key of ChordRowObject', () => {
+    const chordRowObject: ChordRowObject = {
+      chordNote: 'myChordNote',
+      chordQuality: 'myQuality',
+      bassNote: 'myBassNote',
+      selectedScale: 'mySelectedScale',
+      selectedScaleRoot: 'myRoot',
+    }
+
+    const expectedObjectToStringify = {
+      'cn': 'myChordNote',
+      'cq': 'myQuality',
+      'bn': 'myBassNote',
+      'ss': 'mySelectedScale',
+      'ssr': 'myRoot',
+    }
+
+    expect(stringifyChordRowObject(chordRowObject)).toEqual(JSON.stringify(expectedObjectToStringify));
+  })
+})
+
+describe('parseStringifiedChordRowObject', () => {
+  it('shortens each key of ChordRowObject', () => {
+    const objectToStringify = {
+      'cn': 'myChordNote',
+      'cq': 'myQuality',
+      'bn': 'myBassNote',
+      'ss': 'mySelectedScale',
+      'ssr': 'myRoot',
+    }
+
+    const expectedChordRowObject: ChordRowObject = {
+      chordNote: 'myChordNote',
+      chordQuality: 'myQuality',
+      bassNote: 'myBassNote',
+      selectedScale: 'mySelectedScale',
+      selectedScaleRoot: 'myRoot',
+    }
+
+    expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+  })
+})
+

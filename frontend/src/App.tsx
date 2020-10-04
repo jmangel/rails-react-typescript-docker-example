@@ -37,7 +37,7 @@ const createSongObject = (title: string | null): Song => {
   return { title } as Song;
 }
 
-const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
+export const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
   let stringified = JSON.stringify(chordRowObject);
   Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
     stringified = stringified.replace(new RegExp(fullKeyName, 'g'), QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject])
@@ -45,7 +45,7 @@ const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
   return stringified;
 }
 
-const parseStringifiedChordRowObject = (stringifiedObject: string): ChordRowObject => {
+export const parseStringifiedChordRowObject = (stringifiedObject: string): ChordRowObject => {
   let parsedObject = JSON.parse(stringifiedObject)
   Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
     const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject];
@@ -129,6 +129,7 @@ const App: React.FC = () => {
                 chordQuality: parsedChordString[1],
                 bassNote: parsedChordString[2],
                 selectedScale: '',
+                selectedScaleRoot: '',
               }
             });
           })

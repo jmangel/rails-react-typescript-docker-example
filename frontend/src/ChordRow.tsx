@@ -7,12 +7,14 @@ export interface ChordRowObject {
   chordQuality: string;
   bassNote: string;
   selectedScale: string;
+  selectedScaleRoot: string;
 }
 
 export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string } = {
   'chordNote': 'cn',
   'chordQuality': 'cq',
   'bassNote': 'bn',
+  'selectedScaleRoot': 'ssr',
   'selectedScale': 'ss',
 }
 
@@ -25,8 +27,7 @@ const ChordRow: React.FC<{
   onRowChange,
   onRowExpand,
 }) => {
-
-  const { chordNote, chordQuality, bassNote, selectedScale } = chordRowObject;
+  const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot } = chordRowObject;
 
   const scales = (chordNote && scalesForChord(chordNote, chordQuality, bassNote.replace(/\//g,''))) || [];
 
@@ -72,15 +73,21 @@ const ChordRow: React.FC<{
           <Input type="select"
             name="select"
             id="exampleSelect"
-            onChange={e => onRowChange(e.target.value, 'selectedScale')}
+            onChange={e => {
+              const [selectedScaleRoot, selectedScale] = e.target.value.split(/ (.+)/)
+              onRowChange(selectedScale, 'selectedScale')
+              onRowChange(selectedScaleRoot, 'selectedScaleRoot')
+            }}
           >
             <option>--</option>
             {scales.map(
               (namedScale: NamedScale, index: number) => (
                 <option
                   key={`option--scale-${index}`}
-                  value={namedScale.scaleName}
-                  selected={namedScale.scaleName === selectedScale}
+                  value={`${namedScale.scaleNotes[0]} ${namedScale.scaleName}`}
+                  selected={namedScale.scaleName === selectedScale && (
+                    namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
+                  )}
                 >
                   {namedScale.rootScaleNote} {namedScale.rootScale}: {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
                 </option>
