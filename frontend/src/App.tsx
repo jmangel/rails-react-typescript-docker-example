@@ -38,7 +38,11 @@ const createSongObject = (title: string | null): Song => {
 }
 
 export const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
-  let stringified = JSON.stringify(chordRowObject);
+  // remove empty elements to save space
+  const cleanedChordRowObject = Object.entries(chordRowObject)
+    .reduce((a: { [key: string]: string; },[k,v]) => (v === '' ? a : (a[k]=v, a)), {});
+
+  let stringified = JSON.stringify(cleanedChordRowObject);
   Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
     stringified = stringified.replace(new RegExp(fullKeyName, 'g'), QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject])
   })
@@ -52,7 +56,7 @@ export const parseStringifiedChordRowObject = (stringifiedObject: string): Chord
     parsedObject[fullKeyName] = parsedObject[shortKey] || '';
     // TODO remove backward compatibility for ssr
     if (shortKey === 'r') {
-      if (parsedObject[fullKeyName] === '') parsedObject[fullKeyName] = parsedObject.ssr
+      if (parsedObject[fullKeyName] === '') parsedObject[fullKeyName] = parsedObject.ssr || ''
       delete parsedObject.ssr;
     }
     delete parsedObject[shortKey];

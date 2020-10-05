@@ -32,10 +32,22 @@ describe('stringifyChordRowObject', () => {
 
     expect(stringifyChordRowObject(chordRowObject)).toEqual(JSON.stringify(expectedObjectToStringify));
   })
+
+  it('excludes empty keys of ChordRowObject', () => {
+    const chordRowObject: ChordRowObject = {
+      chordNote: '',
+      chordQuality: '',
+      bassNote: '',
+      selectedScale: '',
+      selectedScaleRoot: '',
+    }
+
+    expect(stringifyChordRowObject(chordRowObject)).toEqual(JSON.stringify({}));
+  })
 })
 
 describe('parseStringifiedChordRowObject', () => {
-  it('shortens each key of ChordRowObject', () => {
+  it('rebuilds ChordRowObject from shortened keys', () => {
     const objectToStringify = {
       'cn': 'myChordNote',
       'cq': 'myQuality',
@@ -53,6 +65,18 @@ describe('parseStringifiedChordRowObject', () => {
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+  })
+
+  it('rebuilds ChordRowObject from removed keys', () => {
+    const expectedChordRowObject: ChordRowObject = {
+      chordNote: '',
+      chordQuality: '',
+      bassNote: '',
+      selectedScale: '',
+      selectedScaleRoot: '',
+    }
+
+    expect(parseStringifiedChordRowObject(JSON.stringify({}))).toEqual(expectedChordRowObject);
   })
 
   describe('backward compatibility', () => {
