@@ -27,7 +27,7 @@ describe('stringifyChordRowObject', () => {
       'cq': 'myQuality',
       'bn': 'myBassNote',
       'ss': 'mySelectedScale',
-      'ssr': 'myRoot',
+      'r': 'myRoot',
     }
 
     expect(stringifyChordRowObject(chordRowObject)).toEqual(JSON.stringify(expectedObjectToStringify));
@@ -41,7 +41,7 @@ describe('parseStringifiedChordRowObject', () => {
       'cq': 'myQuality',
       'bn': 'myBassNote',
       'ss': 'mySelectedScale',
-      'ssr': 'myRoot',
+      'r': 'myRoot',
     }
 
     const expectedChordRowObject: ChordRowObject = {
@@ -53,6 +53,49 @@ describe('parseStringifiedChordRowObject', () => {
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+  })
+
+  describe('backward compatibility', () => {
+    it('keeps backward compatibility for ssr', () => {
+      const objectToStringify = {
+        'cn': 'myChordNote',
+        'cq': 'myQuality',
+        'bn': 'myBassNote',
+        'ss': 'mySelectedScale',
+        'ssr': 'myRoot',
+      }
+
+      const expectedChordRowObject: ChordRowObject = {
+        chordNote: 'myChordNote',
+        chordQuality: 'myQuality',
+        bassNote: 'myBassNote',
+        selectedScale: 'mySelectedScale',
+        selectedScaleRoot: 'myRoot',
+      }
+
+      expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+    })
+
+    it('ignores ssr if r present', () => {
+      const objectToStringify = {
+        'cn': 'myChordNote',
+        'cq': 'myQuality',
+        'bn': 'myBassNote',
+        'ss': 'mySelectedScale',
+        'r': 'newRoot',
+        'ssr': 'oldRoot',
+      }
+
+      const expectedChordRowObject: ChordRowObject = {
+        chordNote: 'myChordNote',
+        chordQuality: 'myQuality',
+        bassNote: 'myBassNote',
+        selectedScale: 'mySelectedScale',
+        selectedScaleRoot: 'newRoot',
+      }
+
+      expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+    })
   })
 })
 

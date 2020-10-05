@@ -50,6 +50,11 @@ export const parseStringifiedChordRowObject = (stringifiedObject: string): Chord
   Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
     const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject];
     parsedObject[fullKeyName] = parsedObject[shortKey] || '';
+    // TODO remove backward compatibility for ssr
+    if (shortKey === 'r') {
+      if (parsedObject[fullKeyName] === '') parsedObject[fullKeyName] = parsedObject.ssr
+      delete parsedObject.ssr;
+    }
     delete parsedObject[shortKey];
   })
   return parsedObject;
