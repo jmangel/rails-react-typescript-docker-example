@@ -41,7 +41,7 @@ const ChordRow: React.FC<{
 
   return (
     <Row className="border">
-      <Col xs={3}>
+      <Col xs={6}>
         <Form>
           <FormGroup>
             <Label for="exampleEmail">Chord:</Label>
@@ -53,23 +53,8 @@ const ChordRow: React.FC<{
             />
           </FormGroup>
         </Form>
-      </Col>
-      <Col xs={4}>
-        {scales.map(
-          (namedScale: NamedScale, index: number) => (
-            <div key={`scale-${index}`}>
-              <p>
-                {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
-                <br />
-                <small>{namedScale.rootScaleNote} {namedScale.rootScale}</small>
-              </p>
-            </div>
-          )
-        )}
-      </Col>
-      <Col xs={5}>
         <FormGroup>
-          <Label for="exampleSelect">Select</Label>
+          <Label for="exampleSelect">Preferred Scale</Label>
           <Input type="select"
             name="select"
             id="exampleSelect"
@@ -97,10 +82,23 @@ const ChordRow: React.FC<{
         </FormGroup>
         {
           onRowExpand && (
-            <Button color="info" onClick={onRowExpand}>Expand</Button>
+            <Button color="info" className="mb-2" onClick={onRowExpand}>Expand</Button>
           )
         }
-        </Col>
+      </Col>
+      <Col xs={6}>
+        {scales.map(
+          (namedScale: NamedScale, index: number) => (
+            <div key={`scale-${index}`}>
+              <p>
+                {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
+                <br />
+                <small>{namedScale.rootScaleNote} {namedScale.rootScale}</small>
+              </p>
+            </div>
+          )
+        )}
+      </Col>
     </Row>
   );
 }
