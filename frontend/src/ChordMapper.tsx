@@ -894,6 +894,11 @@ const createScaleForMode = (
     if (bassNoteScaleDegreeOffset < 0) return null;
   }
 
+  if (availableTensions.split(',').filter((availableTension: string) => availableTension !== '').some((availableTension: string) => {
+    const availableTensionScaleDegreeOffset = modeIntervalsSemitones.indexOf(countSemitonesBetween(chordNote, availableTension));
+    return (availableTensionScaleDegreeOffset < 0);
+  })) return null;
+
   let previousSharps = 0
   let cumulativeSemitones = 0
 

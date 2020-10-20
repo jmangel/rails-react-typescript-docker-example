@@ -740,6 +740,57 @@ describe('bassNote', () => {
   })
 })
 
+describe('availableTensions', () => {
+  describe("exclude scales that don't include availableTensions", () => {
+    it('-7 with natural 6 excludes aeolian, phrygian', () => {
+      const minorScales: Array<NamedScale> = scalesForChord('A', '-', '', 'F#')
+
+      expect(minorScales.length).toEqual(2);
+
+      const dorianScale = minorScales[0]
+
+      expect(dorianScale.scaleName).toEqual('dorian')
+      expect(dorianScale.scaleNotes).toEqual([
+        'A','B','C','D','E','F#','G'
+      ])
+
+      const dorianSharpFourScale = minorScales[1]
+
+      expect(dorianSharpFourScale.scaleName).toEqual('dorian #4')
+      expect(dorianSharpFourScale.scaleNotes).toEqual([
+        'A','B','C','D#','E','F#','G'
+      ])
+    })
+
+    it('-7 with natural 6 and natural 4 excludes aeolian, phrygian, dorian #4', () => {
+      const minorScales: Array<NamedScale> = scalesForChord('A', '-', '', 'F#,D')
+
+      expect(minorScales.length).toEqual(1);
+
+      const dorianScale = minorScales[0];
+
+      expect(dorianScale.scaleName).toEqual('dorian')
+      expect(dorianScale.scaleNotes).toEqual([
+        'A','B','C','D','E','F#','G'
+      ])
+    })
+
+    describe('recognizes enharmonics as equal', () => {
+      it('simple enharmonic', () => {
+        expect(scalesForChord('A', '-', '', 'B#').length).toEqual(4);
+      });
+
+      it('gets double sharp', () => {
+        expect(scalesForChord('A', '-', '', 'D##').length).toEqual(4);
+      });
+
+      it('gets mixed accidentals', () => {
+        expect(scalesForChord('B', '^', '', 'Bb').length).toEqual(3);
+      })
+    })
+  })
+})
+
 describe('countSemitonesBetween', () => {
   it('natural seconds', () => {
     expect(countSemitonesBetween('E', 'F')).toEqual(1);
