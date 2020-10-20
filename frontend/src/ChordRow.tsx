@@ -74,7 +74,7 @@ const ChordRow: React.FC<{
                     namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
                   )}
                 >
-                  {namedScale.rootScaleNote} {namedScale.rootScale}: {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
+                  {namedScale.scaleNotes[0]} {namedScale.scaleName} ({namedScale.rootScaleNote} {namedScale.rootScale}): {namedScale.scaleNotes.join(',')}
                 </option>
               )
             )}
