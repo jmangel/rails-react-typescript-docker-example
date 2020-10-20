@@ -772,6 +772,7 @@ export const countSemitonesBetween = (rootNote: string, intervalNote: string): n
 const createScaleForRelativeMode = (
   chordNote: string,
   possibleMode: RelativeMode,
+  availableTensions: string,
   bassNote?: string
 ): Array<NamedScale | null> => {
   const mode = MODES.find((mode: Mode) => mode.name == possibleMode.name);
@@ -817,6 +818,7 @@ const createScaleForRelativeMode = (
     modeDegrees,
     modeIntervalsSemitones,
     rootDegree,
+    availableTensions,
     bassNote
   );
   if (rootScale && bassNote) {
@@ -861,6 +863,7 @@ const createScaleForRelativeMode = (
         modeDegrees,
         modeIntervalsSemitones,
         bassNoteStartingDegree,
+        availableTensions,
         chordNote,
         rootScale.rootScaleNote
       );
@@ -879,8 +882,9 @@ const createScaleForMode = (
   modeDegrees: Array<{degree: number; quality: string | null}>,
   modeIntervalsSemitones: Array<number | null>,
   rootDegree: number,
+  availableTensions: string,
   bassNote?: string,
-  rootScaleNote?: string
+  rootScaleNote?: string,
 ): NamedScale | null => {
   const namedNoteIndex = NAMED_NOTES.findIndex((note: NamedNote): boolean => chordNote.includes(note))
   const rotatedNamedNotes = arrayRotate(NAMED_NOTES, namedNoteIndex);
@@ -944,10 +948,10 @@ export interface NamedScale {
   rootScaleNote: string;
   notes: Array<string>;
 }
-const scalesForChord = (chordNote: string, chordQuality: string, bassNote?: string): Array<NamedScale> => {
+const scalesForChord = (chordNote: string, chordQuality: string, bassNote?: string, availableTensions?: string): Array<NamedScale> => {
   const possibleModes = CHORD_MAPPINGS.find((chord: ChordMapping) => chord.quality == chordQuality)?.possibleModes || []
   const unflattenedScales = possibleModes.map((possibleMode) => {
-    return createScaleForRelativeMode(chordNote, possibleMode, bassNote);
+    return createScaleForRelativeMode(chordNote, possibleMode, availableTensions || '', bassNote);
   })
 
   return flatten(unflattenedScales).filter((element) => element !== null) as Array<NamedScale>;

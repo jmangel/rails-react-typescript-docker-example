@@ -139,6 +139,7 @@ const App: React.FC = () => {
                 bassNote: parsedChordString[2],
                 selectedScale: '',
                 selectedScaleRoot: '',
+                availableTensions: '',
               }
             });
           })

@@ -8,6 +8,7 @@ export interface ChordRowObject {
   bassNote: string;
   selectedScale: string;
   selectedScaleRoot: string;
+  availableTensions: string;
 }
 
 export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string } = {
@@ -16,6 +17,7 @@ export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string 
   'bassNote': 'bn',
   'selectedScaleRoot': 'r',
   'selectedScale': 'ss',
+  'availableTensions': 'at',
 }
 
 const ChordRow: React.FC<{
@@ -27,9 +29,9 @@ const ChordRow: React.FC<{
   onRowChange,
   onRowExpand,
 }) => {
-  const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot } = chordRowObject;
+  const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot, availableTensions } = chordRowObject;
 
-  const scales = (chordNote && scalesForChord(chordNote, chordQuality, bassNote.replace(/\//g,''))) || [];
+  const scales = (chordNote && scalesForChord(chordNote, chordQuality, bassNote.replace(/\//g,''), availableTensions)) || [];
 
   const handleChordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const parsedChordString = parseChordString(e.target.value);
@@ -50,6 +52,17 @@ const ChordRow: React.FC<{
               name="chordNote"
               value={`${chordNote || ""}${chordQuality || ""}${bassNote || ""}`}
               onChange={handleChordChange}
+            />
+          </FormGroup>
+        </Form>
+        <Form>
+          <FormGroup>
+            <Label for="exampleEmail">Additional Known Available Tensions:</Label>
+            <Input
+              type="text"
+              name="availableTensions"
+              value={availableTensions}
+              onChange={e => onRowChange(e.target.value, 'availableTensions')}
             />
           </FormGroup>
         </Form>

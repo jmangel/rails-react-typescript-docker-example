@@ -20,6 +20,7 @@ describe('stringifyChordRowObject', () => {
       bassNote: 'myBassNote',
       selectedScale: 'mySelectedScale',
       selectedScaleRoot: 'myRoot',
+      availableTensions: '',
     }
 
     const expectedObjectToStringify = {
@@ -40,6 +41,7 @@ describe('stringifyChordRowObject', () => {
       bassNote: '',
       selectedScale: '',
       selectedScaleRoot: '',
+      availableTensions: '',
     }
 
     expect(stringifyChordRowObject(chordRowObject)).toEqual(JSON.stringify({}));
@@ -62,6 +64,7 @@ describe('parseStringifiedChordRowObject', () => {
       bassNote: 'myBassNote',
       selectedScale: 'mySelectedScale',
       selectedScaleRoot: 'myRoot',
+      availableTensions: '',
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
@@ -74,6 +77,7 @@ describe('parseStringifiedChordRowObject', () => {
       bassNote: '',
       selectedScale: '',
       selectedScaleRoot: '',
+      availableTensions: '',
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify({}))).toEqual(expectedChordRowObject);
@@ -87,6 +91,7 @@ describe('parseStringifiedChordRowObject', () => {
         'bn': 'myBassNote',
         'ss': 'mySelectedScale',
         'ssr': 'myRoot',
+        'at': 'myAvailableTensions'
       }
 
       const expectedChordRowObject: ChordRowObject = {
@@ -95,6 +100,7 @@ describe('parseStringifiedChordRowObject', () => {
         bassNote: 'myBassNote',
         selectedScale: 'mySelectedScale',
         selectedScaleRoot: 'myRoot',
+        availableTensions: 'myAvailableTensions'
       }
 
       expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
@@ -106,6 +112,7 @@ describe('parseStringifiedChordRowObject', () => {
         'cq': 'myQuality',
         'bn': 'myBassNote',
         'ss': 'mySelectedScale',
+        'at': 'myAvailableTensions',
         'r': 'newRoot',
         'ssr': 'oldRoot',
       }
@@ -116,6 +123,7 @@ describe('parseStringifiedChordRowObject', () => {
         bassNote: 'myBassNote',
         selectedScale: 'mySelectedScale',
         selectedScaleRoot: 'newRoot',
+        availableTensions: 'myAvailableTensions',
       }
 
       expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
