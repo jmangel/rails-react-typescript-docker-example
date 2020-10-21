@@ -57,7 +57,7 @@ const ChordRow: React.FC<{
         </Form>
         <Form>
           <FormGroup>
-            <Label for="exampleEmail">Additional Known Available Tensions:</Label>
+            <Label for="exampleEmail">Other Known Scale Tones <small>(e.g. melody notes, notes that sound good to you)</small>:</Label>
             <Input
               type="text"
               name="availableTensions"
