@@ -630,6 +630,7 @@ const CHORD_MAPPINGS = [
         name: 'dorian b9',
         offset: 0,
       },
+      // TODO: look into whether this should include phrygian dominant
     ]
   },
   {
