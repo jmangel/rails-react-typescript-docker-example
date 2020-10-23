@@ -133,6 +133,14 @@ export enum PossibleRootScale {
   wt = 'whole-tone',
 };
 
+export const POSSIBLE_ROOT_SCALE_MAPPINGS: { [key: string]: string } = {
+  'major': 'm',
+  'harmonic minor': 'hm',
+  'melodic minor': 'mm',
+  'diminished': 'd',
+  'whole-tone': 'wt',
+}
+
 interface ScaleDegree {
   degree: number;
   quality: string | null;

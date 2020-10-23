@@ -18,7 +18,7 @@ describe('stringifyChordRowObject', () => {
       chordNote: 'myChordNote',
       chordQuality: 'myQuality',
       bassNote: 'myBassNote',
-      selectedScale: 'mySelectedScale',
+      selectedScale: 'phrygian dominant',
       selectedScaleRoot: 'myRoot',
       availableTensions: '',
     }
@@ -27,7 +27,7 @@ describe('stringifyChordRowObject', () => {
       'cn': 'myChordNote',
       'cq': 'myQuality',
       'bn': 'myBassNote',
-      'ss': 'mySelectedScale',
+      'ss': 'hm5',
       'r': 'myRoot',
     }
 
@@ -113,6 +113,27 @@ describe('parseStringifiedChordRowObject', () => {
 
     expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
   })
+
+  it('rebuilds ChordRowObject with encoded scale', () => {
+    const objectToStringify = {
+      'cn': 'myChordNote',
+      'cq': 'myQuality',
+      'bn': 'myBassNote',
+      'ss': 'hm5',
+      'r': 'myRoot',
+    }
+
+    const expectedChordRowObject: ChordRowObject = {
+      chordNote: 'myChordNote',
+      chordQuality: 'myQuality',
+      bassNote: 'myBassNote',
+      selectedScale: 'phrygian dominant',
+      selectedScaleRoot: 'myRoot',
+      availableTensions: '',
+    }
+
+    expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+  });
 
   it('handles strings that include short keys', () => {
     const objectToStringify = {
@@ -216,6 +237,27 @@ describe('parseStringifiedChordRowObject', () => {
 
       expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
     })
+
+    it('rebuilds ChordRowObject with unencoded scale', () => {
+      const objectToStringify = {
+        'cn': 'myChordNote',
+        'cq': 'myQuality',
+        'bn': 'myBassNote',
+        'ss': 'phrygian dominant',
+        'r': 'myRoot',
+      }
+
+      const expectedChordRowObject: ChordRowObject = {
+        chordNote: 'myChordNote',
+        chordQuality: 'myQuality',
+        bassNote: 'myBassNote',
+        selectedScale: 'phrygian dominant',
+        selectedScaleRoot: 'myRoot',
+        availableTensions: '',
+      }
+
+      expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+    });
   })
 })
 
