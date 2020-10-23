@@ -5,17 +5,6 @@ const CSV_DELIMITER = '|';
 
 const SORTED_CHORD_ROW_OBJECT_KEYS = Object.keys(QUERY_STRING_KEY_MAPPINGS);
 
-export const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
-  const simplifiedChordRowObject = simplifyChordRowObject(chordRowObject);
-
-  // remove empty elements to save space
-  const cleanedChordRowObject = Object.entries(simplifiedChordRowObject)
-    .reduce((a: { [key: string]: string; },[k,v]) => (v === '' ? a : (a[k]=v, a)), {});
-
-
-  return JSON.stringify(cleanedChordRowObject);
-}
-
 export const parseStringifiedChordRowObject = (stringifiedObject: string): ChordRowObject => {
   let parsedObject = JSON.parse(stringifiedObject)
 
@@ -98,20 +87,6 @@ export const parseCsvifiedChordRowObjects = (csvifiedObject: string): ChordRowOb
 
     return chordRowObject;
   });
-}
-
-const simplifyChordRowObject = (chordRowObject: ChordRowObject): { [key: string]: string; } => {
-  const simplifiedChordRowObject:  { [key: string]: string; } = {};
-
-  (Object.keys(QUERY_STRING_KEY_MAPPINGS) as [keyof ChordRowObject]).forEach((fullKeyName) => {
-    const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject];
-    simplifiedChordRowObject[shortKey] = chordRowObject[fullKeyName] || '';
-  })
-
-  const encodedSelectedScale = encodeSelectedScale(chordRowObject.selectedScale)
-  if (encodedSelectedScale) simplifiedChordRowObject.ss = encodedSelectedScale;
-
-  return simplifiedChordRowObject;
 }
 
 const encodeSelectedScale = (selectedScale: string): string => {
