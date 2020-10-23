@@ -22,7 +22,7 @@ import './App.css';
 import ChordCarousel from './ChordCarousel';
 import parseChordString from './ChordParser';
 import ChordRow, { ChordRowObject } from './ChordRow'
-import { stringifyChordRowObject, parseStringifiedChordRowObject } from './JsonCondenser'
+import { parseStringifiedChordRowObject, csvifyChordRowObjects, parseCsvifiedChordRowObjects } from './JsonCondenser'
 
 const createChordRowObject = (): ChordRowObject => {
   return { chordQuality: '' } as ChordRowObject;
@@ -42,19 +42,21 @@ const App: React.FC = () => {
   const [newChordRows, setNewChordRows] = useState(1);
 
   const [query, setQuery] = useQueryParams({
-    a: withDefault(ArrayParam, [stringifyChordRowObject(createChordRowObject())]),
+    a: withDefault(ArrayParam, undefined),
+    c: withDefault(StringParam, ''),
     t: withDefault(StringParam, ''),
     i: withDefault(NumberParam, -1)
   });
-  const { a, t, i } = query;
+  const { a, c, t, i } = query;
 
-  const [chordRowObjects, setChordRowObjects] = useState(
-    (a as Array<string>).map(parseStringifiedChordRowObject)
-  );
+  const startingChordRowObjects = (c) ? parseCsvifiedChordRowObjects(c) : (a as Array<string> || []).map(parseStringifiedChordRowObject);
+  const [chordRowObjects, setChordRowObjects] = useState(startingChordRowObjects);
+  if (a) setQuery({ a: undefined }, 'pushIn');
+  if (c === '') setQuery({ c: csvifyChordRowObjects(chordRowObjects) }, 'pushIn');
 
   useEffect(() => {
     setQuery(
-      { a: chordRowObjects.map(stringifyChordRowObject) },
+      { c: csvifyChordRowObjects(chordRowObjects) },
       'pushIn'
     )
   }, [chordRowObjects]);
