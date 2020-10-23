@@ -49,15 +49,16 @@ export const parseStringifiedChordRowObject = (stringifiedObject: string): Chord
 }
 
 export const csvifyChordRowObject = (chordRowObject: ChordRowObject): string => {
-  const simplifiedObject = simplifyChordRowObject(chordRowObject)
-
   // make sure values are predictably sorted
-  const ordered: { [key: string]: string; } = {};
-  Object.keys(simplifiedObject).sort((a, b) => {
+  const ordered = {} as ChordRowObject;
+  (Object.keys(chordRowObject) as [keyof ChordRowObject]).sort((a, b) => {
     return SORTED_CHORD_ROW_OBJECT_KEYS.indexOf(a) - SORTED_CHORD_ROW_OBJECT_KEYS.indexOf(b);
   }).forEach((key) => {
-    ordered[key] = simplifiedObject[key];
+    ordered[key] = chordRowObject[key];
   });
+
+  const encodedSelectedScale = encodeSelectedScale(chordRowObject.selectedScale)
+  if (encodedSelectedScale) ordered.selectedScale = encodedSelectedScale;
 
   const valuesArray = Object.values(ordered);
   return valuesArray.join(CSV_DELIMITER);
@@ -107,8 +108,13 @@ const simplifyChordRowObject = (chordRowObject: ChordRowObject): { [key: string]
     simplifiedChordRowObject[shortKey] = chordRowObject[fullKeyName] || '';
   })
 
-  const mode = MODES.find((mode) => mode.name === chordRowObject.selectedScale);
-  if (mode) simplifiedChordRowObject.ss = `${POSSIBLE_ROOT_SCALE_MAPPINGS[mode.relatedScale.name]}${mode.relatedScale.startingDegree}`;
+  const encodedSelectedScale = encodeSelectedScale(chordRowObject.selectedScale)
+  if (encodedSelectedScale) simplifiedChordRowObject.ss = encodedSelectedScale;
 
   return simplifiedChordRowObject;
+}
+
+const encodeSelectedScale = (selectedScale: string): string => {
+  const mode = MODES.find((mode) => mode.name === selectedScale);
+  return mode ? `${POSSIBLE_ROOT_SCALE_MAPPINGS[mode.relatedScale.name]}${mode.relatedScale.startingDegree}` : '';
 }
