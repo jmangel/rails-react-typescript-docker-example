@@ -2,6 +2,7 @@ import { MODES, PossibleRootScale, POSSIBLE_ROOT_SCALE_MAPPINGS } from "./ChordM
 import { ChordRowObject, QUERY_STRING_KEY_MAPPINGS } from "./ChordRow";
 
 const CSV_DELIMITER = '|';
+const CSV_DELIMITER_REGEX = new RegExp(`[${CSV_DELIMITER}]`, 'g');
 
 const SORTED_CHORD_ROW_OBJECT_KEYS = Object.keys(QUERY_STRING_KEY_MAPPINGS);
 
@@ -66,7 +67,7 @@ export const parseCsvifiedChordRowObjects = (csvifiedObject: string): ChordRowOb
     let chordRowObject = {} as ChordRowObject;
 
     headers.forEach((header, i) => {
-      const stringifiedValue = line.split(CSV_DELIMITER)[i];
+      const stringifiedValue = line.split(CSV_DELIMITER_REGEX)[i];
       chordRowObject[header as keyof ChordRowObject] = stringifiedValue;
 
       if (header === 'selectedScale') {
