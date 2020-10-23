@@ -5,17 +5,6 @@ const CSV_DELIMITER = '|';
 
 const SORTED_CHORD_ROW_OBJECT_KEYS = Object.keys(QUERY_STRING_KEY_MAPPINGS);
 
-export const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
-  const simplifiedChordRowObject = simplifyChordRowObject(chordRowObject);
-
-  // remove empty elements to save space
-  const cleanedChordRowObject = Object.entries(simplifiedChordRowObject)
-    .reduce((a: { [key: string]: string; },[k,v]) => (v === '' ? a : (a[k]=v, a)), {});
-
-
-  return JSON.stringify(cleanedChordRowObject);
-}
-
 export const parseStringifiedChordRowObject = (stringifiedObject: string): ChordRowObject => {
   let parsedObject = JSON.parse(stringifiedObject)
 
