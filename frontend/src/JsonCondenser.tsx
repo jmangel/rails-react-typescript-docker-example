@@ -1,8 +1,8 @@
 import { MODES, PossibleRootScale, POSSIBLE_ROOT_SCALE_MAPPINGS } from "./ChordMapper";
 import { ChordRowObject, QUERY_STRING_KEY_MAPPINGS } from "./ChordRow";
 
-const CSV_DELIMITER = '|';
-const CSV_DELIMITER_REGEX = new RegExp(`[${CSV_DELIMITER}]`, 'g');
+const CSV_DELIMITER = '.';
+const CSV_DELIMITER_REGEX = new RegExp(`[${CSV_DELIMITER}|]`, 'g');
 
 const SORTED_CHORD_ROW_OBJECT_KEYS = Object.keys(QUERY_STRING_KEY_MAPPINGS);
 
