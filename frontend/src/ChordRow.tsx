@@ -15,8 +15,8 @@ export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string 
   'chordNote': 'cn',
   'chordQuality': 'cq',
   'bassNote': 'bn',
-  'selectedScaleRoot': 'r',
   'selectedScale': 'ss',
+  'selectedScaleRoot': 'r',
   'availableTensions': 'at',
 }
 

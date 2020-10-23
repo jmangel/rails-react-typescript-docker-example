@@ -34,6 +34,50 @@ describe('stringifyChordRowObject', () => {
     expect(stringifyChordRowObject(chordRowObject)).toEqual(JSON.stringify(expectedObjectToStringify));
   })
 
+  it('handles strings that include short keys', () => {
+    const chordRowObject: ChordRowObject = {
+      chordNote: 'my cn',
+      chordQuality: 'my cq',
+      bassNote: 'my bn',
+      selectedScale: 'my ss',
+      selectedScaleRoot: 'my r',
+      availableTensions: 'my at',
+    }
+
+    const expectedObjectToStringify = {
+      'cn': 'my cn',
+      'cq': 'my cq',
+      'bn': 'my bn',
+      'ss': 'my ss',
+      'r': 'my r',
+      'at': 'my at',
+    }
+
+    expect(stringifyChordRowObject(chordRowObject)).toEqual(JSON.stringify(expectedObjectToStringify));
+  })
+
+  it('handles strings that include full keys', () => {
+    const chordRowObject: ChordRowObject = {
+      chordNote: 'my chordNote',
+      chordQuality: 'my chordQuality',
+      bassNote: 'my bassNote',
+      selectedScale: 'my selectedScale',
+      selectedScaleRoot: 'my selectedScaleRoot',
+      availableTensions: 'my availableTensions',
+    }
+
+    const expectedObjectToStringify = {
+      'cn': 'my chordNote',
+      'cq': 'my chordQuality',
+      'bn': 'my bassNote',
+      'ss': 'my selectedScale',
+      'r': 'my selectedScaleRoot',
+      'at': 'my availableTensions',
+    }
+
+    expect(stringifyChordRowObject(chordRowObject)).toEqual(JSON.stringify(expectedObjectToStringify));
+  })
+
   it('excludes empty keys of ChordRowObject', () => {
     const chordRowObject: ChordRowObject = {
       chordNote: '',
@@ -65,6 +109,50 @@ describe('parseStringifiedChordRowObject', () => {
       selectedScale: 'mySelectedScale',
       selectedScaleRoot: 'myRoot',
       availableTensions: '',
+    }
+
+    expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+  })
+
+  it('handles strings that include short keys', () => {
+    const objectToStringify = {
+      'cn': 'my cn',
+      'cq': 'my cq',
+      'bn': 'my bn',
+      'ss': 'my ss',
+      'r': 'my r',
+      'at': 'my at',
+    }
+
+    const expectedChordRowObject: ChordRowObject = {
+      chordNote: 'my cn',
+      chordQuality: 'my cq',
+      bassNote: 'my bn',
+      selectedScale: 'my ss',
+      selectedScaleRoot: 'my r',
+      availableTensions: 'my at',
+    }
+
+    expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+  })
+
+  it('handles strings that include full keys', () => {
+    const objectToStringify = {
+      'cn': 'my chordNote',
+      'cq': 'my chordQuality',
+      'bn': 'my bassNote',
+      'ss': 'my selectedScale',
+      'r': 'my selectedScaleRoot',
+      'at': 'my availableTensions',
+    }
+
+    const expectedChordRowObject: ChordRowObject = {
+      chordNote: 'my chordNote',
+      chordQuality: 'my chordQuality',
+      bassNote: 'my bassNote',
+      selectedScale: 'my selectedScale',
+      selectedScaleRoot: 'my selectedScaleRoot',
+      availableTensions: 'my availableTensions',
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);

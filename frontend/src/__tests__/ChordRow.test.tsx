@@ -15,7 +15,8 @@ describe('ChordRow', () => {
       chordQuality: '-',
       selectedScale: 'aeolian',
       bassNote: '/E',
-      selectedScaleRoot: ''
+      selectedScaleRoot: '',
+      availableTensions: '',
     };
   });
 

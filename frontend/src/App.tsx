@@ -38,19 +38,23 @@ const createSongObject = (title: string | null): Song => {
 }
 
 export const stringifyChordRowObject = (chordRowObject: ChordRowObject): string => {
+  const clonedChordRowObject:  { [key: string]: string; } = {};
+
+  (Object.keys(QUERY_STRING_KEY_MAPPINGS) as [keyof ChordRowObject]).forEach((fullKeyName) => {
+    const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject];
+    clonedChordRowObject[shortKey] = chordRowObject[fullKeyName] || '';
+  })
+
   // remove empty elements to save space
-  const cleanedChordRowObject = Object.entries(chordRowObject)
+  const cleanedChordRowObject = Object.entries(clonedChordRowObject)
     .reduce((a: { [key: string]: string; },[k,v]) => (v === '' ? a : (a[k]=v, a)), {});
 
-  let stringified = JSON.stringify(cleanedChordRowObject);
-  Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
-    stringified = stringified.replace(new RegExp(fullKeyName, 'g'), QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject])
-  })
-  return stringified;
+  return JSON.stringify(cleanedChordRowObject);
 }
 
 export const parseStringifiedChordRowObject = (stringifiedObject: string): ChordRowObject => {
   let parsedObject = JSON.parse(stringifiedObject)
+
   Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
     const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject];
     parsedObject[fullKeyName] = parsedObject[shortKey] || '';
