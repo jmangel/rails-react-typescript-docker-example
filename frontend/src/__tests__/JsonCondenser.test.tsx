@@ -181,7 +181,7 @@ describe('csvifyChordRowObject', () => {
       availableTensions: '',
     }
 
-    const expectedCsv = 'myChordNote|myQuality|myBassNote|hm5|myRoot|'
+    const expectedCsv = 'myChordNote.myQuality.myBassNote.hm5.myRoot.'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -196,7 +196,7 @@ describe('csvifyChordRowObject', () => {
       bassNote: 'myBassNote',
     }
 
-    const expectedCsv = 'myChordNote|myQuality|myBassNote|hm5|myRoot|'
+    const expectedCsv = 'myChordNote.myQuality.myBassNote.hm5.myRoot.'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -211,7 +211,7 @@ describe('csvifyChordRowObject', () => {
       availableTensions: 'my at',
     }
 
-    const expectedCsv = 'my cn|my cq|my bn|my ss|my r|my at'
+    const expectedCsv = 'my cn.my cq.my bn.my ss.my r.my at'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -226,7 +226,7 @@ describe('csvifyChordRowObject', () => {
       availableTensions: 'my availableTensions',
     }
 
-    const expectedCsv = 'my chordNote|my chordQuality|my bassNote|my selectedScale|my selectedScaleRoot|my availableTensions'
+    const expectedCsv = 'my chordNote.my chordQuality.my bassNote.my selectedScale.my selectedScaleRoot.my availableTensions'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -241,7 +241,7 @@ describe('csvifyChordRowObject', () => {
       availableTensions: '',
     }
 
-    const expectedCsv = '|||||'
+    const expectedCsv = '.....'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -284,10 +284,10 @@ describe('csvifyChordRowObjects', () => {
       },
     ]
 
-    let expectedCsv = `myChordNote|myQuality|myBassNote|hm5|myRoot|
-    my cn|my cq|my bn|my ss|my r|my at
-    my chordNote|my chordQuality|my bassNote|my selectedScale|my selectedScaleRoot|my availableTensions
-    |||||`.replace(/\n  +/g, '\n');
+    let expectedCsv = `myChordNote.myQuality.myBassNote.hm5.myRoot.
+    my cn.my cq.my bn.my ss.my r.my at
+    my chordNote.my chordQuality.my bassNote.my selectedScale.my selectedScaleRoot.my availableTensions
+    .....`.replace(/\n  +/g, '\n');
 
     expect(csvifyChordRowObjects(chordRowObjects)).toEqual(expectedCsv);
   })
@@ -295,6 +295,50 @@ describe('csvifyChordRowObjects', () => {
 
 describe('parseCsvifiedChordRowObjects', () => {
   it('parses all csv-ified chordRowObjects', () => {
+    const expectedChordRowObjects: ChordRowObject[] = [
+      {
+        chordNote: 'myChordNote',
+        chordQuality: 'myQuality',
+        bassNote: 'myBassNote',
+        selectedScale: 'phrygian dominant',
+        selectedScaleRoot: 'myRoot',
+        availableTensions: '',
+      },
+      {
+        chordNote: 'my cn',
+        chordQuality: 'my cq',
+        bassNote: 'my bn',
+        selectedScale: 'my ss',
+        selectedScaleRoot: 'my r',
+        availableTensions: 'my at',
+      },
+      {
+        chordNote: 'my chordNote',
+        chordQuality: 'my chordQuality',
+        bassNote: 'my bassNote',
+        selectedScale: 'my selectedScale',
+        selectedScaleRoot: 'my selectedScaleRoot',
+        availableTensions: 'my availableTensions',
+      },
+      {
+        chordNote: '',
+        chordQuality: '',
+        bassNote: '',
+        selectedScale: '',
+        selectedScaleRoot: '',
+        availableTensions: '',
+      },
+    ]
+
+    let csv = `myChordNote.myQuality.myBassNote.hm5.myRoot.
+    my cn.my cq.my bn.my ss.my r.my at
+    my chordNote.my chordQuality.my bassNote.my selectedScale.my selectedScaleRoot.my availableTensions
+    .....`.replace(/\n  +/g, '\n');
+
+    expect(parseCsvifiedChordRowObjects(csv)).toEqual(expectedChordRowObjects);
+  })
+
+  it('backwards compatible with | delimiter', () => {
     const expectedChordRowObjects: ChordRowObject[] = [
       {
         chordNote: 'myChordNote',
