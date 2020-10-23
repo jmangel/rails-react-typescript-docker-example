@@ -125,6 +125,14 @@ const INTERVALS = [
   },
 ]
 
+export enum PossibleRootScale {
+  m = 'major',
+  hm = 'harmonic minor',
+  mm = 'melodic minor',
+  d = 'diminished',
+  wt = 'whole-tone',
+};
+
 interface ScaleDegree {
   degree: number;
   quality: string | null;
@@ -134,9 +142,8 @@ interface Scale {
   degrees: Array<ScaleDegree>;
 }
 const PRIMARY_SCALES = [
-
   {
-    name: 'major',
+    name: PossibleRootScale.m,
     degrees: [
       {
         degree: 1,
@@ -169,7 +176,7 @@ const PRIMARY_SCALES = [
     ],
   },
   {
-    name: 'melodic minor',
+    name: PossibleRootScale.mm,
     degrees: [
       {
         degree: 1,
@@ -202,7 +209,7 @@ const PRIMARY_SCALES = [
     ],
   },
   {
-    name: 'harmonic minor',
+    name: PossibleRootScale.hm,
     degrees: [
       {
         degree: 1,
@@ -235,7 +242,7 @@ const PRIMARY_SCALES = [
     ],
   },
   {
-    name: 'diminished',
+    name: PossibleRootScale.d,
     degrees: [
       {
         degree: 1,
@@ -272,7 +279,7 @@ const PRIMARY_SCALES = [
     ],
   },
   {
-    name: 'whole-tone',
+    name: PossibleRootScale.wt,
     degrees: [
       {
         degree: 1,
@@ -306,179 +313,179 @@ const PRIMARY_SCALES = [
   },
 ]
 
-interface Mode {
+export interface Mode {
   name: string;
   relatedScale: {
-    name: string;
+    name: PossibleRootScale;
     startingDegree: number;
   };
 }
-const MODES = [
+export const MODES: Array<Mode> = [
   {
     name: 'ionian',
     relatedScale: {
-      name: 'major',
+      name: PossibleRootScale.m,
       startingDegree: 1,
     },
   },
   {
     name: 'dorian',
     relatedScale: {
-      name: 'major',
+      name: PossibleRootScale.m,
       startingDegree: 2,
     },
   },
   {
     name: 'phrygian',
     relatedScale: {
-      name: 'major',
+      name: PossibleRootScale.m,
       startingDegree: 3,
     },
   },
   {
     name: 'lydian',
     relatedScale: {
-      name: 'major',
+      name: PossibleRootScale.m,
       startingDegree: 4,
     },
   },
   {
     name: 'mixolydian',
     relatedScale: {
-      name: 'major',
+      name: PossibleRootScale.m,
       startingDegree: 5,
     },
   },
   {
     name: 'aeolian',
     relatedScale: {
-      name: 'major',
+      name: PossibleRootScale.m,
       startingDegree: 6,
     },
   },
   {
     name: 'locrian',
     relatedScale: {
-      name: 'major',
+      name: PossibleRootScale.m,
       startingDegree: 7,
     },
   },
   {
-    name: 'melodic minor',
+    name: PossibleRootScale.mm,
     relatedScale: {
-      name: 'melodic minor',
+      name: PossibleRootScale.mm,
       startingDegree: 1,
     },
   },
   {
     name: 'dorian b9',
     relatedScale: {
-      name: 'melodic minor',
+      name: PossibleRootScale.mm,
       startingDegree: 2,
     },
   },
   {
     name: 'lydian augmented',
     relatedScale: {
-      name: 'melodic minor',
+      name: PossibleRootScale.mm,
       startingDegree: 3,
     },
   },
   {
     name: 'lydian dominant',
     relatedScale: {
-      name: 'melodic minor',
+      name: PossibleRootScale.mm,
       startingDegree: 4,
     },
   },
   {
     name: 'mixolydian b13',
     relatedScale: {
-      name: 'melodic minor',
+      name: PossibleRootScale.mm,
       startingDegree: 5,
     },
   },
   {
     name: 'locrian 2/half-dim',
     relatedScale: {
-      name: 'melodic minor',
+      name: PossibleRootScale.mm,
       startingDegree: 6,
     },
   },
   {
     name: 'altered',
     relatedScale: {
-      name: 'melodic minor',
+      name: PossibleRootScale.mm,
       startingDegree: 7,
     },
   },
   {
-    name: 'harmonic minor',
+    name: PossibleRootScale.hm,
     relatedScale: {
-      name: 'harmonic minor',
+      name: PossibleRootScale.hm,
       startingDegree: 1,
     },
   },
   {
     name: 'locrian #6',
     relatedScale: {
-      name: 'harmonic minor',
+      name: PossibleRootScale.hm,
       startingDegree: 2,
     },
   },
   {
     name: 'major #5',
     relatedScale: {
-      name: 'harmonic minor',
+      name: PossibleRootScale.hm,
       startingDegree: 3,
     },
   },
   {
     name: 'dorian #4',
     relatedScale: {
-      name: 'harmonic minor',
+      name: PossibleRootScale.hm,
       startingDegree: 4,
     },
   },
   {
     name: 'phrygian dominant',
     relatedScale: {
-      name: 'harmonic minor',
+      name: PossibleRootScale.hm,
       startingDegree: 5,
     },
   },
   {
     name: 'lydian #2',
     relatedScale: {
-      name: 'harmonic minor',
+      name: PossibleRootScale.hm,
       startingDegree: 6,
     },
   },
   {
     name: 'alt dom bb7',
     relatedScale: {
-      name: 'harmonic minor',
+      name: PossibleRootScale.hm,
       startingDegree: 7,
     },
   },
   {
     name: 'w/h diminished',
     relatedScale: {
-      name: 'diminished',
+      name: PossibleRootScale.d,
       startingDegree: 1,
     },
   },
   {
     name: 'h/w diminished',
     relatedScale: {
-      name: 'diminished',
+      name: PossibleRootScale.d,
       startingDegree: 6,
     },
   },
   {
-    name: 'whole-tone',
+    name: PossibleRootScale.wt,
     relatedScale: {
-      name: 'whole-tone',
+      name: PossibleRootScale.wt,
       startingDegree: 1,
     },
   },
@@ -527,17 +534,17 @@ const MAJOR_MODES = [
 ]
 const MINOR_MAJOR_MODES = [
   {
-    name: 'melodic minor',
+    name: PossibleRootScale.mm,
     offset: 0,
   },
   {
-    name: 'harmonic minor',
+    name: PossibleRootScale.hm,
     offset: 0,
   },
 ]
 const AUGMENTED_MODES: Array<RelativeMode> = [
   {
-    name: 'whole-tone',
+    name: PossibleRootScale.wt,
     offset: 0,
   },
   {
