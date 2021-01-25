@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import scalesForChord, { NamedScale } from './ChordMapper'
 import parseChordString from './ChordParser'
+import scaleToHexColor from './ScaleColorer';
 export interface ChordRowObject {
   chordNote: string;
   chordQuality: string;
@@ -41,8 +42,17 @@ const ChordRow: React.FC<{
     onRowChange(parsedChordString[2], 'bassNote');
   }
 
+
+  const selectedNamedScale = scales.find((namedScale: NamedScale, index: number) => namedScale.scaleName === selectedScale && (
+    namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
+  ));
+
+  console.warn(selectedNamedScale);
+  let backgroundColor = '';
+  if (selectedNamedScale) backgroundColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote);
+
   return (
-    <Row className="border">
+    <Row className="border" style={{ backgroundColor }}>
       <Col xs={6}>
         <Form>
           <FormGroup>

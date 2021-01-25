@@ -1,4 +1,4 @@
-const CHROMATIC_NOTES = [
+export const CHROMATIC_NOTES = [
   ['A'],
   ['A#', 'Bb'],
   ['B'],
