@@ -1,7 +1,6 @@
 npm install
 nvm use 10
 
-yarn dev
 yarn dev --port 3001
 ./ngrok http 3001
 
