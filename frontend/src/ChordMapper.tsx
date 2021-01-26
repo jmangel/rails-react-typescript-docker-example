@@ -627,6 +627,10 @@ const CHORD_MAPPINGS = [
         name: 'phrygian dominant',
         offset: 0,
       },
+      {
+        name: 'lydian dominant',
+        offset: 0,
+      },
     ]
   },
   {
