@@ -43,7 +43,7 @@ const App: React.FC = () => {
 
   const [query, setQuery] = useQueryParams({
     a: withDefault(ArrayParam, undefined),
-    c: withDefault(StringParam, ''),
+    c: withDefault(StringParam, csvifyChordRowObjects([createChordRowObject()])),
     t: withDefault(StringParam, ''),
     i: withDefault(NumberParam, -1)
   });
@@ -116,6 +116,7 @@ const App: React.FC = () => {
                 selectedScaleRoot: '',
                 availableTensions: '',
               }
+
             });
           })
           setChordRowObjects(newChordRows)
