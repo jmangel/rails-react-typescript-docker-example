@@ -609,6 +609,10 @@ const CHORD_MAPPINGS = [
     possibleModes: MAJOR_MODES,
   },
   {
+    quality: '6',
+    possibleModes: MAJOR_MODES,
+  },
+  {
     quality: '^7',
     possibleModes: MAJOR_MODES,
   },
@@ -749,7 +753,7 @@ const CHORD_MAPPINGS = [
   },
 ]
 
-function arrayRotate<T>(arr: Array<T>, index: number): Array<T> {
+export function arrayRotate<T>(arr: Array<T>, index: number): Array<T> {
   const emptyArray: Array<T> = [];
   const clone = emptyArray.concat(arr)
 

@@ -1,4 +1,4 @@
-import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper'
+import { CHROMATIC_NOTES, PossibleRootScale, arrayRotate } from './ChordMapper'
 
 const circleOfFifths: string[][] = [
   ['C'],
@@ -53,8 +53,8 @@ const grayOpacities = [
 
 const opacities: { [key in PossibleRootScale]: number } = {
   [PossibleRootScale.m]: 1.0,
-  [PossibleRootScale.mm]: 0.6,
   [PossibleRootScale.hm]: 0.4,
+  [PossibleRootScale.mm]: 0.25,
   [PossibleRootScale.d]: 0.1,
   [PossibleRootScale.wt]: 1.0,
 };
@@ -70,7 +70,10 @@ const scaleToHexColor = (selectedScale: PossibleRootScale, selectedScaleRoot: st
     return `rgb(0,0,0,${grayOpacities[moddedChromaticIndex]})`;
   }
 
-  const circleOfFifthsIndex = circleOfFifths.findIndex((enharmonicNotesArray: string[]) => enharmonicNotesArray.indexOf(selectedScaleRoot) > -1);
+  let rotatedCircleOfFifths = circleOfFifths;
+  if ([PossibleRootScale.mm, PossibleRootScale.hm].indexOf(selectedScale) > -1) rotatedCircleOfFifths = arrayRotate(circleOfFifths, 3);
+
+  const circleOfFifthsIndex = rotatedCircleOfFifths.findIndex((enharmonicNotesArray: string[]) => enharmonicNotesArray.indexOf(selectedScaleRoot) > -1);
 
   if (selectedScale == PossibleRootScale.wt) {
     // black or white
