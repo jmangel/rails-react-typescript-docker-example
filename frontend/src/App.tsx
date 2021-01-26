@@ -71,6 +71,9 @@ const App: React.FC = () => {
       { t: song.title },
       'pushIn'
     )
+
+    document.title = `Song Scaler - ${song.title}`
+
   }, [song]);
 
   const [expandedRowIndex, setExpandedRowIndex] = useState(i);
