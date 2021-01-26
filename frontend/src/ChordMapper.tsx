@@ -712,6 +712,15 @@ const CHORD_MAPPINGS = [
     ]
   },
   {
+    quality: '7#9',
+    possibleModes: [
+      {
+        name: 'h/w diminished',
+        offset: 0,
+      }
+    ]
+  },
+  {
     quality: '7b13',
     possibleModes: [
       {
