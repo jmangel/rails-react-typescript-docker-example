@@ -42,8 +42,7 @@ const ChordRow: React.FC<{
     onRowChange(parsedChordString[2], 'bassNote');
   }
 
-
-  const selectedNamedScale = scales.find((namedScale: NamedScale, index: number) => namedScale.scaleName === selectedScale && (
+  const selectedNamedScale = scales.find((namedScale: NamedScale) => namedScale.scaleName === selectedScale && (
     namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
   ));
 

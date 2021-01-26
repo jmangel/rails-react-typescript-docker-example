@@ -965,7 +965,7 @@ const createScaleForMode = (
 export interface NamedScale {
   scaleName: string;
   scaleNotes: Array<string>;
-  rootScale: string;
+  rootScale: PossibleRootScale;
   rootScaleNote: string;
   notes: Array<string>;
 }

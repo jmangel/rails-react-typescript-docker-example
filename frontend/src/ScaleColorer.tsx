@@ -1,4 +1,4 @@
-import { CHROMATIC_NOTES } from './ChordMapper'
+import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper'
 
 const circleOfFifths: string[][] = [
   ['C'],
@@ -30,14 +30,58 @@ const colorWheel = [
   '#80FF00', // yellow green
 ]
 
-const scaleToHexColor = (selectedScale: string, selectedScaleRoot: string): string => {
+const rgbColorWheel = [
+  [255,255,0], // yellow
+  [255,125,0], // orange
+  [255,0,0], // red
+  [255,0,125], // raspberry
+  [255,0,255], // magenta
+  [125,0,255], // violet
+  [0,0,255], // blue
+  [0,125,255], // ocean
+  [0,255,255], // cyan
+  [0,255,125], // turquoise
+  [0,255,0], // green
+  [125,255,0], // spring green
+]
+
+const grayOpacities = [
+  0.87,
+  0.6,
+  0.38,
+]
+
+const opacities: { [key in PossibleRootScale]: number } = {
+  [PossibleRootScale.m]: 1.0,
+  [PossibleRootScale.mm]: 0.6,
+  [PossibleRootScale.hm]: 0.4,
+  [PossibleRootScale.d]: 0.1,
+  [PossibleRootScale.wt]: 1.0,
+};
+
+const scaleToHexColor = (selectedScale: PossibleRootScale, selectedScaleRoot: string): string => {
   console.warn(selectedScale, selectedScaleRoot);
 
-  if (selectedScale == 'major') {
-    const circleOfFifthsIndex = circleOfFifths.findIndex((enharmonicNotesArray: string[]) => enharmonicNotesArray.indexOf(selectedScaleRoot) > -1);
-    return colorWheel[circleOfFifthsIndex];
+  if (selectedScale == PossibleRootScale.d) {
+    // 3 shades of gray
+
+    const chromaticIndex = CHROMATIC_NOTES.findIndex((enharmonicNotesArray: string[]) => enharmonicNotesArray.indexOf(selectedScaleRoot) > -1);
+    const moddedChromaticIndex = chromaticIndex % 3;
+    return `rgb(0,0,0,${grayOpacities[moddedChromaticIndex]})`;
   }
-  return '1';
+
+  const circleOfFifthsIndex = circleOfFifths.findIndex((enharmonicNotesArray: string[]) => enharmonicNotesArray.indexOf(selectedScaleRoot) > -1);
+
+  if (selectedScale == PossibleRootScale.wt) {
+    // black or white
+    const moddedCircleOfFifthsIndex = circleOfFifthsIndex % 2;
+    return moddedCircleOfFifthsIndex ? 'black' : 'white';
+  }
+
+  const rgbColor = rgbColorWheel[circleOfFifthsIndex];
+  const opacity = opacities[selectedScale];
+
+  return `rgb(${rgbColor},${opacity})`;
 }
 
 export default scaleToHexColor
