@@ -65,7 +65,7 @@ const scaleToHexColor = (selectedScale: PossibleRootScale, selectedScaleRoot: st
   if (selectedScale == PossibleRootScale.wt) {
     // black or white
     const moddedCircleOfFifthsIndex = circleOfFifthsIndex % 2;
-    return moddedCircleOfFifthsIndex ? 'black' : 'white';
+    return moddedCircleOfFifthsIndex ? 'white' : 'black';
   }
 
   const rgbColor = rgbColorWheel[circleOfFifthsIndex];
