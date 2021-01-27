@@ -3,7 +3,7 @@ import {
   PieChart, Pie, Cell,
 } from 'recharts';
 import { PossibleRootScale } from './ChordMapper';
-import { circleOfFifthsMajorColors, opacities } from './ScaleColorer';
+import scaleToHexColor, { circleOfFifthsMajorColors } from './ScaleColorer';
 
 const ColorWheel: React.FC = () => {
   const majorChartSections = Object.entries(circleOfFifthsMajorColors).map(([note, rgbArray]) => {
@@ -33,8 +33,6 @@ const ColorWheel: React.FC = () => {
     [PossibleRootScale.hm]: '  h.m.',
     [PossibleRootScale.mm]: '  m.m.',
   };
-
-  const fillForEntry = ({ rgbArray, quality }: { rgbArray: Array<number>, quality: PossibleRootScale }) => `rgba(${rgbArray},${opacities[quality]})`;
 
   const RADIAN = Math.PI / 180;
   class CustomizedLabel extends React.Component {
@@ -87,7 +85,7 @@ const ColorWheel: React.FC = () => {
           label={<CustomizedLabel />}
         >
           {
-            mmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={fillForEntry(entry)} />)
+            mmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
           }
         </Pie>
         <Pie
@@ -102,7 +100,7 @@ const ColorWheel: React.FC = () => {
           label={<CustomizedLabel />}
         >
           {
-            hmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={fillForEntry(entry)} />)
+            hmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
           }
         </Pie>
         <Pie
@@ -116,7 +114,7 @@ const ColorWheel: React.FC = () => {
           label={<CustomizedLabel />}
         >
           {
-            majorChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={fillForEntry(entry)} />)
+            majorChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
           }
         </Pie>
       </PieChart>
