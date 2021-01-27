@@ -2,7 +2,7 @@ import React from 'react';
 import {
   PieChart, Pie, Cell,
 } from 'recharts';
-import { PossibleRootScale } from './ChordMapper';
+import { arrayRotate, PossibleRootScale } from './ChordMapper';
 import scaleToHexColor, { circleOfFifthsMajorColors } from './ScaleColorer';
 
 const ColorWheel: React.FC = () => {
@@ -15,14 +15,14 @@ const ColorWheel: React.FC = () => {
     };
   });
 
-  const mmChartSections = majorChartSections.map((entry) => {
+  const mmChartSections = arrayRotate(majorChartSections.map((entry) => {
     return {
       ...entry,
       quality: PossibleRootScale.mm,
     };
-  });
+  }), 3);
 
-  const hmChartSections = majorChartSections.map((entry) => {
+  const hmChartSections = mmChartSections.map((entry) => {
     return {
       ...entry,
       quality: PossibleRootScale.hm,
