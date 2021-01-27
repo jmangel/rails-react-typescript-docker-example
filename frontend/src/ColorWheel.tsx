@@ -29,9 +29,25 @@ const ColorWheel: React.FC = () => {
     };
   }), 9); // 9 instead of 3 because we reversed so that it moves clockwise as in circle of fifths
 
+  const diminishedChartSections = majorChartSections.map((entry) => {
+    return {
+      ...entry,
+      quality: PossibleRootScale.d,
+    };
+  });
+
+  const wholeToneChartSections = majorChartSections.map((entry) => {
+    return {
+      ...entry,
+      quality: PossibleRootScale.wt,
+    };
+  });
+
   const legendQualityMappings: { [key in PossibleRootScale]?: string } = {
     [PossibleRootScale.hm]: '  h.m.',
     [PossibleRootScale.mm]: '  m.m.',
+    [PossibleRootScale.d]: '  dim.',
+    [PossibleRootScale.wt]: '  whole tone',
   };
 
   const startAngle = 90 + (360 / majorChartSections.length / 2);
@@ -44,12 +60,12 @@ const ColorWheel: React.FC = () => {
       } = this.props as {cx: number, cy: number, midAngle: number, innerRadius: number, outerRadius: number, name: string, quality: PossibleRootScale};
 
       let radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-      if (innerRadius == 0) radius = innerRadius + (outerRadius - innerRadius) * 0.7;
+      if (innerRadius <= 115) radius = 115;
       const x = cx + radius * Math.cos(-midAngle * RADIAN);
       const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
       const rotationAngle = midAngle + ((midAngle % 360) >= 90 && (midAngle % 360) < 270 ? 180 : 0)
-      const textProps = innerRadius == 0 ? {
+      const textProps = radius == 115 ? {
         x: 0,
         y: 0,
         transform: `translate(${x}, ${y}) rotate(-${rotationAngle})`
@@ -71,14 +87,50 @@ const ColorWheel: React.FC = () => {
     }
   }
 
+  const pieChartDimensions = 1130;
+
   return (
-    <PieChart width={1000} height={1000}>
+    <PieChart width={pieChartDimensions} height={pieChartDimensions} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+        <Pie
+          data={wholeToneChartSections}
+          dataKey="value"
+          cx="50%"
+          cy="50%"
+          outerRadius={195}
+          isAnimationActive={false}
+          labelLine={false}
+          label={<CustomizedLabel />}
+          startAngle={startAngle}
+          endAngle={360 + startAngle}
+        >
+          {
+            wholeToneChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
+          }
+        </Pie>
+        <Pie
+          data={diminishedChartSections}
+          dataKey="value"
+          cx="50%"
+          cy="50%"
+          innerRadius={195}
+          outerRadius={280}
+          isAnimationActive={false}
+          labelLine={false}
+          label={<CustomizedLabel />}
+          startAngle={startAngle}
+          endAngle={360 + startAngle}
+        >
+          {
+            diminishedChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
+          }
+        </Pie>
         <Pie
           data={hmChartSections}
           dataKey="value"
           cx="50%"
           cy="50%"
-          outerRadius={175}
+          innerRadius={280}
+          outerRadius={365}
           isAnimationActive={false}
           labelLine={false}
           label={<CustomizedLabel />}
@@ -94,8 +146,8 @@ const ColorWheel: React.FC = () => {
           dataKey="value"
           cx="50%"
           cy="50%"
-          innerRadius={175}
-          outerRadius={300}
+          innerRadius={365}
+          outerRadius={460}
           isAnimationActive={false}
           labelLine={false}
           label={<CustomizedLabel />}
@@ -107,11 +159,13 @@ const ColorWheel: React.FC = () => {
           }
         </Pie>
         <Pie
+          // legendType="none"
           data={majorChartSections}
           dataKey="value"
           cx="50%"
           cy="50%"
-          innerRadius={300}
+          innerRadius={460}
+          outerRadius="90%"
           isAnimationActive={false}
           labelLine={false}
           label={<CustomizedLabel />}

@@ -35,9 +35,9 @@ export const circleOfFifthsMajorColors: { [key: string]: number[] } = {};
 circleOfFifths.forEach((enharmonicNotesArray: Array<string>, index: number) => circleOfFifthsMajorColors[enharmonicNotesArray[0]] = rgbColorWheel[index])
 
 const grayOpacities = [
-  0.87,
-  0.6,
-  0.38,
+  0.7,
+  0.5,
+  0.3,
 ]
 
 export const opacities: { [key in PossibleRootScale]: number } = {
