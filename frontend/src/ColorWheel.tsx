@@ -29,6 +29,11 @@ const ColorWheel: React.FC = () => {
     };
   });
 
+  const legendQualityMappings: { [key in PossibleRootScale]?: string } = {
+    [PossibleRootScale.hm]: '  h.m.',
+    [PossibleRootScale.mm]: '  m.m.',
+  };
+
   const fillForEntry = ({ rgbArray, quality }: { rgbArray: Array<number>, quality: PossibleRootScale }) => `rgba(${rgbArray},${opacities[quality]})`;
 
   const RADIAN = Math.PI / 180;
@@ -43,10 +48,19 @@ const ColorWheel: React.FC = () => {
       const x = cx + radius * Math.cos(-midAngle * RADIAN);
       const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
+      const rotationAngle = midAngle + (midAngle >= 90 && midAngle < 270 ? 180 : 0)
+      const textProps = quality == PossibleRootScale.mm ? {
+        x: 0,
+        y: 0,
+        transform: `translate(${x}, ${y}) rotate(-${rotationAngle})`
+      } : {
+        x,
+        y
+      };
+
       return (
         <text
-          x={x}
-          y={y}
+          {...textProps}
           fill="white"
           stroke="black"
           fontSize={25}
@@ -54,20 +68,20 @@ const ColorWheel: React.FC = () => {
           textAnchor="middle"
           dominantBaseline="central"
         >
-          {name}
+          {name}{legendQualityMappings[quality]}
         </text>
       );
     }
   }
 
   return (
-    <PieChart width={800} height={800}>
+    <PieChart width={1000} height={1000}>
         <Pie
           data={mmChartSections}
           dataKey="value"
           cx="50%"
           cy="50%"
-          outerRadius={120}
+          outerRadius={175}
           isAnimationActive={false}
           labelLine={false}
           label={<CustomizedLabel />}
@@ -81,8 +95,8 @@ const ColorWheel: React.FC = () => {
           dataKey="value"
           cx="50%"
           cy="50%"
-          innerRadius={120}
-          outerRadius={220}
+          innerRadius={175}
+          outerRadius={300}
           isAnimationActive={false}
           labelLine={false}
           label={<CustomizedLabel />}
@@ -96,7 +110,7 @@ const ColorWheel: React.FC = () => {
           dataKey="value"
           cx="50%"
           cy="50%"
-          innerRadius={220}
+          innerRadius={300}
           isAnimationActive={false}
           labelLine={false}
           label={<CustomizedLabel />}
