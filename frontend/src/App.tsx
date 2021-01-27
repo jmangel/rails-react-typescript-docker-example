@@ -22,6 +22,7 @@ import './App.css';
 import ChordCarousel from './ChordCarousel';
 import parseChordString from './ChordParser';
 import ChordRow, { ChordRowObject } from './ChordRow'
+import ColorWheel from './ColorWheel';
 import { parseStringifiedChordRowObject, csvifyChordRowObjects, parseCsvifiedChordRowObjects } from './JsonCondenser'
 
 const createChordRowObject = (): ChordRowObject => {
@@ -206,6 +207,7 @@ const App: React.FC = () => {
             />
             Row(s)
           </Row>
+          <ColorWheel />
         </Container>
         )
       }

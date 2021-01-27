@@ -15,22 +15,7 @@ const circleOfFifths: string[][] = [
   ['F'],
 ]
 
-const colorWheel = [
-  '#FFFF00', // yellow
-  '#FF8000', // orange
-  '#FF0000', // red
-  '#FF0080', // deep pink
-  '#FF00FF', // magenta
-  '#8000FF', // purple
-  '#0000FF', // deep blue
-  '#0080FF', // blue
-  '#00FFFF', // sky blue
-  '#00FF80', // cyan green
-  '#00FF00', // green
-  '#80FF00', // yellow green
-]
-
-const rgbColorWheel = [
+export const rgbColorWheel = [
   [255,255,0], // yellow
   [255,125,0], // orange
   [255,0,0], // red
@@ -45,13 +30,17 @@ const rgbColorWheel = [
   [125,255,0], // spring green
 ]
 
+export const circleOfFifthsMajorColors: { [key: string]: number[] } = {};
+
+circleOfFifths.forEach((enharmonicNotesArray: Array<string>, index: number) => circleOfFifthsMajorColors[enharmonicNotesArray[0]] = rgbColorWheel[index])
+
 const grayOpacities = [
   0.87,
   0.6,
   0.38,
 ]
 
-const opacities: { [key in PossibleRootScale]: number } = {
+export const opacities: { [key in PossibleRootScale]: number } = {
   [PossibleRootScale.m]: 1.0,
   [PossibleRootScale.hm]: 0.4,
   [PossibleRootScale.mm]: 0.25,
