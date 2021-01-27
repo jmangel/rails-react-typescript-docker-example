@@ -42,8 +42,8 @@ const grayOpacities = [
 
 export const opacities: { [key in PossibleRootScale]: number } = {
   [PossibleRootScale.m]: 1.0,
-  [PossibleRootScale.hm]: 0.4,
-  [PossibleRootScale.mm]: 0.25,
+  [PossibleRootScale.mm]: 0.4,
+  [PossibleRootScale.hm]: 0.25,
   [PossibleRootScale.d]: 0.1, // should be unused
   [PossibleRootScale.wt]: 1.0, // should be unused
 };
@@ -58,7 +58,7 @@ const scaleToHexColor = (selectedScale: PossibleRootScale, selectedScaleRoot: st
   }
 
   let rotatedCircleOfFifths = circleOfFifths;
-  if ([PossibleRootScale.mm, PossibleRootScale.hm].indexOf(selectedScale) > -1) rotatedCircleOfFifths = arrayRotate(circleOfFifths, 3);
+  if (selectedScale == PossibleRootScale.hm) rotatedCircleOfFifths = arrayRotate(circleOfFifths, 3);
 
   const circleOfFifthsIndex = rotatedCircleOfFifths.findIndex((enharmonicNotesArray: string[]) => enharmonicNotesArray.indexOf(selectedScaleRoot) > -1);
 

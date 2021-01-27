@@ -15,19 +15,19 @@ const ColorWheel: React.FC = () => {
     };
   });
 
-  const mmChartSections = arrayRotate(majorChartSections.map((entry) => {
+  const mmChartSections = majorChartSections.map((entry) => {
     return {
       ...entry,
       quality: PossibleRootScale.mm,
     };
-  }), 3);
+  });
 
-  const hmChartSections = mmChartSections.map((entry) => {
+  const hmChartSections = arrayRotate(majorChartSections.map((entry) => {
     return {
       ...entry,
       quality: PossibleRootScale.hm,
     };
-  });
+  }), 3);
 
   const legendQualityMappings: { [key in PossibleRootScale]?: string } = {
     [PossibleRootScale.hm]: '  h.m.',
@@ -42,12 +42,12 @@ const ColorWheel: React.FC = () => {
       } = this.props as {cx: number, cy: number, midAngle: number, innerRadius: number, outerRadius: number, name: string, quality: PossibleRootScale};
 
       let radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-      if (quality == PossibleRootScale.mm) radius = innerRadius + (outerRadius - innerRadius) * 0.7;
+      if (innerRadius == 0) radius = innerRadius + (outerRadius - innerRadius) * 0.7;
       const x = cx + radius * Math.cos(-midAngle * RADIAN);
       const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
       const rotationAngle = midAngle + (midAngle >= 90 && midAngle < 270 ? 180 : 0)
-      const textProps = quality == PossibleRootScale.mm ? {
+      const textProps = innerRadius == 0 ? {
         x: 0,
         y: 0,
         transform: `translate(${x}, ${y}) rotate(-${rotationAngle})`
@@ -75,7 +75,7 @@ const ColorWheel: React.FC = () => {
   return (
     <PieChart width={1000} height={1000}>
         <Pie
-          data={mmChartSections}
+          data={hmChartSections}
           dataKey="value"
           cx="50%"
           cy="50%"
@@ -85,11 +85,11 @@ const ColorWheel: React.FC = () => {
           label={<CustomizedLabel />}
         >
           {
-            mmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
+            hmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
           }
         </Pie>
         <Pie
-          data={hmChartSections}
+          data={mmChartSections}
           dataKey="value"
           cx="50%"
           cy="50%"
@@ -100,7 +100,7 @@ const ColorWheel: React.FC = () => {
           label={<CustomizedLabel />}
         >
           {
-            hmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
+            mmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
           }
         </Pie>
         <Pie
