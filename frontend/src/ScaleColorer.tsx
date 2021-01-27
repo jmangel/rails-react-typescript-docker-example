@@ -49,8 +49,6 @@ export const opacities: { [key in PossibleRootScale]: number } = {
 };
 
 const scaleToHexColor = (selectedScale: PossibleRootScale, selectedScaleRoot: string): string => {
-  console.warn(selectedScale, selectedScaleRoot);
-
   if (selectedScale == PossibleRootScale.d) {
     // 3 shades of gray
 

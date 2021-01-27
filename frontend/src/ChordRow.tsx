@@ -46,7 +46,6 @@ const ChordRow: React.FC<{
     namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
   ));
 
-  console.warn(selectedNamedScale);
   let backgroundColor = '';
   if (selectedNamedScale) backgroundColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote);
 

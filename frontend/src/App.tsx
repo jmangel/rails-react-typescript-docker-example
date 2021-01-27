@@ -56,7 +56,6 @@ const App: React.FC = () => {
   if (c === '') setQuery({ c: csvifyChordRowObjects(chordRowObjects) }, 'pushIn');
 
   useEffect(() => {
-    console.warn('using effect 1')
     setQuery(
       { c: csvifyChordRowObjects(chordRowObjects) },
       'pushIn'
@@ -66,8 +65,6 @@ const App: React.FC = () => {
   const [song, setSong] = useState(createSongObject(t));
 
   useEffect(() => {
-    console.warn('using effect 2')
-
     setQuery(
       { t: song.title },
       'pushIn'
@@ -79,13 +76,11 @@ const App: React.FC = () => {
 
   const [expandedRowIndex, setExpandedRowIndex] = useState(i);
   const toggle = (rowIndex: number) => {
-    console.warn('toggling')
     if (expandedRowIndex > -1) setExpandedRowIndex(-1);
     else setExpandedRowIndex(rowIndex);
   }
 
   useEffect(() => {
-    console.warn('using effect 3')
     setQuery(
       { i: expandedRowIndex },
       'pushIn'
