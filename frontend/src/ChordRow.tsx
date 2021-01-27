@@ -50,11 +50,11 @@ const ChordRow: React.FC<{
   if (selectedNamedScale) backgroundColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote);
 
   return (
-    <Row className="border" style={{ backgroundColor }}>
+    <Row className="border row__color-coded" style={{ backgroundColor }}>
       <Col xs={6}>
         <Form>
           <FormGroup>
-            <Label for="exampleEmail">Chord:</Label>
+            <Label for="exampleEmail" className="color-coded--text">Chord:</Label>
             <Input
               type="text"
               name="chordNote"
@@ -65,7 +65,7 @@ const ChordRow: React.FC<{
         </Form>
         <Form>
           <FormGroup>
-            <Label for="exampleEmail">Other Known Scale Tones <small>(e.g. melody notes, notes that sound good to you)</small>:</Label>
+            <Label for="exampleEmail" className="color-coded--text">Other Known Scale Tones <small className="color-coded--text">(e.g. melody notes, notes that sound good to you)</small>:</Label>
             <Input
               type="text"
               name="availableTensions"
@@ -75,7 +75,7 @@ const ChordRow: React.FC<{
           </FormGroup>
         </Form>
         <FormGroup>
-          <Label for="exampleSelect">Preferred Scale</Label>
+          <Label for="exampleSelect" className="color-coded--text">Preferred Scale</Label>
           <Input type="select"
             name="select"
             id="exampleSelect"
@@ -111,10 +111,10 @@ const ChordRow: React.FC<{
         {scales.map(
           (namedScale: NamedScale, index: number) => (
             <div key={`scale-${index}`}>
-              <p>
+              <p className="color-coded--text">
                 {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
                 <br />
-                <small>{namedScale.rootScaleNote} {namedScale.rootScale}</small>
+                <small className="color-coded--text">{namedScale.rootScaleNote} {namedScale.rootScale}</small>
               </p>
             </div>
           )

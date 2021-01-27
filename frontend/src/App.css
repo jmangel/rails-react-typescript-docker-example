@@ -31,3 +31,18 @@
     transform: rotate(360deg);
   }
 }
+
+.color-coded--text {
+  -webkit-text-stroke: 0.023em black;
+  color: white;
+}
+
+.color-coded--text:not(small) {
+  font-size: 1.2rem;
+}
+
+.recharts-pie text {
+  stroke: black;
+  stroke-width: 0.023em;
+  fill: white;
+}

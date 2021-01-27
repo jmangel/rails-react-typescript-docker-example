@@ -61,10 +61,7 @@ const ColorWheel: React.FC = () => {
       return (
         <text
           {...textProps}
-          fill="white"
-          stroke="black"
           fontSize={25}
-          strokeWidth={0.8}
           textAnchor="middle"
           dominantBaseline="central"
         >
