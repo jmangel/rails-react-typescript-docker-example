@@ -13,7 +13,7 @@ const ColorWheel: React.FC = () => {
       value: 100,
       quality: PossibleRootScale.m,
     };
-  });
+  }).reverse(); // reverse so that it moves clockwise as in circle of fifths
 
   const mmChartSections = majorChartSections.map((entry) => {
     return {
@@ -27,12 +27,14 @@ const ColorWheel: React.FC = () => {
       ...entry,
       quality: PossibleRootScale.hm,
     };
-  }), 3);
+  }), 9); // 9 instead of 3 because we reversed so that it moves clockwise as in circle of fifths
 
   const legendQualityMappings: { [key in PossibleRootScale]?: string } = {
     [PossibleRootScale.hm]: '  h.m.',
     [PossibleRootScale.mm]: '  m.m.',
   };
+
+  const startAngle = 90 + (360 / majorChartSections.length / 2);
 
   const RADIAN = Math.PI / 180;
   class CustomizedLabel extends React.Component {
@@ -46,7 +48,7 @@ const ColorWheel: React.FC = () => {
       const x = cx + radius * Math.cos(-midAngle * RADIAN);
       const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-      const rotationAngle = midAngle + (midAngle >= 90 && midAngle < 270 ? 180 : 0)
+      const rotationAngle = midAngle + ((midAngle % 360) >= 90 && (midAngle % 360) < 270 ? 180 : 0)
       const textProps = innerRadius == 0 ? {
         x: 0,
         y: 0,
@@ -83,6 +85,8 @@ const ColorWheel: React.FC = () => {
           isAnimationActive={false}
           labelLine={false}
           label={<CustomizedLabel />}
+          startAngle={startAngle}
+          endAngle={360 + startAngle}
         >
           {
             hmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
@@ -98,6 +102,8 @@ const ColorWheel: React.FC = () => {
           isAnimationActive={false}
           labelLine={false}
           label={<CustomizedLabel />}
+          startAngle={startAngle}
+          endAngle={360 + startAngle}
         >
           {
             mmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
@@ -112,6 +118,8 @@ const ColorWheel: React.FC = () => {
           isAnimationActive={false}
           labelLine={false}
           label={<CustomizedLabel />}
+          startAngle={startAngle}
+          endAngle={360 + startAngle}
         >
           {
             majorChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
