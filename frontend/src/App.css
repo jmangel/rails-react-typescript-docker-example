@@ -33,7 +33,9 @@
 }
 
 .color-coded--text {
-  -webkit-text-stroke: 0.023em black;
+  -webkit-text-stroke: 0.033em black;
+  /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
+  -webkit-font-smoothing: subpixel-antialiased;
   color: white;
 }
 
@@ -43,6 +45,7 @@
 
 .recharts-pie text {
   stroke: black;
-  stroke-width: 0.023em;
+  stroke-width: 0.033em;
+  -webkit-font-smoothing: subpixel-antialiased;
   fill: white;
 }
