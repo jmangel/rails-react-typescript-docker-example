@@ -1,8 +1,10 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState, Dispatch, SetStateAction } from 'react';
 import {
   Button,
   Col,
   Container,
+  Form,
+  FormGroup,
   FormText,
   Input,
   Label,
@@ -24,6 +26,7 @@ import parseChordString from './ChordParser';
 import ChordRow, { ChordRowObject } from './ChordRow'
 import ColorWheel from './ColorWheel';
 import { parseStringifiedChordRowObject, csvifyChordRowObjects, parseCsvifiedChordRowObjects } from './JsonCondenser'
+import { MonochromaticPossibleRootScale, regenerateMonochromaticSchemes } from './ScaleColorer';
 
 const createChordRowObject = (): ChordRowObject => {
   return { chordQuality: '' } as ChordRowObject;
@@ -88,6 +91,18 @@ const App: React.FC = () => {
   }, [expandedRowIndex]);
 
   const expandedChordRow = (expandedRowIndex > -1) && chordRowObjects[expandedRowIndex];
+
+  const [redRgbValue, setRedRgbValue] = useState(42);
+  const [greenRgbValue, setGreenRgbValue] = useState(214);
+  const [blueRgbValue, setBlueRgbValue] = useState(255);
+
+  const [monochromaticSchemes, setMonochromaticSchemes] = useState<{ [key in MonochromaticPossibleRootScale]: string }[]>(
+    regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue)
+  );
+
+  useEffect(() => {
+    setMonochromaticSchemes(regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue));
+  }, [redRgbValue, greenRgbValue, blueRgbValue]);
 
   const handleRowChange = (rowIndex: number, newValue: string, key: keyof ChordRowObject): void => {
     let newChordRows = chordRowObjects.slice()
@@ -182,6 +197,7 @@ const App: React.FC = () => {
             chordRowObject={chordRowObject}
             onRowExpand={ () => toggle(rowIndex) }
             onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
+            monochromaticSchemes={monochromaticSchemes}
           />)}
           <Row className='w-25 mx-auto border'>
             <Button onClick={() => {
@@ -202,7 +218,32 @@ const App: React.FC = () => {
             />
             Row(s)
           </Row>
-          <ColorWheel />
+          <Form>
+            <FormGroup>
+              <Label for="red" >Red:</Label>
+              <Input
+                type="number"
+                name="red"
+                value={redRgbValue}
+                onChange={(e) => setRedRgbValue(parseInt(e.target.value))}
+              />
+              <Label for="green" >Green:</Label>
+              <Input
+                type="number"
+                name="green"
+                value={greenRgbValue}
+                onChange={(e) => setGreenRgbValue(parseInt(e.target.value))}
+              />
+              <Label for="blue" >Blue:</Label>
+              <Input
+                type="number"
+                name="blue"
+                value={blueRgbValue}
+                onChange={(e) => setBlueRgbValue(parseInt(e.target.value))}
+              />
+            </FormGroup>
+          </Form>
+          <ColorWheel monochromaticSchemes={monochromaticSchemes} />
         </Container>
         )
       }

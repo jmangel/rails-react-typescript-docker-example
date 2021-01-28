@@ -3,9 +3,13 @@ import {
   PieChart, Pie, Cell,
 } from 'recharts';
 import { arrayRotate, PossibleRootScale } from './ChordMapper';
-import scaleToHexColor, { circleOfFifths } from './ScaleColorer';
+import scaleToHexColor, { circleOfFifths, MonochromaticPossibleRootScale } from './ScaleColorer';
 
-const ColorWheel: React.FC = () => {
+const ColorWheel: React.FC<{
+  monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
+  }> = ({
+    monochromaticSchemes,
+  }) => {
   const majorChartSections = circleOfFifths.map((enharmonicNotesArray: Array<string>) => {
     return {
       name: enharmonicNotesArray[0],
@@ -103,7 +107,7 @@ const ColorWheel: React.FC = () => {
           endAngle={360 + startAngle}
         >
           {
-            wholeToneChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
+            wholeToneChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
           }
         </Pie>
         <Pie
@@ -120,7 +124,7 @@ const ColorWheel: React.FC = () => {
           endAngle={360 + startAngle}
         >
           {
-            diminishedChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
+            diminishedChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
           }
         </Pie>
         <Pie
@@ -137,7 +141,7 @@ const ColorWheel: React.FC = () => {
           endAngle={360 + startAngle}
         >
           {
-            hmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
+            hmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
           }
         </Pie>
         <Pie
@@ -154,7 +158,7 @@ const ColorWheel: React.FC = () => {
           endAngle={360 + startAngle}
         >
           {
-            mmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
+            mmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
           }
         </Pie>
         <Pie
@@ -172,7 +176,7 @@ const ColorWheel: React.FC = () => {
           endAngle={360 + startAngle}
         >
           {
-            majorChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name)} />)
+            majorChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
           }
         </Pie>
       </PieChart>

@@ -16,46 +16,24 @@ export const circleOfFifths: string[][] = [
   ['F'],
 ]
 
-export const rgbColorWheel = [
-  [255,255,0], // yellow
-  [255,125,0], // orange
-  [255,0,0], // red
-  [255,0,125], // raspberry
-  [255,0,255], // magenta
-  [125,0,255], // violet
-  [0,0,255], // blue
-  [0,125,255], // ocean
-  [0,255,255], // cyan
-  [0,255,125], // turquoise
-  [0,255,0], // green
-  [125,255,0], // spring green
-  // BRIGHTER OPTIONS
-  // [255,255,65], // yellow
-  // [255,189,64], // orange
-  // [255,64,64], // red
-  // [255,64,189], // raspberry
-  // [255,64,255], // magenta
-  // [189,64,255], // violet
-  // [64,64,255], // blue
-  // [64,189,255], // ocean
-  // [64,255,255], // cyan
-  // [64,255,189], // turquoise
-  // [64,255,64], // green
-  // [189,255,64], // spring green
-];
+export type MonochromaticPossibleRootScale = PossibleRootScale.m | PossibleRootScale.mm | PossibleRootScale.hm;
 
-type MonochromaticPossibleRootScale = PossibleRootScale.m | PossibleRootScale.mm | PossibleRootScale.hm;
+export const regenerateMonochromaticSchemes = (redRgbValue: number, greenRgbValue: number, blueRgbValue: number) => {
+  const baseColor = [redRgbValue, greenRgbValue, blueRgbValue];
 
-const monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[] = rgbColorWheel.map((rgbArray) => {
-  const monochromaticSchemeSize = 6;
-  const monochromaticSchemeArray = tinycolor(`rgb (${rgbArray})`).monochromatic(monochromaticSchemeSize);
-  const scaleQualityToMonochromaticColor: { [key in MonochromaticPossibleRootScale]: string } = {
-    [PossibleRootScale.m]: monochromaticSchemeArray[0].toString('rgb'),
-    [PossibleRootScale.mm]: monochromaticSchemeArray[monochromaticSchemeSize - 1].toString('rgb'),
-    [PossibleRootScale.hm]: monochromaticSchemeArray[monochromaticSchemeSize - 2].toString('rgb'),
-  };
-  return scaleQualityToMonochromaticColor;
-});
+  const rgbColorWheel = arrayRotate(Array.from(Array(12)).map((_, i) => tinycolor(`rgb (${baseColor})`).spin(i * (360/12))), 5);
+
+  return rgbColorWheel.map((rgbColor) => {
+    const monochromaticSchemeSize = 6;
+    const monochromaticSchemeArray = rgbColor.monochromatic(monochromaticSchemeSize);
+    const scaleQualityToMonochromaticColor: { [key in MonochromaticPossibleRootScale]: string } = {
+      [PossibleRootScale.m]: monochromaticSchemeArray[0].toString('rgb'),
+      [PossibleRootScale.mm]: monochromaticSchemeArray[monochromaticSchemeSize - 1].toString('rgb'),
+      [PossibleRootScale.hm]: monochromaticSchemeArray[monochromaticSchemeSize - 2].toString('rgb'),
+    };
+    return scaleQualityToMonochromaticColor;
+  });
+}
 
 const grayOpacities = [
   0.7,
@@ -63,7 +41,7 @@ const grayOpacities = [
   0.3,
 ]
 
-const scaleToHexColor = (selectedScale: PossibleRootScale, selectedScaleRoot: string): string => {
+const scaleToHexColor = (selectedScale: PossibleRootScale, selectedScaleRoot: string, monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[]): string => {
   if (selectedScale == PossibleRootScale.d) {
     // 3 shades of gray
 

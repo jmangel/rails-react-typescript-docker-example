@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import scalesForChord, { NamedScale } from './ChordMapper'
 import parseChordString from './ChordParser'
-import scaleToHexColor from './ScaleColorer';
+import scaleToHexColor, { MonochromaticPossibleRootScale } from './ScaleColorer';
 export interface ChordRowObject {
   chordNote: string;
   chordQuality: string;
@@ -25,10 +25,12 @@ const ChordRow: React.FC<{
   chordRowObject: ChordRowObject,
   onRowChange: (newValue: string, key: keyof ChordRowObject) => void,
   onRowExpand?: () => void,
+  monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
 }> = ({
   chordRowObject,
   onRowChange,
   onRowExpand,
+  monochromaticSchemes,
 }) => {
   const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot, availableTensions } = chordRowObject;
 
@@ -47,7 +49,7 @@ const ChordRow: React.FC<{
   ));
 
   let backgroundColor = '';
-  if (selectedNamedScale) backgroundColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote);
+  if (selectedNamedScale) backgroundColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
 
   return (
     <Row className="border row__color-coded" style={{ backgroundColor }}>
