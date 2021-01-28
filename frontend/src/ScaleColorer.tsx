@@ -1,4 +1,5 @@
 import { CHROMATIC_NOTES, PossibleRootScale, arrayRotate } from './ChordMapper'
+import tinycolor from 'tinycolor2';
 
 const circleOfFifths: string[][] = [
   ['C'],
@@ -28,7 +29,32 @@ export const rgbColorWheel = [
   [0,255,125], // turquoise
   [0,255,0], // green
   [125,255,0], // spring green
-]
+  // BRIGHTER OPTIONS
+  // [255,255,65], // yellow
+  // [255,189,64], // orange
+  // [255,64,64], // red
+  // [255,64,189], // raspberry
+  // [255,64,255], // magenta
+  // [189,64,255], // violet
+  // [64,64,255], // blue
+  // [64,189,255], // ocean
+  // [64,255,255], // cyan
+  // [64,255,189], // turquoise
+  // [64,255,64], // green
+  // [189,255,64], // spring green
+];
+
+type MonochromaticPossibleRootScale = PossibleRootScale.m | PossibleRootScale.mm | PossibleRootScale.hm;
+
+const monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[] = rgbColorWheel.map((rgbArray) => {
+  const monochromaticSchemeArray = tinycolor(`rgb (${rgbArray})`).monochromatic(4);
+  const scaleQualityToMonochromaticColor: { [key in MonochromaticPossibleRootScale]: string } = {
+    [PossibleRootScale.m]: monochromaticSchemeArray[0].toString('rgb'),
+    [PossibleRootScale.mm]: monochromaticSchemeArray[3].toString('rgb'),
+    [PossibleRootScale.hm]: monochromaticSchemeArray[2].toString('rgb'),
+  };
+  return scaleQualityToMonochromaticColor;
+});
 
 export const circleOfFifthsMajorColors: { [key: string]: number[] } = {};
 
@@ -39,14 +65,6 @@ const grayOpacities = [
   0.5,
   0.3,
 ]
-
-export const opacities: { [key in PossibleRootScale]: number } = {
-  [PossibleRootScale.m]: 1.0,
-  [PossibleRootScale.mm]: 0.4,
-  [PossibleRootScale.hm]: 0.25,
-  [PossibleRootScale.d]: 0.1, // should be unused
-  [PossibleRootScale.wt]: 1.0, // should be unused
-};
 
 const scaleToHexColor = (selectedScale: PossibleRootScale, selectedScaleRoot: string): string => {
   if (selectedScale == PossibleRootScale.d) {
@@ -68,10 +86,9 @@ const scaleToHexColor = (selectedScale: PossibleRootScale, selectedScaleRoot: st
     return moddedCircleOfFifthsIndex ? 'white' : 'black';
   }
 
-  const rgbColor = rgbColorWheel[circleOfFifthsIndex];
-  const opacity = opacities[selectedScale];
-
-  return `rgb(${rgbColor},${opacity})`;
+  const monochromaticScheme = monochromaticSchemes[circleOfFifthsIndex];
+  const monochromaticColor = monochromaticScheme[selectedScale as MonochromaticPossibleRootScale];
+  return monochromaticColor;
 }
 
 export default scaleToHexColor
