@@ -47,11 +47,12 @@ export const rgbColorWheel = [
 type MonochromaticPossibleRootScale = PossibleRootScale.m | PossibleRootScale.mm | PossibleRootScale.hm;
 
 const monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[] = rgbColorWheel.map((rgbArray) => {
-  const monochromaticSchemeArray = tinycolor(`rgb (${rgbArray})`).monochromatic(4);
+  const monochromaticSchemeSize = 6;
+  const monochromaticSchemeArray = tinycolor(`rgb (${rgbArray})`).monochromatic(monochromaticSchemeSize);
   const scaleQualityToMonochromaticColor: { [key in MonochromaticPossibleRootScale]: string } = {
     [PossibleRootScale.m]: monochromaticSchemeArray[0].toString('rgb'),
-    [PossibleRootScale.mm]: monochromaticSchemeArray[3].toString('rgb'),
-    [PossibleRootScale.hm]: monochromaticSchemeArray[2].toString('rgb'),
+    [PossibleRootScale.mm]: monochromaticSchemeArray[monochromaticSchemeSize - 1].toString('rgb'),
+    [PossibleRootScale.hm]: monochromaticSchemeArray[monochromaticSchemeSize - 2].toString('rgb'),
   };
   return scaleQualityToMonochromaticColor;
 });
