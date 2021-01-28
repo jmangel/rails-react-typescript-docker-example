@@ -1,7 +1,7 @@
 import { CHROMATIC_NOTES, PossibleRootScale, arrayRotate } from './ChordMapper'
 import tinycolor from 'tinycolor2';
 
-const circleOfFifths: string[][] = [
+export const circleOfFifths: string[][] = [
   ['C'],
   ['G'],
   ['D'],
@@ -55,10 +55,6 @@ const monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[
   };
   return scaleQualityToMonochromaticColor;
 });
-
-export const circleOfFifthsMajorColors: { [key: string]: number[] } = {};
-
-circleOfFifths.forEach((enharmonicNotesArray: Array<string>, index: number) => circleOfFifthsMajorColors[enharmonicNotesArray[0]] = rgbColorWheel[index])
 
 const grayOpacities = [
   0.7,

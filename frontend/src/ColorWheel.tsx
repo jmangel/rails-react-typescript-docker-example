@@ -3,13 +3,12 @@ import {
   PieChart, Pie, Cell,
 } from 'recharts';
 import { arrayRotate, PossibleRootScale } from './ChordMapper';
-import scaleToHexColor, { circleOfFifthsMajorColors } from './ScaleColorer';
+import scaleToHexColor, { circleOfFifths } from './ScaleColorer';
 
 const ColorWheel: React.FC = () => {
-  const majorChartSections = Object.entries(circleOfFifthsMajorColors).map(([note, rgbArray]) => {
+  const majorChartSections = circleOfFifths.map((enharmonicNotesArray: Array<string>) => {
     return {
-      name: note,
-      rgbArray,
+      name: enharmonicNotesArray[0],
       value: 100,
       quality: PossibleRootScale.m,
     };
