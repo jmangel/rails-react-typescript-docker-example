@@ -94,92 +94,92 @@ const ColorWheel: React.FC<{
 
   return (
     <PieChart width={pieChartDimensions} height={pieChartDimensions} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
-        <Pie
-          data={wholeToneChartSections}
-          dataKey="value"
-          cx="50%"
-          cy="50%"
-          outerRadius={195}
-          isAnimationActive={false}
-          labelLine={false}
-          label={<CustomizedLabel />}
-          startAngle={startAngle}
-          endAngle={360 + startAngle}
-        >
-          {
-            wholeToneChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
-          }
-        </Pie>
-        <Pie
-          data={diminishedChartSections}
-          dataKey="value"
-          cx="50%"
-          cy="50%"
-          innerRadius={195}
-          outerRadius={280}
-          isAnimationActive={false}
-          labelLine={false}
-          label={<CustomizedLabel />}
-          startAngle={startAngle}
-          endAngle={360 + startAngle}
-        >
-          {
-            diminishedChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
-          }
-        </Pie>
-        <Pie
-          data={hmChartSections}
-          dataKey="value"
-          cx="50%"
-          cy="50%"
-          innerRadius={280}
-          outerRadius={365}
-          isAnimationActive={false}
-          labelLine={false}
-          label={<CustomizedLabel />}
-          startAngle={startAngle}
-          endAngle={360 + startAngle}
-        >
-          {
-            hmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
-          }
-        </Pie>
-        <Pie
-          data={mmChartSections}
-          dataKey="value"
-          cx="50%"
-          cy="50%"
-          innerRadius={365}
-          outerRadius={460}
-          isAnimationActive={false}
-          labelLine={false}
-          label={<CustomizedLabel />}
-          startAngle={startAngle}
-          endAngle={360 + startAngle}
-        >
-          {
-            mmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
-          }
-        </Pie>
-        <Pie
-          // legendType="none"
-          data={majorChartSections}
-          dataKey="value"
-          cx="50%"
-          cy="50%"
-          innerRadius={460}
-          outerRadius="90%"
-          isAnimationActive={false}
-          labelLine={false}
-          label={<CustomizedLabel />}
-          startAngle={startAngle}
-          endAngle={360 + startAngle}
-        >
-          {
-            majorChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
-          }
-        </Pie>
-      </PieChart>
+      <Pie
+        data={wholeToneChartSections}
+        dataKey="value"
+        cx="50%"
+        cy="50%"
+        outerRadius={195}
+        isAnimationActive={false}
+        labelLine={false}
+        label={<CustomizedLabel />}
+        startAngle={startAngle}
+        endAngle={360 + startAngle}
+      >
+        {
+          wholeToneChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
+        }
+      </Pie>
+      <Pie
+        data={diminishedChartSections}
+        dataKey="value"
+        cx="50%"
+        cy="50%"
+        innerRadius={195}
+        outerRadius={280}
+        isAnimationActive={false}
+        labelLine={false}
+        label={<CustomizedLabel />}
+        startAngle={startAngle}
+        endAngle={360 + startAngle}
+      >
+        {
+          diminishedChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
+        }
+      </Pie>
+      <Pie
+        data={hmChartSections}
+        dataKey="value"
+        cx="50%"
+        cy="50%"
+        innerRadius={280}
+        outerRadius={365}
+        isAnimationActive={false}
+        labelLine={false}
+        label={<CustomizedLabel />}
+        startAngle={startAngle}
+        endAngle={360 + startAngle}
+      >
+        {
+          hmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
+        }
+      </Pie>
+      <Pie
+        data={mmChartSections}
+        dataKey="value"
+        cx="50%"
+        cy="50%"
+        innerRadius={365}
+        outerRadius={460}
+        isAnimationActive={false}
+        labelLine={false}
+        label={<CustomizedLabel />}
+        startAngle={startAngle}
+        endAngle={360 + startAngle}
+      >
+        {
+          mmChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
+        }
+      </Pie>
+      <Pie
+        // legendType="none"
+        data={majorChartSections}
+        dataKey="value"
+        cx="50%"
+        cy="50%"
+        innerRadius={460}
+        outerRadius="90%"
+        isAnimationActive={false}
+        labelLine={false}
+        label={<CustomizedLabel />}
+        startAngle={startAngle}
+        endAngle={360 + startAngle}
+      >
+        {
+          majorChartSections.map((entry, index) => <Cell key={`cell-${index}`} fill={scaleToHexColor(entry.quality, entry.name, monochromaticSchemes)} />)
+        }
+      </Pie>
+    </PieChart>
   )
 }
 
