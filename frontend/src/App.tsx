@@ -206,8 +206,8 @@ const App: React.FC = () => {
           />
         ) : (
         <Container fluid>
-          <Row className='mx-auto py-2 mb-3'>
-            <Col xs={8}>
+          <Row className='mx-auto py-2 my-2'>
+            <Col className="border py-2 mx-5">
               <div className="custom-file">
                 <Label className="custom-file-label" for="irealImportFile">Import song from iReal Pro</Label>
                 <Input
@@ -221,7 +221,7 @@ const App: React.FC = () => {
                 </FormText>
               </div>
             </Col>
-            <Col>
+            <Col className="border py-2 mx-5">
               <Row>
                 <Col>
                   <div>
