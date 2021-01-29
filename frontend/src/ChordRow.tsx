@@ -113,7 +113,7 @@ const ChordRow: React.FC<{
             <Col xs={12}>
               {
                 onRowExpand && (
-                  <Button color="info" className="mb-2" onClick={onRowExpand}>Expand</Button>
+                  <Button color="info" className="mb-2 border-dark" onClick={onRowExpand}>Expand</Button>
                 )
               }
             </Col>
