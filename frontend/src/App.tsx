@@ -93,7 +93,7 @@ const App: React.FC = () => {
 
   const expandedChordRow = (expandedRowIndex > -1) && chordRowObjects[expandedRowIndex];
 
-  const [rgbValues, setRgbValues] = useState([42, 214, 255]);
+  const [rgbValues, setRgbValues] = useState([50, 241, 255]);
 
   const [redRgbValue, greenRgbValue, blueRgbValue] = rgbValues;
 
