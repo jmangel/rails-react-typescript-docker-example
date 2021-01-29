@@ -105,7 +105,7 @@ const App: React.FC = () => {
   const [globalKeyNote, setGlobalKeyNote] = useState('');
   const [globalKeyScale, setGlobalKeyScale] = useState('');
 
-  useEffect(() => {
+  const applyGlobalKey = () => {
     if (globalKeyNote === '' || globalKeyScale === '') return;
     if (CHROMATIC_NOTES.find(chromaticNoteArray => chromaticNoteArray.includes(globalKeyNote)) == undefined) return;
     if (!((Object.keys(PossibleRootScale) as [keyof typeof PossibleRootScale]).find(key => PossibleRootScale[key] === globalKeyScale))) return;
@@ -126,7 +126,7 @@ const App: React.FC = () => {
     });
 
     setChordRowObjects(newChordRows);
-  }, [globalKeyNote, globalKeyScale]);
+  };
 
   useEffect(() => {
     setMonochromaticSchemes(regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue));
@@ -247,6 +247,10 @@ const App: React.FC = () => {
               <FormText color="muted" className="py-1">
                 The key chosen here will apply to any unselected chords.
               </FormText>
+              <Button
+                className="ml-auto mr-3"
+                color="primary"
+                onClick={applyGlobalKey}>Apply</Button>
             </Col>
           </Row>
           {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
