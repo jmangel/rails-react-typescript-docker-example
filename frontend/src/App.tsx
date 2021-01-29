@@ -176,7 +176,7 @@ const App: React.FC = () => {
             toggle={toggle}
           />
         ) : (
-        <Container>
+        <Container fluid>
           <Row className='mx-auto py-2 mb-3'>
             <Col>
               <div className="custom-file">
