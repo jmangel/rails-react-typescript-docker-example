@@ -33,6 +33,7 @@
 }
 
 .color-coded--text {
+  /* looks worse on larger monitor */
   /* -webkit-text-stroke: 0.033em black; */
   letter-spacing: 0.11em;
   text-shadow: -1.1px 0 black, 0 1.1px black, 1.1px 0 black, 0 -1.1px black;
