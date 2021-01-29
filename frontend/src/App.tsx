@@ -221,12 +221,16 @@ const App: React.FC = () => {
             Row(s)
           </Row>
           <Row>
-          <SketchPicker
-            color={ `rgb(${redRgbValue},${greenRgbValue},${blueRgbValue})` }
-            onChangeComplete={(color, _) => setRgbValues([color.rgb.r, color.rgb.g, color.rgb.b])}
-          />
+            <Col xs={2}>
+              <SketchPicker
+                width="100"
+                className="m-0"
+                color={ `rgb(${redRgbValue},${greenRgbValue},${blueRgbValue})` }
+                onChangeComplete={(color, _) => setRgbValues([color.rgb.r, color.rgb.g, color.rgb.b])}
+              />
+            </Col>
+            <ColorWheel monochromaticSchemes={monochromaticSchemes} />
           </Row>
-          <ColorWheel monochromaticSchemes={monochromaticSchemes} />
         </Container>
         )
       }
