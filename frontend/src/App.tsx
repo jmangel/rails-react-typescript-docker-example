@@ -17,6 +17,7 @@ import {
   StringParam,
   withDefault,
 } from 'use-query-params';
+import { SketchPicker } from 'react-color';
 
 const iRealReader = require('ireal-reader');
 
@@ -92,9 +93,9 @@ const App: React.FC = () => {
 
   const expandedChordRow = (expandedRowIndex > -1) && chordRowObjects[expandedRowIndex];
 
-  const [redRgbValue, setRedRgbValue] = useState(42);
-  const [greenRgbValue, setGreenRgbValue] = useState(214);
-  const [blueRgbValue, setBlueRgbValue] = useState(255);
+  const [rgbValues, setRgbValues] = useState([42, 214, 255]);
+
+  const [redRgbValue, greenRgbValue, blueRgbValue] = rgbValues;
 
   const [monochromaticSchemes, setMonochromaticSchemes] = useState<{ [key in MonochromaticPossibleRootScale]: string }[]>(
     regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue)
@@ -102,7 +103,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setMonochromaticSchemes(regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue));
-  }, [redRgbValue, greenRgbValue, blueRgbValue]);
+  }, rgbValues);
 
   const handleRowChange = (rowIndex: number, newValue: string, key: keyof ChordRowObject): void => {
     let newChordRows = chordRowObjects.slice()
@@ -220,35 +221,10 @@ const App: React.FC = () => {
             Row(s)
           </Row>
           <Row>
-            <Form inline className="w-100 pt-3">
-              <Col xs={4}>
-                <Label for="red" >Red:</Label>
-                <Input
-                  type="number"
-                  name="red"
-                  value={redRgbValue}
-                  onChange={(e) => setRedRgbValue(parseInt(e.target.value))}
-                  />
-              </Col>
-              <Col xs={4}>
-                <Label for="green" >Green:</Label>
-                <Input
-                  type="number"
-                  name="green"
-                  value={greenRgbValue}
-                  onChange={(e) => setGreenRgbValue(parseInt(e.target.value))}
-                  />
-              </Col>
-              <Col xs={4}>
-                <Label for="blue" >Blue:</Label>
-                <Input
-                  type="number"
-                  name="blue"
-                  value={blueRgbValue}
-                  onChange={(e) => setBlueRgbValue(parseInt(e.target.value))}
-                  />
-              </Col>
-            </Form>
+          <SketchPicker
+            color={ `rgb(${redRgbValue},${greenRgbValue},${blueRgbValue})` }
+            onChangeComplete={(color, _) => setRgbValues([color.rgb.r, color.rgb.g, color.rgb.b])}
+          />
           </Row>
           <ColorWheel monochromaticSchemes={monochromaticSchemes} />
         </Container>
