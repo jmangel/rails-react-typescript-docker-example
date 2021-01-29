@@ -46,7 +46,8 @@
 
 .recharts-pie text {
   stroke: black;
-  stroke-width: 0.023em;
+  stroke-width: 0.1em;
+  paint-order: stroke fill;
   -webkit-font-smoothing: subpixel-antialiased;
   fill: white;
 }
