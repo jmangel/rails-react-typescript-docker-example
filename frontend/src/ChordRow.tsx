@@ -21,6 +21,11 @@ export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string 
   'availableTensions': 'at',
 }
 
+export const scalesForChordRowObject = (chordRowObject: ChordRowObject): Array<NamedScale> => {
+  const { chordNote, chordQuality, bassNote, availableTensions } = chordRowObject;
+  return (chordNote && scalesForChord(chordNote, chordQuality, bassNote.replace(/\//g,''), availableTensions)) || [];
+}
+
 const ChordRow: React.FC<{
   chordRowObject: ChordRowObject,
   onRowChange: (newValue: string, key: keyof ChordRowObject) => void,
@@ -34,7 +39,7 @@ const ChordRow: React.FC<{
 }) => {
   const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot, availableTensions } = chordRowObject;
 
-  const scales = (chordNote && scalesForChord(chordNote, chordQuality, bassNote.replace(/\//g,''), availableTensions)) || [];
+  const scales = scalesForChordRowObject(chordRowObject);
 
   const handleChordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const parsedChordString = parseChordString(e.target.value);
@@ -92,7 +97,7 @@ const ChordRow: React.FC<{
                 }}
                 className="w-100"
                 >
-                <option>--</option>
+                <option value="">--</option>
                 {scales.map(
                   (namedScale: NamedScale, index: number) => (
                     <option

@@ -24,10 +24,11 @@ const iRealReader = require('ireal-reader');
 import './App.css';
 import ChordCarousel from './ChordCarousel';
 import parseChordString from './ChordParser';
-import ChordRow, { ChordRowObject } from './ChordRow'
+import ChordRow, { ChordRowObject, scalesForChordRowObject } from './ChordRow'
 import ColorWheel from './ColorWheel';
 import { parseStringifiedChordRowObject, csvifyChordRowObjects, parseCsvifiedChordRowObjects } from './JsonCondenser'
 import { MonochromaticPossibleRootScale, regenerateMonochromaticSchemes } from './ScaleColorer';
+import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
 
 const createChordRowObject = (): ChordRowObject => {
   return { chordQuality: '' } as ChordRowObject;
@@ -100,6 +101,32 @@ const App: React.FC = () => {
   const [monochromaticSchemes, setMonochromaticSchemes] = useState<{ [key in MonochromaticPossibleRootScale]: string }[]>(
     regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue)
   );
+
+  const [globalKeyNote, setGlobalKeyNote] = useState('');
+  const [globalKeyScale, setGlobalKeyScale] = useState('');
+
+  useEffect(() => {
+    if (globalKeyNote === '' || globalKeyScale === '') return;
+    if (CHROMATIC_NOTES.find(chromaticNoteArray => chromaticNoteArray.includes(globalKeyNote)) == undefined) return;
+    if (!((Object.keys(PossibleRootScale) as [keyof typeof PossibleRootScale]).find(key => PossibleRootScale[key] === globalKeyScale))) return;
+
+    let newChordRows = chordRowObjects.slice();
+    newChordRows.forEach((chordRowObject) => {
+      if (!chordRowObject.selectedScale && !chordRowObject.selectedScaleRoot) {
+        const matchingScale = scalesForChordRowObject(chordRowObject)
+          .find(({ rootScale, rootScaleNote }) => rootScale === globalKeyScale && rootScaleNote === globalKeyNote);
+
+        if (matchingScale != undefined) {
+          chordRowObject.selectedScaleRoot = matchingScale.scaleNotes[0];
+          chordRowObject.selectedScale = matchingScale.scaleName;
+        }
+      }
+
+      return chordRowObject;
+    });
+
+    setChordRowObjects(newChordRows);
+  }, [globalKeyNote, globalKeyScale]);
 
   useEffect(() => {
     setMonochromaticSchemes(regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue));
@@ -180,7 +207,7 @@ const App: React.FC = () => {
         ) : (
         <Container fluid>
           <Row className='mx-auto py-2 mb-3'>
-            <Col>
+            <Col xs={8}>
               <div className="custom-file">
                 <Label className="custom-file-label" for="irealImportFile">Import song from iReal Pro</Label>
                 <Input
@@ -193,6 +220,33 @@ const App: React.FC = () => {
                   Export the song from iReal Pro as HTML and upload here.
                 </FormText>
               </div>
+            </Col>
+            <Col>
+              <Row>
+                <Col>
+                  <div>
+                    <Label for="globalKeyNote">Root of global key</Label>
+                    <Input
+                      type="text"
+                      name="globalKeyNote"
+                      id="globalKeyNote"
+                      onChange={(e) => setGlobalKeyNote(e.target.value)}
+                    />
+                  </div>
+                </Col>
+                <Col>
+                  <Label for="globalKeyScale">Quality of global key</Label>
+                  <Input
+                    type="text"
+                    name="globalKeyScale"
+                    id="globalKeyScale"
+                    onChange={(e) => setGlobalKeyScale(e.target.value)}
+                  />
+                </Col>
+              </Row>
+              <FormText color="muted" className="py-1">
+                The key chosen here will apply to any unselected chords.
+              </FormText>
             </Col>
           </Row>
           {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
