@@ -218,31 +218,37 @@ const App: React.FC = () => {
             />
             Row(s)
           </Row>
-          <Form>
-            <FormGroup>
-              <Label for="red" >Red:</Label>
-              <Input
-                type="number"
-                name="red"
-                value={redRgbValue}
-                onChange={(e) => setRedRgbValue(parseInt(e.target.value))}
-              />
-              <Label for="green" >Green:</Label>
-              <Input
-                type="number"
-                name="green"
-                value={greenRgbValue}
-                onChange={(e) => setGreenRgbValue(parseInt(e.target.value))}
-              />
-              <Label for="blue" >Blue:</Label>
-              <Input
-                type="number"
-                name="blue"
-                value={blueRgbValue}
-                onChange={(e) => setBlueRgbValue(parseInt(e.target.value))}
-              />
-            </FormGroup>
-          </Form>
+          <Row>
+            <Form inline className="w-100 pt-3">
+              <Col xs={4}>
+                <Label for="red" >Red:</Label>
+                <Input
+                  type="number"
+                  name="red"
+                  value={redRgbValue}
+                  onChange={(e) => setRedRgbValue(parseInt(e.target.value))}
+                  />
+              </Col>
+              <Col xs={4}>
+                <Label for="green" >Green:</Label>
+                <Input
+                  type="number"
+                  name="green"
+                  value={greenRgbValue}
+                  onChange={(e) => setGreenRgbValue(parseInt(e.target.value))}
+                  />
+              </Col>
+              <Col xs={4}>
+                <Label for="blue" >Blue:</Label>
+                <Input
+                  type="number"
+                  name="blue"
+                  value={blueRgbValue}
+                  onChange={(e) => setBlueRgbValue(parseInt(e.target.value))}
+                  />
+              </Col>
+            </Form>
+          </Row>
           <ColorWheel monochromaticSchemes={monochromaticSchemes} />
         </Container>
         )
