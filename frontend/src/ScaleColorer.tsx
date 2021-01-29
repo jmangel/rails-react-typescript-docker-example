@@ -21,7 +21,7 @@ export type MonochromaticPossibleRootScale = PossibleRootScale.m | PossibleRootS
 export const regenerateMonochromaticSchemes = (redRgbValue: number, greenRgbValue: number, blueRgbValue: number) => {
   const baseColor = [redRgbValue, greenRgbValue, blueRgbValue];
 
-  const rgbColorWheel = arrayRotate(Array.from(Array(12)).map((_, i) => tinycolor(`rgb (${baseColor})`).spin(i * (360/12))), 5);
+  const rgbColorWheel = arrayRotate(Array.from(Array(12)).map((_, i) => tinycolor(`rgb (${baseColor})`).spin(-i * (360/12))), 4);
 
   return rgbColorWheel.map((rgbColor) => {
     const monochromaticSchemeSize = 6;
