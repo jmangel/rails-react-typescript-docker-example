@@ -171,6 +171,7 @@ const App: React.FC = () => {
           <ChordCarousel
             expandedRowIndex={expandedRowIndex}
             chordRowObjects={chordRowObjects}
+            monochromaticSchemes={monochromaticSchemes}
             setExpandedRowIndex={setExpandedRowIndex}
             onRowChange={handleRowChange}
             toggle={toggle}
