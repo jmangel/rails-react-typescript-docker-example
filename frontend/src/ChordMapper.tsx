@@ -628,7 +628,11 @@ const CHORD_MAPPINGS = [
         offset: 0,
       },
       {
-        name: 'lydian dominant',
+        name: 'altered', // for tritone sub
+        offset: 0,
+      },
+      {
+        name: 'lydian dominant', // for tritone sub
         offset: 0,
       },
     ]
