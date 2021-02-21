@@ -20,7 +20,7 @@ import ChordCarousel from './ChordCarousel';
 import parseChordString from './ChordParser';
 import { ChordRowObject, scalesForChordRowObject } from './ChordRow'
 // import ColorWheel from './ColorWheel';
-import Steps, { Step } from './Steps'
+import Steps, { chooseKeyStepIndex, Step } from './Steps'
 import New from './Steps/New';
 import ChooseKey from './Steps/ChooseKey';
 import Edit from './Steps/Edit';
@@ -144,8 +144,24 @@ const App: React.FC = () => {
     setChordRowObjects(newChordRows)
   }
 
-  const navigateToNextStep = () => {
-    setStepIndex(stepIndex + 1);
+  const allChordsSelected = (chordRowObjects: ChordRowObject[]): boolean => {
+    return chordRowObjects.every(({ selectedScale, chordNote, chordQuality }) => (!chordNote && !chordQuality) || !!selectedScale);
+  }
+
+  const shouldSkipChooseKeyStep = (newStepIndex: number, newChordRows?: ChordRowObject[]): boolean => {
+    return (newStepIndex === chooseKeyStepIndex) && allChordsSelected(newChordRows || chordRowObjects);
+  }
+
+  const navigateToNextStep = (newChordRows?: ChordRowObject[]) => {
+    let newStepIndex = stepIndex + 1;
+    if (shouldSkipChooseKeyStep(newStepIndex, newChordRows)) newStepIndex += 1;
+    setStepIndex(newStepIndex);
+  }
+
+  const navigateToPreviousStep = () => {
+    let newStepIndex = stepIndex - 1;
+    if (shouldSkipChooseKeyStep(newStepIndex)) newStepIndex -= 1;
+    setStepIndex(newStepIndex);
   }
 
   const handleFiles = (event: ChangeEvent<HTMLInputElement>) => {
@@ -177,7 +193,7 @@ const App: React.FC = () => {
             });
           })
           setChordRowObjects(newChordRows);
-          navigateToNextStep();
+          navigateToNextStep(newChordRows);
         } else alert('no song found');
       }
       reader.onerror = () => {
@@ -187,9 +203,10 @@ const App: React.FC = () => {
   }
 
   const startNewSong = () => {
-    setChordRowObjects([createChordRowObject()]);
+    const newChordRows = [createChordRowObject()];
+    setChordRowObjects(newChordRows);
     setSong(createSongObject(''));
-    navigateToNextStep();
+    navigateToNextStep(newChordRows);
   }
 
   const addRows = (numNewChordRows: number) => {
@@ -237,7 +254,7 @@ const App: React.FC = () => {
       <header className="App-header flex-row justify-content-between">
         {
           stepIndex > 0 && (
-            <MdKeyboardArrowLeft onClick={() => setStepIndex(stepIndex - 1) } />
+            <MdKeyboardArrowLeft onClick={() => navigateToPreviousStep()} />
           )
         }
         {song.title &&

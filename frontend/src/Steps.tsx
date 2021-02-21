@@ -12,4 +12,6 @@ const Steps = [
   Step.s,
 ];
 
+export const chooseKeyStepIndex = Steps.findIndex(step => step === Step.k);
+
 export default Steps;

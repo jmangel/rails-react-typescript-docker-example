@@ -61,7 +61,7 @@ const ChooseKey: React.FC<{
       <Col className="py-2">
         <Button
           className="ml-auto mr-3"
-          onClick={navigateToNextStep}
+          onClick={() => navigateToNextStep()}
         >
           Continue
         </Button>
