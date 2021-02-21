@@ -634,6 +634,16 @@ const CHORD_MAPPINGS = [
       {
         name: 'lydian dominant', // for tritone sub
         offset: 0,
+        // this always works for tritone sub of V/ii
+        // "If you imagine that the A7 is the “V of ii,”
+        // meaning that you pretend the ii chord is a minor i chord, you
+        // can draw the same conclusions about the note relationships of the
+        // Eb7 and the A7. It’s the same concept. The Eb7 would imply an A7alt."
+        // A7alt == Bb mm == Eb lydian dominant
+      },
+      {
+        name: 'mixolydian b13', // for V7/ii instead of vi http://hubguitar.com/improv/dealing-with-secondary-dominants
+        offset: 0,
       },
     ]
   },
