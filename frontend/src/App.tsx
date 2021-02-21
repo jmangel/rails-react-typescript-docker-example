@@ -1,9 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
   Button,
-  Col,
   Container,
-  Row,
 } from 'reactstrap';
 import {
   useQueryParams,
@@ -12,7 +10,7 @@ import {
   StringParam,
   withDefault,
 } from 'use-query-params';
-import { SketchPicker } from 'react-color';
+// import { SketchPicker } from 'react-color';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 
 const iRealReader = require('ireal-reader');
@@ -21,7 +19,7 @@ import './App.css';
 import ChordCarousel from './ChordCarousel';
 import parseChordString from './ChordParser';
 import { ChordRowObject, scalesForChordRowObject } from './ChordRow'
-import ColorWheel from './ColorWheel';
+// import ColorWheel from './ColorWheel';
 import Steps, { Step } from './Steps'
 import New from './Steps/New';
 import ChooseKey from './Steps/ChooseKey';
@@ -257,7 +255,7 @@ const App: React.FC = () => {
         ) : (
         <Container fluid>
           {renderStep(stepIndex)}
-          <Row>
+          {/* <Row>
             <Col xs={2}>
               <SketchPicker
                 width="100"
@@ -267,7 +265,7 @@ const App: React.FC = () => {
               />
             </Col>
             <ColorWheel monochromaticSchemes={monochromaticSchemes} />
-          </Row>
+          </Row> */}
         </Container>
         )
       }
