@@ -172,7 +172,8 @@ const App: React.FC = () => {
 
             });
           })
-          setChordRowObjects(newChordRows)
+          setChordRowObjects(newChordRows);
+          setStepIndex(1);
         } else alert('no song found');
       }
       reader.onerror = () => {
