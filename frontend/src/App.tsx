@@ -1,13 +1,8 @@
-import React, { ChangeEvent, useEffect, useState, Dispatch, SetStateAction } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
   Button,
   Col,
   Container,
-  Form,
-  FormGroup,
-  FormText,
-  Input,
-  Label,
   Row,
 } from 'reactstrap';
 import {
@@ -24,8 +19,12 @@ const iRealReader = require('ireal-reader');
 import './App.css';
 import ChordCarousel from './ChordCarousel';
 import parseChordString from './ChordParser';
-import ChordRow, { ChordRowObject, scalesForChordRowObject } from './ChordRow'
+import { ChordRowObject, scalesForChordRowObject } from './ChordRow'
 import ColorWheel from './ColorWheel';
+import Steps, { Step } from './Steps'
+import New from './Steps/New';
+import ChooseKey from './Steps/ChooseKey';
+import Edit from './Steps/Edit';
 import { parseStringifiedChordRowObject, csvifyChordRowObjects, parseCsvifiedChordRowObjects } from './JsonCondenser'
 import { MonochromaticPossibleRootScale, regenerateMonochromaticSchemes } from './ScaleColorer';
 import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
@@ -45,15 +44,14 @@ const createSongObject = (title: string | null): Song => {
 }
 
 const App: React.FC = () => {
-  const [newChordRows, setNewChordRows] = useState(1);
-
   const [query, setQuery] = useQueryParams({
     a: withDefault(ArrayParam, undefined),
     c: withDefault(StringParam, csvifyChordRowObjects([createChordRowObject()])),
     t: withDefault(StringParam, ''),
-    i: withDefault(NumberParam, -1)
+    i: withDefault(NumberParam, -1),
+    s: withDefault(NumberParam, 0),
   });
-  const { a, c, t, i } = query;
+  const { a, c, t, i, s } = query;
 
   const startingChordRowObjects = (c) ? parseCsvifiedChordRowObjects(c) : (a as Array<string> || []).map(parseStringifiedChordRowObject);
   const [chordRowObjects, setChordRowObjects] = useState(startingChordRowObjects);
@@ -93,6 +91,15 @@ const App: React.FC = () => {
   }, [expandedRowIndex]);
 
   const expandedChordRow = (expandedRowIndex > -1) && chordRowObjects[expandedRowIndex];
+
+  const [stepIndex, setStepIndex] = useState(s);
+
+  useEffect(() => {
+    setQuery(
+      { s: stepIndex },
+      'pushIn'
+    )
+  }, [stepIndex]);
 
   const [rgbValues, setRgbValues] = useState([50, 241, 255]);
 
@@ -174,6 +181,43 @@ const App: React.FC = () => {
       }
     })
   }
+
+  const addRows = (numNewChordRows: number) => {
+    if (numNewChordRows < 0) {
+      setChordRowObjects(chordRowObjects => chordRowObjects.slice(0,numNewChordRows))
+    } else {
+      const numNewChordRowsArray: Array<ChordRowObject> = [...Array(numNewChordRows)].map(() => createChordRowObject())
+      setChordRowObjects(chordRowObjects => [...chordRowObjects, ...numNewChordRowsArray])
+    }
+  }
+
+  const renderStep = (stepIndex: number): React.ReactElement => {
+    switch(Steps[stepIndex]) {
+      case Step.k:
+        return (
+          <ChooseKey
+            setGlobalKeyNote={setGlobalKeyNote}
+            setGlobalKeyScale={setGlobalKeyScale}
+            applyGlobalKey={applyGlobalKey}
+          />
+        );
+      case Step.e:
+        return (
+          <Edit
+            chordRowObjects={chordRowObjects}
+            handleRowChange={handleRowChange}
+            toggleExpandedRow={toggle}
+            addRows={addRows}
+            monochromaticSchemes={monochromaticSchemes}
+          />
+        );
+      default:
+        return (
+          <New handleFiles={handleFiles} />
+        );
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header flex-row justify-content-between">
@@ -206,78 +250,7 @@ const App: React.FC = () => {
           />
         ) : (
         <Container fluid>
-          <Row className='mx-auto py-2 my-2'>
-            <Col className="border py-2 mx-5">
-              <div className="custom-file">
-                <Label className="custom-file-label" for="irealImportFile">Import song from iReal Pro</Label>
-                <Input
-                  type="file"
-                  name="irealImportFile"
-                  id="irealImportFile"
-                  onChange={handleFiles}
-                />
-                <FormText color="muted" className="py-1">
-                  Export the song from iReal Pro as HTML and upload here.
-                </FormText>
-              </div>
-            </Col>
-            <Col className="border py-2 mx-5">
-              <Row>
-                <Col>
-                  <div>
-                    <Label for="globalKeyNote">Root of global key</Label>
-                    <Input
-                      type="text"
-                      name="globalKeyNote"
-                      id="globalKeyNote"
-                      onChange={(e) => setGlobalKeyNote(e.target.value)}
-                    />
-                  </div>
-                </Col>
-                <Col>
-                  <Label for="globalKeyScale">Quality of global key</Label>
-                  <Input
-                    type="text"
-                    name="globalKeyScale"
-                    id="globalKeyScale"
-                    onChange={(e) => setGlobalKeyScale(e.target.value)}
-                  />
-                </Col>
-              </Row>
-              <FormText color="muted" className="py-1">
-                The key chosen here will apply to any unselected chords.
-              </FormText>
-              <Button
-                className="ml-auto mr-3"
-                color="primary"
-                onClick={applyGlobalKey}>Apply</Button>
-            </Col>
-          </Row>
-          {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
-            chordRowObject={chordRowObject}
-            onRowExpand={ () => toggle(rowIndex) }
-            onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
-            monochromaticSchemes={monochromaticSchemes}
-          />)}
-          <Row className='w-25 mx-auto border'>
-            <Button onClick={() => {
-              if (newChordRows < 0) {
-                setChordRowObjects(chordRowObjects => chordRowObjects.slice(0,newChordRows))
-              } else {
-                const newChordRowsArray: Array<ChordRowObject> = [...Array(newChordRows)].map(() => createChordRowObject())
-                setChordRowObjects(chordRowObjects => [...chordRowObjects, ...newChordRowsArray])
-              }
-            }}>Add</Button>
-            <Input
-              type="number"
-              name="newChordRows"
-              value={newChordRows}
-              onChange={e => setNewChordRows(parseInt(e.target.value))}
-              className='w-25 mx-2'
-              inline
-            />
-            Row(s)
-          </Row>
+          {renderStep(stepIndex)}
           <Row>
             <Col xs={2}>
               <SketchPicker
