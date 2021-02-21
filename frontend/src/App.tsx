@@ -13,6 +13,7 @@ import {
   withDefault,
 } from 'use-query-params';
 import { SketchPicker } from 'react-color';
+import { MdKeyboardArrowLeft } from 'react-icons/md';
 
 const iRealReader = require('ireal-reader');
 
@@ -221,6 +222,11 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header flex-row justify-content-between">
+        {
+          stepIndex > 0 && (
+            <MdKeyboardArrowLeft onClick={() => setStepIndex(stepIndex - 1) } />
+          )
+        }
         {song.title &&
           <span className="ml-3">
             {song.title}
