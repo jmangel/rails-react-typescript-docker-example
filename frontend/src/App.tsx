@@ -132,6 +132,8 @@ const App: React.FC = () => {
     });
 
     setChordRowObjects(newChordRows);
+
+    if (allChordsSelected(newChordRows)) setStepIndex(stepIndex + 1);
   };
 
   useEffect(() => {
