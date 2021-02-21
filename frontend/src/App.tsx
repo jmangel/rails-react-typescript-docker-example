@@ -209,6 +209,7 @@ const App: React.FC = () => {
             setGlobalKeyNote={setGlobalKeyNote}
             setGlobalKeyScale={setGlobalKeyScale}
             applyGlobalKey={applyGlobalKey}
+            navigateToNextStep={navigateToNextStep}
           />
         );
       case Step.e:
