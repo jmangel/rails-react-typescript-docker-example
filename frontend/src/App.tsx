@@ -144,6 +144,10 @@ const App: React.FC = () => {
     setChordRowObjects(newChordRows)
   }
 
+  const moveToEditStep = () => {
+    setStepIndex(1);
+  }
+
   const handleFiles = (event: ChangeEvent<HTMLInputElement>) => {
     Array.from((event.target as HTMLInputElement).files as FileList).forEach((file: File) => {
       var reader = new FileReader();
@@ -173,13 +177,19 @@ const App: React.FC = () => {
             });
           })
           setChordRowObjects(newChordRows);
-          setStepIndex(1);
+          moveToEditStep();
         } else alert('no song found');
       }
       reader.onerror = () => {
         alert('error reading file');
       }
     })
+  }
+
+  const startNewSong = () => {
+    setChordRowObjects([createChordRowObject()]);
+    setSong(createSongObject(''));
+    moveToEditStep();
   }
 
   const addRows = (numNewChordRows: number) => {
@@ -213,7 +223,10 @@ const App: React.FC = () => {
         );
       default:
         return (
-          <New handleFiles={handleFiles} />
+          <New
+            handleFiles={handleFiles}
+            startNewSong={startNewSong}
+          />
         );
     }
   }
