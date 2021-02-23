@@ -264,11 +264,9 @@ const App: React.FC = () => {
             <MdKeyboardArrowLeft className="mx-2" onClick={() => navigateToPreviousStep()} />
           )
         }
-        {song.title &&
-          <span className="mx-auto">
-            {song.title}
-          </span>
-        }
+        <span className="mx-auto">
+          {song.title || 'Untitled Song'}
+        </span>
         {
           stepIndex > 0 && (
             <MdHome className="mx-2" onClick={() => navigateToFirstStep()} />
