@@ -246,6 +246,7 @@ const App: React.FC = () => {
           <New
             handleFiles={handleFiles}
             startNewSong={startNewSong}
+            navigateToNextStep={navigateToNextStep}
           />
         );
     }
