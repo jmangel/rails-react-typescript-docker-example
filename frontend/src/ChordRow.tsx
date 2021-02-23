@@ -57,88 +57,92 @@ const ChordRow: React.FC<{
   if (selectedNamedScale) backgroundColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
 
   return (
-    <Row className="border row__color-coded" style={{ backgroundColor }}>
-      <Col xs={6}>
-        <Form inline>
-          <Row className="w-100">
-            <Col xs={6}>
-              <Label for="chordNote" className="color-coded--text">Chord:</Label>
-              <Input
-                type="text"
-                name="chordNote"
-                value={`${chordNote || ""}${chordQuality || ""}${bassNote || ""}`}
-                onChange={handleChordChange}
-                className="w-100"
-              />
-            </Col>
-            <Col xs={6}>
-              <Label for="exampleEmail" className="color-coded--text"><text>Other Scale Tones:</text></Label>
-              <Input
-                type="text"
-                name="availableTensions"
-                value={availableTensions}
-                placeholder="(e.g. melody, notes you like)"
-                onChange={e => onRowChange(e.target.value, 'availableTensions')}
-                className="w-100"
-              />
-            </Col>
-          </Row>
-          <Row className="w-100">
-            <Col xs={12}>
+    <div>
+      <Row className="border row__color-coded" style={{ backgroundColor }}>
+        <Col>
+          <Form inline>
+            <Row className="w-100">
+              <Col xs={6}>
+                <Label for="chordNote" className="color-coded--text">Chord:</Label>
+                <Input
+                  type="text"
+                  name="chordNote"
+                  value={`${chordNote || ""}${chordQuality || ""}${bassNote || ""}`}
+                  onChange={handleChordChange}
+                  className="w-100"
+                />
+              </Col>
+              <Col xs={6}>
+                <Label for="exampleEmail" className="color-coded--text"><text>Other Scale Tones:</text></Label>
+                <Input
+                  type="text"
+                  name="availableTensions"
+                  value={availableTensions}
+                  placeholder="(e.g. melody, notes you like)"
+                  onChange={e => onRowChange(e.target.value, 'availableTensions')}
+                  className="w-100"
+                />
+              </Col>
+            </Row>
+            <Row className="w-100">
+              <Col xs={12}>
 
-              <Label for="exampleSelect" className="color-coded--text">Preferred Scale</Label>
-              <Input type="select"
-                name="select"
-                id="exampleSelect"
-                onChange={e => {
-                  const [selectedScaleRoot, selectedScale] = e.target.value.split(/ (.+)/)
-                  onRowChange(selectedScale, 'selectedScale')
-                  onRowChange(selectedScaleRoot, 'selectedScaleRoot')
-                }}
-                className="w-100"
-                >
-                <option value="">--</option>
-                {scales.map(
-                  (namedScale: NamedScale, index: number) => (
-                    <option
-                    key={`option--scale-${index}`}
-                    value={`${namedScale.scaleNotes[0]} ${namedScale.scaleName}`}
-                    selected={namedScale.scaleName === selectedScale && (
-                      namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
-                      )}
-                      >
-                      {namedScale.scaleNotes[0]} {namedScale.scaleName} ({namedScale.rootScaleNote} {namedScale.rootScale}): {namedScale.scaleNotes.join(',')}
-                    </option>
+                <Label for="exampleSelect" className="color-coded--text">Preferred Scale</Label>
+                <Input type="select"
+                  name="select"
+                  id="exampleSelect"
+                  onChange={e => {
+                    const [selectedScaleRoot, selectedScale] = e.target.value.split(/ (.+)/)
+                    onRowChange(selectedScale, 'selectedScale')
+                    onRowChange(selectedScaleRoot, 'selectedScaleRoot')
+                  }}
+                  className="w-100"
+                  >
+                  <option value="">--</option>
+                  {scales.map(
+                    (namedScale: NamedScale, index: number) => (
+                      <option
+                      key={`option--scale-${index}`}
+                      value={`${namedScale.scaleNotes[0]} ${namedScale.scaleName}`}
+                      selected={namedScale.scaleName === selectedScale && (
+                        namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
+                        )}
+                        >
+                        {namedScale.scaleNotes[0]} {namedScale.scaleName} ({namedScale.rootScaleNote} {namedScale.rootScale}): {namedScale.scaleNotes.join(',')}
+                      </option>
+                    )
+                  )}
+                </Input>
+              </Col>
+            </Row>
+            <Row className="w-100 pt-3">
+              <Col xs={12}>
+                {
+                  onRowExpand && (
+                    <Button color="info" className="mb-2 border-dark" onClick={onRowExpand}>Expand</Button>
                   )
-                )}
-              </Input>
-            </Col>
-          </Row>
-          <Row className="w-100 pt-3">
-            <Col xs={12}>
-              {
-                onRowExpand && (
-                  <Button color="info" className="mb-2 border-dark" onClick={onRowExpand}>Expand</Button>
-                )
-              }
-            </Col>
-          </Row>
-        </Form>
-      </Col>
-      <Col xs={6}>
-        {scales.map(
-          (namedScale: NamedScale, index: number) => (
-            <div key={`scale-${index}`}>
-              <p className="color-coded--text">
-                {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
-                <br />
-                <small className="color-coded--text">{namedScale.rootScaleNote} {namedScale.rootScale}</small>
-              </p>
-            </div>
-          )
-        )}
-      </Col>
-    </Row>
+                }
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          {scales.map(
+            (namedScale: NamedScale, index: number) => (
+              <div key={`scale-${index}`}>
+                <p className="color-coded--text">
+                  {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
+                  <br />
+                  <small className="color-coded--text">{namedScale.rootScaleNote} {namedScale.rootScale}</small>
+                </p>
+              </div>
+            )
+          )}
+        </Col>
+      </Row>
+    </div>
   );
 }
 
