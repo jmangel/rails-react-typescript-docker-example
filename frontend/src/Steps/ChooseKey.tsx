@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, Button, Col, FormText, Input, Label, Row } from "reactstrap";
+import { PossibleRootScale } from '../ChordMapper';
 
 const ChooseKey: React.FC<{
   setGlobalKeyNote: React.Dispatch<React.SetStateAction<string>>,
@@ -36,13 +37,24 @@ const ChooseKey: React.FC<{
               </div>
             </Col>
             <Col>
-              <Label for="globalKeyScale">Quality of global key</Label>
-              <Input
-                type="text"
+            <Label for="globalKeyScale">Quality of global key</Label>
+              <Input type="select"
                 name="globalKeyScale"
                 id="globalKeyScale"
                 onChange={(e) => setGlobalKeyScale(e.target.value)}
-              />
+              >
+                <option value="">--</option>
+                {Object.values(PossibleRootScale).map(
+                  (value: string, index: number) => (
+                    <option
+                    key={`option--scale-${index}`}
+                    value={`${value}`}
+                    >
+                      {value}
+                    </option>
+                  )
+                )}
+              </Input>
             </Col>
           </Row>
           <FormText color="muted" className="py-1">
