@@ -29,12 +29,10 @@ export const scalesForChordRowObject = (chordRowObject: ChordRowObject): Array<N
 const ChordRow: React.FC<{
   chordRowObject: ChordRowObject,
   onRowChange: (newValue: string, key: keyof ChordRowObject) => void,
-  // onRowExpand?: () => void,
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
 }> = ({
   chordRowObject,
   onRowChange,
-  // onRowExpand,
   monochromaticSchemes,
 }) => {
   const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot, availableTensions } = chordRowObject;
@@ -119,11 +117,6 @@ const ChordRow: React.FC<{
             </Row>
             <Row className="w-100 pt-3">
               <Col xs={12}>
-                {/* {
-                  onRowExpand && (
-                    <Button color="info" className="mb-2 border-dark" onClick={onRowExpand}>Expand</Button>
-                  )
-                } */}
                 <Button color="info" className="mb-2 border-dark" onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
               </Col>
             </Row>
