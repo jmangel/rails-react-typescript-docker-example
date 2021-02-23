@@ -236,7 +236,7 @@ const App: React.FC = () => {
           <Edit
             chordRowObjects={chordRowObjects}
             handleRowChange={handleRowChange}
-            toggleExpandedRow={toggle}
+            // toggleExpandedRow={toggle}
             addRows={addRows}
             monochromaticSchemes={monochromaticSchemes}
           />

@@ -6,24 +6,23 @@ import { MonochromaticPossibleRootScale } from '../ScaleColorer';
 const Edit: React.FC<{
   chordRowObjects: ChordRowObject[],
   handleRowChange: (rowIndex: number, newValue: string, key: keyof ChordRowObject) => void,
-  toggleExpandedRow: (rowIndex: number) => void,
+  // toggleExpandedRow: (rowIndex: number) => void,
   addRows: (numNewRows: number) => void,
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
 }> = ({
   chordRowObjects,
   handleRowChange,
-  toggleExpandedRow,
+  // toggleExpandedRow,
   addRows,
   monochromaticSchemes,
 }) => {
   const [newChordRows, setNewChordRows] = useState(1);
 
-
   return (
     <div>
       {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
         chordRowObject={chordRowObject}
-        onRowExpand={ () => toggleExpandedRow(rowIndex) }
+        // onRowExpand={ () => toggleExpandedRow(rowIndex) }
         onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
         monochromaticSchemes={monochromaticSchemes}
       />)}

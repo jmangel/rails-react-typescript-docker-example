@@ -29,15 +29,17 @@ export const scalesForChordRowObject = (chordRowObject: ChordRowObject): Array<N
 const ChordRow: React.FC<{
   chordRowObject: ChordRowObject,
   onRowChange: (newValue: string, key: keyof ChordRowObject) => void,
-  onRowExpand?: () => void,
+  // onRowExpand?: () => void,
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
 }> = ({
   chordRowObject,
   onRowChange,
-  onRowExpand,
+  // onRowExpand,
   monochromaticSchemes,
 }) => {
   const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot, availableTensions } = chordRowObject;
+
+  const [rowExpanded, setRowExpanded] = useState(false);
 
   const scales = scalesForChordRowObject(chordRowObject);
 
@@ -117,31 +119,36 @@ const ChordRow: React.FC<{
             </Row>
             <Row className="w-100 pt-3">
               <Col xs={12}>
-                {
+                {/* {
                   onRowExpand && (
                     <Button color="info" className="mb-2 border-dark" onClick={onRowExpand}>Expand</Button>
                   )
-                }
+                } */}
+                <Button color="info" className="mb-2 border-dark" onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
               </Col>
             </Row>
           </Form>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          {scales.map(
-            (namedScale: NamedScale, index: number) => (
-              <div key={`scale-${index}`}>
-                <p className="color-coded--text">
-                  {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
-                  <br />
-                  <small className="color-coded--text">{namedScale.rootScaleNote} {namedScale.rootScale}</small>
-                </p>
-              </div>
-            )
-          )}
-        </Col>
-      </Row>
+      {
+        rowExpanded && (
+          <Row className="border row__color-coded" style={{ backgroundColor }}>
+            <Col>
+              {scales.map(
+                (namedScale: NamedScale, index: number) => (
+                  <div key={`scale-${index}`}>
+                    <p className="color-coded--text">
+                      {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
+                      <br />
+                      <small className="color-coded--text">{namedScale.rootScaleNote} {namedScale.rootScale}</small>
+                    </p>
+                  </div>
+                )
+              )}
+            </Col>
+          </Row>
+        )
+      }
     </div>
   );
 }
