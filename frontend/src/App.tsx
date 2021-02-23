@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
   Button,
+  Col,
   Container,
 } from 'reactstrap';
 import {
@@ -11,7 +12,7 @@ import {
   withDefault,
 } from 'use-query-params';
 // import { SketchPicker } from 'react-color';
-import { MdKeyboardArrowLeft } from 'react-icons/md';
+import { MdHome, MdKeyboardArrowLeft } from 'react-icons/md';
 
 const iRealReader = require('ireal-reader');
 
@@ -160,6 +161,10 @@ const App: React.FC = () => {
     setStepIndex(newStepIndex);
   }
 
+  const navigateToFirstStep = () => {
+    setStepIndex(0);
+  }
+
   const navigateToPreviousStep = () => {
     let newStepIndex = stepIndex - 1;
     if (shouldSkipChooseKeyStep(newStepIndex)) newStepIndex -= 1;
@@ -253,28 +258,22 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <header className="App-header flex-row justify-content-between">
+      <header className="App-header flex-row justify-content-center">
         {
           stepIndex > 0 && (
-            <MdKeyboardArrowLeft onClick={() => navigateToPreviousStep()} />
+            <MdKeyboardArrowLeft className="mx-2" onClick={() => navigateToPreviousStep()} />
           )
         }
         {song.title &&
-          <span className="ml-3">
+          <span className="mx-auto">
             {song.title}
           </span>
         }
-        <Button
-          className="ml-auto mr-3"
-          color="primary"
-          onClick={() => {
-            const el = document.createElement('textarea');
-            el.value = window.location.href;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-        }}>Copy Share link to clipboard</Button>
+        {
+          stepIndex > 0 && (
+            <MdHome className="mx-2" onClick={() => navigateToFirstStep()} />
+          )
+        }
       </header>
       {
         expandedChordRow ? (
