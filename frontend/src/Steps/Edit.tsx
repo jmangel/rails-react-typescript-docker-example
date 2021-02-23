@@ -24,7 +24,7 @@ const Edit: React.FC<{
       />)}
       <Row className='pt-2 flex-row justify-content-center align-items-center'>
         <MdAddCircle color="#EF532B" size="3em" onClick={() => addRows(1)} />
-        <MdRemoveCircle color="#EF532B" size="3em" onClick={() => addRows(-1)} />
+        { chordRowObjects.length > 1 && <MdRemoveCircle color="#EF532B" size="3em" onClick={() => addRows(-1)} />}
       </Row>
     </div>
   );
