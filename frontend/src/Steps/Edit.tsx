@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Input, Row } from "reactstrap";
+import React from 'react';
+import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
+import { Row } from "reactstrap";
 import ChordRow, { ChordRowObject } from '../ChordRow';
 import { MonochromaticPossibleRootScale } from '../ScaleColorer';
 
@@ -14,8 +15,6 @@ const Edit: React.FC<{
   addRows,
   monochromaticSchemes,
 }) => {
-  const [newChordRows, setNewChordRows] = useState(1);
-
   return (
     <div>
       {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
@@ -23,17 +22,9 @@ const Edit: React.FC<{
         onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
         monochromaticSchemes={monochromaticSchemes}
       />)}
-      <Row className='w-25 mx-auto border'>
-        <Button onClick={() => addRows(newChordRows)}>Add</Button>
-        <Input
-          type="number"
-          name="newChordRows"
-          value={newChordRows}
-          onChange={e => setNewChordRows(parseInt(e.target.value))}
-          className='w-25 mx-2'
-          inline
-        />
-        Row(s)
+      <Row className='pt-2 flex-row justify-content-center align-items-center'>
+        <MdAddCircle color="#EF532B" size="3em" onClick={() => addRows(1)} />
+        <MdRemoveCircle color="#EF532B" size="3em" onClick={() => addRows(-1)} />
       </Row>
     </div>
   );
