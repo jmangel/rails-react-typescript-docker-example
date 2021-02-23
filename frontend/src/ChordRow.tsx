@@ -58,74 +58,69 @@ const ChordRow: React.FC<{
 
   return (
     <div>
-      <Row className="border row__color-coded" style={{ backgroundColor }}>
+      <Row className="border" style={{ backgroundColor }}>
         <Col>
-          <Form inline>
-            <Row className="w-100">
-              <Col xs={6}>
-                <Label for="chordNote" className="color-coded--text">Chord:</Label>
-                <Input
-                  type="text"
-                  name="chordNote"
-                  value={`${chordNote || ""}${chordQuality || ""}${bassNote || ""}`}
-                  onChange={handleChordChange}
-                  className="w-100"
-                />
-              </Col>
-              <Col xs={6}>
-                <Label for="exampleEmail" className="color-coded--text"><text>Other Scale Tones:</text></Label>
-                <Input
-                  type="text"
-                  name="availableTensions"
-                  value={availableTensions}
-                  placeholder="(e.g. melody, notes you like)"
-                  onChange={e => onRowChange(e.target.value, 'availableTensions')}
-                  className="w-100"
-                />
-              </Col>
-            </Row>
-            <Row className="w-100">
-              <Col xs={12}>
-
-                <Label for="exampleSelect" className="color-coded--text">Preferred Scale</Label>
-                <Input type="select"
-                  name="select"
-                  id="exampleSelect"
-                  onChange={e => {
-                    const [selectedScaleRoot, selectedScale] = e.target.value.split(/ (.+)/)
-                    onRowChange(selectedScale, 'selectedScale')
-                    onRowChange(selectedScaleRoot, 'selectedScaleRoot')
-                  }}
-                  className="w-100"
-                  >
-                  <option value="">--</option>
-                  {scales.map(
-                    (namedScale: NamedScale, index: number) => (
-                      <option
-                      key={`option--scale-${index}`}
-                      value={`${namedScale.scaleNotes[0]} ${namedScale.scaleName}`}
-                      selected={namedScale.scaleName === selectedScale && (
-                        namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
-                        )}
-                        >
-                        {namedScale.scaleNotes[0]} {namedScale.scaleName} ({namedScale.rootScaleNote} {namedScale.rootScale}): {namedScale.scaleNotes.join(',')}
-                      </option>
-                    )
-                  )}
-                </Input>
-              </Col>
-            </Row>
-            <Row className="w-100 pt-3">
-              <Col xs={12}>
-                <Button color="info" className="mb-2 border-dark" onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
-              </Col>
-            </Row>
-          </Form>
+          <Row className="pt-3">
+            <Col xs={6}>
+              <Input
+                type="text"
+                name="chordNote"
+                value={`${chordNote || ""}${chordQuality || ""}${bassNote || ""}`}
+                placeholder="A^7#9"
+                onChange={handleChordChange}
+                className="w-100"
+              />
+            </Col>
+            <Col xs={6}>
+              <Input
+                type="text"
+                name="availableTensions"
+                value={availableTensions}
+                placeholder="extra notes (e.g. melody, notes you like)"
+                onChange={e => onRowChange(e.target.value, 'availableTensions')}
+                className="w-100"
+              />
+            </Col>
+          </Row>
+          <Row className="pt-3">
+            <Col xs={12}>
+              <Input type="select"
+                name="select"
+                id="exampleSelect"
+                onChange={e => {
+                  const [selectedScaleRoot, selectedScale] = e.target.value.split(/ (.+)/)
+                  onRowChange(selectedScale, 'selectedScale')
+                  onRowChange(selectedScaleRoot, 'selectedScaleRoot')
+                }}
+                className="w-100"
+                >
+                <option value="">--</option>
+                {scales.map(
+                  (namedScale: NamedScale, index: number) => (
+                    <option
+                    key={`option--scale-${index}`}
+                    value={`${namedScale.scaleNotes[0]} ${namedScale.scaleName}`}
+                    selected={namedScale.scaleName === selectedScale && (
+                      namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
+                      )}
+                      >
+                      {namedScale.scaleNotes[0]} {namedScale.scaleName} ({namedScale.rootScaleNote} {namedScale.rootScale}): {namedScale.scaleNotes.join(',')}
+                    </option>
+                  )
+                )}
+              </Input>
+            </Col>
+          </Row>
+          <Row className="pt-3">
+            <Col xs={12}>
+              <Button color="info" className="mb-2 border-dark" onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
+            </Col>
+          </Row>
         </Col>
       </Row>
       {
         rowExpanded && (
-          <Row className="border row__color-coded" style={{ backgroundColor }}>
+          <Row className="border" style={{ backgroundColor }}>
             <Col>
               {scales.map(
                 (namedScale: NamedScale, index: number) => (
