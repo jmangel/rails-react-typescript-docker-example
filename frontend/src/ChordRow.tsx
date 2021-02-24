@@ -53,12 +53,12 @@ const ChordRow: React.FC<{
     namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
   ));
 
-  let backgroundColor = '';
-  if (selectedNamedScale) backgroundColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
+  let borderColor = '';
+  if (selectedNamedScale) borderColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
 
   return (
     <div className="chord-row">
-      <Row className="border" style={{ backgroundColor }}>
+      <Row className="chord-row" style={{ borderTop: `3px solid ${borderColor}` }}>
         <Col>
           <Row className="pt-3">
             <Col xs={6}>
@@ -120,7 +120,7 @@ const ChordRow: React.FC<{
       </Row>
       {
         rowExpanded && (
-          <Row className="border" style={{ backgroundColor }}>
+          <Row className="chord-row border" style={{ borderTop: `3px solid ${borderColor}` }}>
             <Col>
               {scales.map(
                 (namedScale: NamedScale, index: number) => (
