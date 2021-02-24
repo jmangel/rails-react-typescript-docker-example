@@ -73,7 +73,7 @@ const ChordRow: React.FC<{
   }
   return (
     <div className="chord-row">
-      <Row className="chord-row" style={{ borderTop: `3px solid ${borderColor}` }}>
+      <Row className="chord-row" style={{ borderTop: `3px solid ${borderColor}`,  ...((selectedNamedScale) ? {} : { backgroundColor: 'white' }) }}>
         <Col>
           <Row className="pt-3">
             <Col xs={6}>
