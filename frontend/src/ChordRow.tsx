@@ -3,6 +3,7 @@ import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import scalesForChord, { NamedScale } from './ChordMapper'
 import parseChordString from './ChordParser'
 import scaleToHexColor, { MonochromaticPossibleRootScale } from './ScaleColorer';
+import tinycolor from 'tinycolor2';
 export interface ChordRowObject {
   chordNote: string;
   chordQuality: string;
@@ -54,8 +55,22 @@ const ChordRow: React.FC<{
   ));
 
   let borderColor = '';
-  if (selectedNamedScale) borderColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
+  let textColor = 'white';
+  if (selectedNamedScale) {
+    borderColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
 
+    const borderColorRgb = tinycolor(borderColor).toRgb();
+    // https://stackoverflow.com/a/11868159
+    const brightness = Math.round(
+      (
+        (borderColorRgb.r * 299) +
+        (borderColorRgb.g * 587) +
+        (borderColorRgb.b * 114)
+      ) / 1000
+    );
+
+    if (brightness > 125) textColor = 'black';
+  }
   return (
     <div className="chord-row">
       <Row className="chord-row" style={{ borderTop: `3px solid ${borderColor}` }}>
@@ -113,7 +128,7 @@ const ChordRow: React.FC<{
           </Row>
           <Row className="pt-3">
             <Col xs={12}>
-              <Button color="info" className="mb-2 border-dark" onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
+              <Button className="mb-2 border-dark" style={{ backgroundColor: borderColor, color: textColor }} onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
             </Col>
           </Row>
         </Col>
