@@ -122,7 +122,7 @@ const App: React.FC = () => {
   const [globalKeyScale, setGlobalKeyScale] = useState('');
 
   const processGlobalKey = (keyNote?: string, keyScale?: string, chordRows?: ChordRowObject[]) => {
-    keyNote = keyNote || globalKeyNote;
+    keyNote = (keyNote || globalKeyNote).toUpperCase();
     keyScale = keyScale || globalKeyScale;
     chordRows = chordRows || chordRowObjects;
 
