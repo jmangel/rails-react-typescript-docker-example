@@ -32,6 +32,10 @@
   }
 }
 
+.chord-row {
+  background-color: #6A8992;
+}
+
 .color-coded--text {
   /* looks worse on larger monitor */
   /* -webkit-text-stroke: 0.033em black; */
