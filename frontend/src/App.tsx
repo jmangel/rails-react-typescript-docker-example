@@ -58,11 +58,19 @@ const App: React.FC = () => {
   if (a) setQuery({ a: undefined }, 'pushIn');
   if (c === '') setQuery({ c: csvifyChordRowObjects(chordRowObjects) }, 'pushIn');
 
+  const prevChordRowObjectsCountRef: React.MutableRefObject<number> = useRef(chordRowObjects.length);
   useEffect(() => {
     setQuery(
       { c: csvifyChordRowObjects(chordRowObjects) },
       'pushIn'
     )
+
+    if (chordRowObjects.length > prevChordRowObjectsCountRef.current) {
+      const chordRowHeight = document.querySelector('.chord-row')?.clientHeight;
+      chordRowHeight && window.scrollBy(0, chordRowHeight * (chordRowObjects.length - prevChordRowObjectsCountRef.current));
+    }
+
+    prevChordRowObjectsCountRef.current = chordRowObjects.length;
   }, [chordRowObjects]);
 
   const [song, setSong] = useState(createSongObject(t));
@@ -224,17 +232,6 @@ const App: React.FC = () => {
       setChordRowObjects(chordRowObjects => [...chordRowObjects, ...numNewChordRowsArray])
     }
   }
-
-  const prevChordRowObjectsCountRef: React.MutableRefObject<number> = useRef(chordRowObjects.length);
-  useEffect(() => {
-    if (chordRowObjects.length > prevChordRowObjectsCountRef.current) {
-      const chordRowHeight = document.querySelector('.chord-row')?.clientHeight;
-      chordRowHeight && window.scrollBy(0, chordRowHeight * (chordRowObjects.length - prevChordRowObjectsCountRef.current));
-    }
-
-    prevChordRowObjectsCountRef.current = chordRowObjects.length;
-  }, [chordRowObjects]);
-
 
   const renderStep = (stepIndex: number): React.ReactElement => {
     switch(Steps[stepIndex]) {
