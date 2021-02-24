@@ -35,6 +35,7 @@ const createChordRowObject = (): ChordRowObject => {
 
 interface Song {
   title: string;
+  key?: string;
   music: {
     measures: Array<Array<string>>;
   };
@@ -204,7 +205,7 @@ const App: React.FC = () => {
         const newSong: Song = playlist.songs[0];
         if (newSong) {
           setSong(newSong);
-          const newChordRows = newSong.music.measures.flatMap((measures) => {
+          let newChordRows = newSong.music.measures.flatMap((measures) => {
             return measures.map((measure) => {
               const parsedChordString = parseChordString(measure);
 
@@ -218,7 +219,21 @@ const App: React.FC = () => {
               }
 
             });
-          })
+          });
+
+          if (newSong.key) {
+            const splitKey = newSong.key.split('-');
+            let keyNote = splitKey[0];
+            if (splitKey[1] === '') {
+              // convert to relative major
+              const minorIndex = CHROMATIC_NOTES.findIndex((chromaticNote) => chromaticNote.includes(keyNote));
+              const relativeMajorIndex = (minorIndex + 3) % 12;
+              keyNote = CHROMATIC_NOTES[relativeMajorIndex][0];
+            }
+
+            const processedNewChordRows = processGlobalKey(keyNote, 'major', newChordRows);
+            if (processedNewChordRows) newChordRows = processedNewChordRows;
+          }
           setChordRowObjects(newChordRows);
           navigateToNextStep(newChordRows);
         } else alert('no song found');
