@@ -120,16 +120,20 @@ const App: React.FC = () => {
   const [globalKeyNote, setGlobalKeyNote] = useState('');
   const [globalKeyScale, setGlobalKeyScale] = useState('');
 
-  const applyGlobalKey = () => {
-    if (globalKeyNote === '' || globalKeyScale === '') return;
-    if (CHROMATIC_NOTES.find(chromaticNoteArray => chromaticNoteArray.includes(globalKeyNote)) == undefined) return;
-    if (!((Object.keys(PossibleRootScale) as [keyof typeof PossibleRootScale]).find(key => PossibleRootScale[key] === globalKeyScale))) return;
+  const processGlobalKey = (keyNote?: string, keyScale?: string, chordRows?: ChordRowObject[]) => {
+    keyNote = keyNote || globalKeyNote;
+    keyScale = keyScale || globalKeyScale;
+    chordRows = chordRows || chordRowObjects;
 
-    let newChordRows = chordRowObjects.slice();
+    if (keyNote === '' || keyScale === '') return;
+    if (CHROMATIC_NOTES.find(chromaticNoteArray => chromaticNoteArray.includes(keyNote!)) == undefined) return;
+    if (!((Object.keys(PossibleRootScale) as [keyof typeof PossibleRootScale]).find(key => PossibleRootScale[key] === keyScale))) return;
+
+    let newChordRows = chordRows.slice();
     newChordRows.forEach((chordRowObject) => {
       if (!chordRowObject.selectedScale && !chordRowObject.selectedScaleRoot) {
         const matchingScale = scalesForChordRowObject(chordRowObject)
-          .find(({ rootScale, rootScaleNote }) => rootScale === globalKeyScale && rootScaleNote === globalKeyNote);
+          .find(({ rootScale, rootScaleNote }) => rootScale === keyScale && rootScaleNote === keyNote);
 
         if (matchingScale != undefined) {
           chordRowObject.selectedScaleRoot = matchingScale.scaleNotes[0];
@@ -140,9 +144,17 @@ const App: React.FC = () => {
       return chordRowObject;
     });
 
-    setChordRowObjects(newChordRows);
+    return newChordRows;
+  };
 
-    if (allChordsSelected(newChordRows)) setStepIndex(stepIndex + 1);
+  const applyGlobalKey = () => {
+    const newChordRows = processGlobalKey();
+
+    if (newChordRows) {
+      setChordRowObjects(newChordRows);
+
+      if (allChordsSelected(newChordRows)) setStepIndex(stepIndex + 1);
+    }
   };
 
   useEffect(() => {
