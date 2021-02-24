@@ -57,7 +57,7 @@ const ChordRow: React.FC<{
   if (selectedNamedScale) backgroundColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
 
   return (
-    <div>
+    <div className="chord-row">
       <Row className="border" style={{ backgroundColor }}>
         <Col>
           <Row className="pt-3">

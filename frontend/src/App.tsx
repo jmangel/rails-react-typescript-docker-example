@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   Button,
   Col,
@@ -224,6 +224,17 @@ const App: React.FC = () => {
       setChordRowObjects(chordRowObjects => [...chordRowObjects, ...numNewChordRowsArray])
     }
   }
+
+  const prevChordRowObjectsCountRef: React.MutableRefObject<number> = useRef(chordRowObjects.length);
+  useEffect(() => {
+    if (chordRowObjects.length > prevChordRowObjectsCountRef.current) {
+      const chordRowHeight = document.querySelector('.chord-row')?.clientHeight;
+      chordRowHeight && window.scrollBy(0, chordRowHeight * (chordRowObjects.length - prevChordRowObjectsCountRef.current));
+    }
+
+    prevChordRowObjectsCountRef.current = chordRowObjects.length;
+  }, [chordRowObjects]);
+
 
   const renderStep = (stepIndex: number): React.ReactElement => {
     switch(Steps[stepIndex]) {
