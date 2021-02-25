@@ -713,6 +713,27 @@ const CHORD_MAPPINGS = [
     ]
   },
   {
+    quality: '7b5',
+    possibleModes: [
+      {
+        name: 'lydian dominant',
+        offset: 0,
+      },
+      {
+        name: 'altered',
+        offset: 0,
+      },
+      {
+        name: 'locrian 2/half-dim',
+        offset: 0,
+      },
+      {
+        name: 'whole-tone',
+        offset: 0,
+      },
+    ]
+  },
+  {
     quality: '7b9',
     possibleModes: [
       {
