@@ -128,14 +128,15 @@ const App: React.FC = () => {
     chordRows = chordRows || chordRowObjects;
 
     if (keyNote === '' || keyScale === '') return;
-    if (CHROMATIC_NOTES.find(chromaticNoteArray => chromaticNoteArray.includes(keyNote!)) == undefined) return;
+    const chromatic_note_index = CHROMATIC_NOTES.findIndex(chromaticNoteArray => chromaticNoteArray.includes(keyNote!));
+    if (chromatic_note_index < 0) return;
     if (!((Object.keys(PossibleRootScale) as [keyof typeof PossibleRootScale]).find(key => PossibleRootScale[key] === keyScale))) return;
 
     let newChordRows = chordRows.slice();
     newChordRows.forEach((chordRowObject) => {
       if (!chordRowObject.selectedScale && !chordRowObject.selectedScaleRoot) {
         const matchingScale = scalesForChordRowObject(chordRowObject)
-          .find(({ rootScale, rootScaleNote }) => rootScale === keyScale && rootScaleNote === keyNote);
+          .find(({ rootScale, rootScaleNote }) => rootScale === keyScale && CHROMATIC_NOTES.findIndex(noteArray => noteArray.includes(rootScaleNote)) === chromatic_note_index);
 
         if (matchingScale != undefined) {
           chordRowObject.selectedScaleRoot = matchingScale.scaleNotes[0];
