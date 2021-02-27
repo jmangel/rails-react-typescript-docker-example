@@ -752,7 +752,11 @@ const CHORD_MAPPINGS = [
       {
         name: 'h/w diminished',
         offset: 0,
-      }
+      },
+      {
+        name: 'altered',
+        offset: 0,
+      },
     ]
   },
   {
