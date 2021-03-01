@@ -36,6 +36,28 @@ body {
   }
 }
 
+.btn {
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  color: black;
+  border-radius: 0;
+}
+
+.btn-outline-light {
+  color: white;
+}
+
+.btn-primary {
+  background-color: #EF532B;
+  border-color: #EF532B;
+}
+
+.btn-light {
+  background-color: white;
+  border-color: white;
+}
+
 .chord-row {
   background-color: #6A8992;
 }

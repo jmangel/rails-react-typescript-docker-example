@@ -13,45 +13,49 @@ const New: React.FC<{
 }) => {
 
   return (
-    <div>
-      <Row className='py-2 my-2'>
-        <Col className="border py-2">
-          <Button
-            onClick={() => startNewSong()}
-          >
-            New
-          </Button>
-        </Col>
-        <Col className="border py-2">
-          <Input
-            type="file"
-            name="irealImportFile"
-            id="irealImportFile"
-            onChange={handleFiles}
-            className="d-none"
-          />
-          <Button
-            onClick={() => {
-              const fileInput = document.getElementById('irealImportFile');
-              fileInput && fileInput.click();
-            }}
-          >
-            Import
-          </Button>
-          <FormText color="muted" className="py-1">
-            Export the song from iReal Pro as HTML and upload here.
-          </FormText>
-        </Col>
-      </Row>
-      <Col className="py-2">
+    <Col>
+      <Row className='py-2'>
         <Button
-          className="ml-auto mr-3"
+          color="link"
+          outline
+          className="w-75 ml-auto mr-auto btn-outline-light"
           onClick={() => navigateToNextStep()}
         >
           Continue
         </Button>
-      </Col>
-    </div>
+      </Row>
+      <Row className='py-2'>
+        <Button
+          color="light"
+          className="w-75 ml-auto mr-auto"
+          onClick={() => startNewSong()}
+        >
+          New
+        </Button>
+      </Row>
+      <Row className='py-2'>
+        <Input
+          type="file"
+          name="irealImportFile"
+          id="irealImportFile"
+          onChange={handleFiles}
+          className="d-none"
+        />
+        <Button
+          color="primary"
+          className="w-75 ml-auto mr-auto"
+          onClick={() => {
+            const fileInput = document.getElementById('irealImportFile');
+            fileInput && fileInput.click();
+          }}
+        >
+          Import
+        </Button>
+        <FormText color="muted" className="py-1">
+          Export the song from iReal Pro as HTML and upload here.
+        </FormText>
+      </Row>
+    </Col>
   );
 }
 
