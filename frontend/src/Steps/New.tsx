@@ -3,10 +3,12 @@ import { ChangeEvent } from 'react';
 import { Button, Col, FormText, Input, Row } from "reactstrap";
 
 const New: React.FC<{
+  allowContinue: boolean,
   handleFiles: (event: ChangeEvent<HTMLInputElement>) => void,
   startNewSong: () => void,
   navigateToNextStep: () => void,
 }> = ({
+  allowContinue,
   handleFiles,
   startNewSong,
   navigateToNextStep,
@@ -14,16 +16,18 @@ const New: React.FC<{
 
   return (
     <Col>
-      <Row className='py-2'>
-        <Button
-          color="link"
-          outline
-          className="w-75 ml-auto mr-auto btn-outline-light"
-          onClick={() => navigateToNextStep()}
-        >
-          Continue
-        </Button>
-      </Row>
+      {allowContinue && (
+        <Row className='py-2'>
+          <Button
+            color="link"
+            outline
+            className="w-75 ml-auto mr-auto btn-outline-light"
+            onClick={() => navigateToNextStep()}
+          >
+            Continue
+          </Button>
+        </Row>
+      )}
       <Row className='py-2'>
         <Button
           color="light"

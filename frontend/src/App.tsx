@@ -262,6 +262,10 @@ const App: React.FC = () => {
     }
   }
 
+  const hasSongInProgress = (chordRowObjects: ChordRowObject[]): boolean => {
+    return chordRowObjects.some(({ chordNote, chordQuality, bassNote }) => !!(chordNote || chordQuality || bassNote));
+  }
+
   const renderStep = (stepIndex: number): React.ReactElement => {
     switch(Steps[stepIndex]) {
       case Step.k:
@@ -285,6 +289,7 @@ const App: React.FC = () => {
       default:
         return (
           <New
+            allowContinue={hasSongInProgress(chordRowObjects)}
             handleFiles={handleFiles}
             startNewSong={startNewSong}
             navigateToNextStep={navigateToNextStep}
