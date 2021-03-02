@@ -140,7 +140,7 @@ const ChordRow: React.FC<{
         {rowExpanded && scales.map(
           (namedScale: NamedScale, index: number) => (
             <Row className={`expanded-chord-row py-3 justify-content-center ${ index > 0 && 'border-top'}`} key={`scale-${index}`}>
-              <span style={{ fontSize: '0.7rem'}}>
+              <span>
                 {namedScale.scaleNotes[0]} {namedScale.scaleName}: {namedScale.scaleNotes.join(',')}
                 <hr  />
                 <b>{namedScale.rootScaleNote} {namedScale.rootScale}</b>
