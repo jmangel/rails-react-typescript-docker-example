@@ -3,6 +3,10 @@ body {
   color: white;
 }
 
+hr {
+  border-top: 0.01rem solid white;
+}
+
 .App {
   text-align: center;
 }
@@ -73,6 +77,10 @@ body {
 
 .color-coded--text:not(small) {
   font-size: 1.2rem;
+}
+
+.expanded-chord-row {
+  background-color: #355C68;
 }
 
 .recharts-pie text {
