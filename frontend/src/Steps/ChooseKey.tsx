@@ -20,14 +20,17 @@ const ChooseKey: React.FC<{
   return (
     <div>
       <Alert isOpen={alertVisible} toggle={onDismiss}>
-        Key applied!
+        Key filled!
       </Alert>
-      <Row className='py-2 my-2'>
-        <Col className="border py-2">
+      <Row className="pt-3 border-top justify-content-center">
+        <h4 className="mb-0">Fill by key</h4>
+      </Row>
+      <Row className="py-3">
+        <Col className="border-top border-bottom py-3">
           <Row>
             <Col>
               <div>
-                <Label for="globalKeyNote">Root of global key</Label>
+                <Label for="globalKeyNote">Root</Label>
                 <Input
                   type="text"
                   name="globalKeyNote"
@@ -37,7 +40,7 @@ const ChooseKey: React.FC<{
               </div>
             </Col>
             <Col>
-            <Label for="globalKeyScale">Quality of global key</Label>
+            <Label for="globalKeyScale">Quality</Label>
               <Input type="select"
                 name="globalKeyScale"
                 id="globalKeyScale"
@@ -57,27 +60,27 @@ const ChooseKey: React.FC<{
               </Input>
             </Col>
           </Row>
-          <FormText color="muted" className="py-1">
-            Any keys applied will set the key on any unselected chords with a possible scale in the applied key.
+          <FormText color="muted" className="py-2">
+            Any unfilled chords with an available scale matching the key entered will have that scale selected.
+            <br />
+            (You can enter multiple keys, and they will fill unfilled chords in the order they are entered.)
           </FormText>
           <Button
-            className="ml-auto mr-3"
             color="primary"
             onClick={() => { applyGlobalKey(); setAlertVisible(true); setTimeout(onDismiss, 3000) } }
           >
-            Apply
+            Fill
           </Button>
         </Col>
       </Row>
       <Row>
-      <Col className="py-2">
-        <Button
-          className="ml-auto mr-3"
-          onClick={() => navigateToNextStep()}
-        >
-          Continue
-        </Button>
-      </Col>
+        <Col>
+          <Button
+            onClick={() => navigateToNextStep()}
+          >
+            Continue
+          </Button>
+        </Col>
       </Row>
     </div>
   );
