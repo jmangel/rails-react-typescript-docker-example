@@ -141,6 +141,14 @@ export const POSSIBLE_ROOT_SCALE_MAPPINGS: { [key: string]: string } = {
   'whole-tone': 'wt',
 }
 
+export const ROOT_SCALE_READABLE_SHORTENINGS: { [key: string]: string } = {
+  'major': 'maj',
+  'harmonic minor': 'harm. min',
+  'melodic minor': 'mel. min',
+  'diminished': 'dim',
+  'whole-tone': 'whole-tone',
+}
+
 interface ScaleDegree {
   degree: number;
   quality: string | null;

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
-import scalesForChord, { NamedScale } from './ChordMapper'
+import scalesForChord, { NamedScale, ROOT_SCALE_READABLE_SHORTENINGS } from './ChordMapper'
 import parseChordString from './ChordParser'
 import scaleToHexColor, { MonochromaticPossibleRootScale } from './ScaleColorer';
 import tinycolor from 'tinycolor2';
@@ -119,7 +119,7 @@ const ChordRow: React.FC<{
                       namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
                       )}
                       >
-                      {namedScale.scaleNotes[0]} {namedScale.scaleName} ({namedScale.rootScaleNote} {namedScale.rootScale}): {namedScale.scaleNotes.join(',')}
+                      {namedScale.scaleNotes[0]} {namedScale.scaleName} ({namedScale.rootScaleNote} {ROOT_SCALE_READABLE_SHORTENINGS[namedScale.rootScale]}): {namedScale.scaleNotes.join(',')}
                     </option>
                   )
                 )}
