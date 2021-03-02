@@ -96,7 +96,7 @@ const ChordRow: React.FC<{
             />
           </Col>
         </Row>
-        <Row className="pt-3">
+        <Row className="py-3">
           <Col xs={12}>
             <Input type="select"
               name="select"
@@ -125,11 +125,15 @@ const ChordRow: React.FC<{
             </Input>
           </Col>
         </Row>
-        <Row className="pt-3">
-          <Col xs={12}>
-            <Button className="mb-2 border-dark" style={{ backgroundColor: borderColor, color: textColor }} onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
-          </Col>
-        </Row>
+        {
+          scales.length > 0 && (
+            <Row className="pb-3">
+              <Col xs={12}>
+                <Button className="border-dark" style={{ backgroundColor: borderColor, color: textColor }} onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
+              </Col>
+            </Row>
+          )
+        }
         {rowExpanded && scales.map(
           (namedScale: NamedScale, index: number) => (
             <Row className={`expanded-chord-row py-3 justify-content-center ${ index > 0 && 'border-top'}`} key={`scale-${index}`}>
