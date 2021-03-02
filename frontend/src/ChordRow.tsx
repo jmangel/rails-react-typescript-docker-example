@@ -71,8 +71,11 @@ const ChordRow: React.FC<{
 
     if (brightness > 125) textColor = 'black';
   }
+
+  const rowClassName = `chord-row ${!borderColor && 'border-top' || ''}`;
+  const rowStyle = borderColor ? { borderTop: `3px solid ${borderColor}` } : {};
   return (
-    <Row className="chord-row" style={{ borderTop: `3px solid ${borderColor}` }}>
+    <Row className={rowClassName} style={rowStyle}>
       <Col>
         <Row className="pt-3">
           <Col xs={6}>
