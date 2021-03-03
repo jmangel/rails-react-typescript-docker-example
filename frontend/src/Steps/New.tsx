@@ -1,6 +1,8 @@
 import React from 'react';
 import { ChangeEvent } from 'react';
 import { Button, Col, FormText, Input, Row } from "reactstrap";
+import SaxophonistLogo from '../SaxophonistLogo';
+
 
 const New: React.FC<{
   allowContinue: boolean,
@@ -15,7 +17,10 @@ const New: React.FC<{
 }) => {
 
   return (
-    <Col>
+    <Col className="flex-column d-flex">
+      <Row className="justify-content-center flex-grow-1 align-items-center">
+        <SaxophonistLogo />
+      </Row>
       {allowContinue && (
         <Row className='py-2'>
           <Button

@@ -300,48 +300,35 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <header className="App-header flex-row justify-content-center">
+      <Container fluid className="d-flex flex-column h-100">
+        <header className="App-header flex-row justify-content-center">
+          {
+            stepIndex > 0 && (
+              <MdKeyboardArrowLeft className="mx-2" onClick={() => navigateToPreviousStep()} />
+            )
+          }
+          <span className="mx-auto">
+            {song.title || 'Untitled Song'}
+          </span>
+          {
+            stepIndex > 0 && (
+              <MdHome className="mx-2" onClick={() => navigateToFirstStep()} />
+            )
+          }
+        </header>
         {
-          stepIndex > 0 && (
-            <MdKeyboardArrowLeft className="mx-2" onClick={() => navigateToPreviousStep()} />
-          )
-        }
-        <span className="mx-auto">
-          {song.title || 'Untitled Song'}
-        </span>
-        {
-          stepIndex > 0 && (
-            <MdHome className="mx-2" onClick={() => navigateToFirstStep()} />
-          )
-        }
-      </header>
-      {
-        expandedChordRow ? (
-          <ChordCarousel
-            expandedRowIndex={expandedRowIndex}
-            chordRowObjects={chordRowObjects}
-            monochromaticSchemes={monochromaticSchemes}
-            setExpandedRowIndex={setExpandedRowIndex}
-            onRowChange={handleRowChange}
-            toggle={toggle}
-          />
-        ) : (
-        <Container fluid>
-          {renderStep(stepIndex)}
-          {/* <Row>
-            <Col xs={2}>
-              <SketchPicker
-                width="100"
-                className="m-0"
-                color={ `rgb(${redRgbValue},${greenRgbValue},${blueRgbValue})` }
-                onChangeComplete={(color, _) => setRgbValues([color.rgb.r, color.rgb.g, color.rgb.b])}
-              />
-            </Col>
-            <ColorWheel monochromaticSchemes={monochromaticSchemes} />
-          </Row> */}
-        </Container>
-        )
-      }
+          expandedChordRow ? (
+            <ChordCarousel
+              expandedRowIndex={expandedRowIndex}
+              chordRowObjects={chordRowObjects}
+              monochromaticSchemes={monochromaticSchemes}
+              setExpandedRowIndex={setExpandedRowIndex}
+              onRowChange={handleRowChange}
+              toggle={toggle}
+            />
+          ) : renderStep(stepIndex)
+          }
+      </Container>
     </div>
   );
 }
