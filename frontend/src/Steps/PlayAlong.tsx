@@ -26,28 +26,34 @@ let copiedChordRows = chordRowObjects.slice();
 
           return (
             <Col xs={3}>
-              {measureChords.map((chordRowObject: ChordRowObject) => {
-                const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot } = chordRowObject;
-                const scales = scalesForChordRowObject(chordRowObject);
+              <Row className="px-1">
+                {measureChords.map((chordRowObject: ChordRowObject) => {
+                  const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot } = chordRowObject;
+                  const scales = scalesForChordRowObject(chordRowObject);
 
-                const selectedNamedScale = scales.find((namedScale: NamedScale) => namedScale.scaleName === selectedScale && (
-                  namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
-                ));
+                  const selectedNamedScale = scales.find((namedScale: NamedScale) => namedScale.scaleName === selectedScale && (
+                    namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
+                  ));
 
-                let borderColor = '';
-                if (selectedNamedScale) {
-                  borderColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
-                }
+                  let borderColor = '';
+                  if (selectedNamedScale) {
+                    borderColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
+                  }
 
-                const className = `border-left border-right border-bottom ${!borderColor ? 'border-top' : ''}`;
-                const style = borderColor ? { borderTop: `2px solid ${borderColor}` } : {};
+                  const className = `px-0 border-left border-right border-bottom ${!borderColor ? 'border-top' : ''}`;
+                  const style = borderColor ? { borderTop: `3px solid ${borderColor}` } : {};
 
-                return (
-                  <div className={className} style={style}>
-                    {`${chordNote || ""}${chordQuality || ""}${bassNote || ""}`}
-                  </div>
-                );
-              })}
+                  return (
+                    <Col className={className} style={style}>
+                      {chordNote}
+                      <br />
+                      {chordQuality}
+                      <br />
+                      {bassNote}
+                    </Col>
+                  );
+                })}
+              </Row>
             </Col>
           );
         })
