@@ -214,6 +214,7 @@ const App: React.FC = () => {
         }
         const playlist = iRealReader(evt.target?.result);
 
+        console.warn(playlist.songs);
         const newSong: Song = playlist.songs[0];
         if (newSong) {
           setSong(newSong);
