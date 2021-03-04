@@ -28,6 +28,7 @@ import Edit from './Steps/Edit';
 import { parseStringifiedChordRowObject, csvifyChordRowObjects, parseCsvifiedChordRowObjects } from './JsonCondenser'
 import { MonochromaticPossibleRootScale, regenerateMonochromaticSchemes } from './ScaleColorer';
 import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
+import PlayAlong from './Steps/PlayAlong';
 
 const createChordRowObject = (): ChordRowObject => {
   return { chordQuality: '' } as ChordRowObject;
@@ -296,6 +297,15 @@ const App: React.FC = () => {
             chordRowObjects={chordRowObjects}
             handleRowChange={handleRowChange}
             addRows={addRows}
+            monochromaticSchemes={monochromaticSchemes}
+            navigateToNextStep={navigateToNextStep}
+          />
+        );
+      case Step.s:
+        return (
+          <PlayAlong
+            chordRowObjects={chordRowObjects}
+            measures={measures}
             monochromaticSchemes={monochromaticSchemes}
           />
         );
