@@ -44,7 +44,7 @@ let copiedChordRows = chordRowObjects.slice();
                   const style = borderColor ? { borderTop: `3px solid ${borderColor}` } : {};
 
                   return (
-                    <Col className={className} style={style}>
+                    <Col className={className} style={{...style, backgroundColor: 'rgb(255,255,255,0.2)'}}>
                       {chordNote}
                       <br />
                       {chordQuality}
