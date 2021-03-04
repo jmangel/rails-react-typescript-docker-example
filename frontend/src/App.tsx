@@ -175,7 +175,7 @@ const App: React.FC = () => {
     chordRows = chordRows || chordRowObjects;
 
     if (keyNote === '' || keyScale === '') return;
-    const chromatic_note_index = CHROMATIC_NOTES.findIndex(chromaticNoteArray => chromaticNoteArray.includes(keyNote!));
+    const chromatic_note_index = CHROMATIC_NOTES.findIndex(chromaticNoteArray => chromaticNoteArray.includes(keyNote!.trim()));
     if (chromatic_note_index < 0) return;
     if (!((Object.keys(PossibleRootScale) as [keyof typeof PossibleRootScale]).find(key => PossibleRootScale[key] === keyScale))) return;
 
