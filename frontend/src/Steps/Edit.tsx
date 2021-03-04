@@ -10,12 +10,14 @@ const Edit: React.FC<{
   addRows: (numNewRows: number) => void,
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
   navigateToNextStep: () => void,
+  fillWithKey: (keyNote: string, keyScale: string) => void,
 }> = ({
   chordRowObjects,
   handleRowChange,
   addRows,
   monochromaticSchemes,
   navigateToNextStep,
+  fillWithKey,
 }) => {
   return (
     <div>
@@ -23,6 +25,7 @@ const Edit: React.FC<{
         chordRowObject={chordRowObject}
         onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
         monochromaticSchemes={monochromaticSchemes}
+        fillWithKey={fillWithKey}
       />)}
       <Row className='pt-2 flex-row justify-content-center align-items-center'>
         <MdAddCircle color="#EF532B" size="3em" onClick={() => addRows(1)} />

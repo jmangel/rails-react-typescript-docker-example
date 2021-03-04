@@ -207,6 +207,12 @@ const App: React.FC = () => {
     }
   };
 
+  const fillWithKey = (keyNote: string, keyScale: string) => {
+    const newChordRows = processGlobalKey(keyNote, keyScale, chordRowObjects);
+
+    if (newChordRows) setChordRowObjects(newChordRows);
+  }
+
   useEffect(() => {
     setMonochromaticSchemes(regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue));
   }, rgbValues);
@@ -341,6 +347,7 @@ const App: React.FC = () => {
         return (
           <Edit
             chordRowObjects={chordRowObjects}
+            fillWithKey={fillWithKey}
             handleRowChange={handleRowChange}
             addRows={addRows}
             monochromaticSchemes={monochromaticSchemes}

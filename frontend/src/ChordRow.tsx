@@ -31,10 +31,12 @@ const ChordRow: React.FC<{
   chordRowObject: ChordRowObject,
   onRowChange: (newValue: string, key: keyof ChordRowObject) => void,
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
+  fillWithKey: (keyNote: string, keyScale: string) => void,
 }> = ({
   chordRowObject,
   onRowChange,
   monochromaticSchemes,
+  fillWithKey,
 }) => {
   const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot, availableTensions } = chordRowObject;
 
@@ -100,32 +102,44 @@ const ChordRow: React.FC<{
           </Col>
         </Row>
         <Row className="py-3">
-          <Col xs={12}>
-            <Input type="select"
-              name="select"
-              id="exampleSelect"
-              onChange={e => {
-                const [selectedScaleRoot, selectedScale] = e.target.value.split(/ (.+)/)
-                onRowChange(selectedScale, 'selectedScale')
-                onRowChange(selectedScaleRoot, 'selectedScaleRoot')
-              }}
-              className="w-100"
-              >
-              <option value="">--</option>
-              {scales.map(
-                (namedScale: NamedScale, index: number) => (
-                  <option
-                  key={`option--scale-${index}`}
-                  value={`${namedScale.scaleNotes[0]} ${namedScale.scaleName}`}
-                  selected={namedScale.scaleName === selectedScale && (
-                    namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
-                    )}
-                    >
-                    {namedScale.scaleNotes[0]} {namedScale.scaleName} ({namedScale.rootScaleNote} {ROOT_SCALE_READABLE_SHORTENINGS[namedScale.rootScale]}): {namedScale.scaleNotes.join(',')}
-                  </option>
-                )
-              )}
-            </Input>
+          <Col xs={12} className="d-flex">
+              <Input type="select"
+                name="select"
+                id="exampleSelect"
+                className="flex-grow-1"
+                onChange={e => {
+                  const [selectedScaleRoot, selectedScale] = e.target.value.split(/ (.+)/)
+                  onRowChange(selectedScale, 'selectedScale')
+                  onRowChange(selectedScaleRoot, 'selectedScaleRoot')
+                }}
+                >
+                <option value="">--</option>
+                {scales.map(
+                  (namedScale: NamedScale, index: number) => (
+                    <option
+                    key={`option--scale-${index}`}
+                    value={`${namedScale.scaleNotes[0]} ${namedScale.scaleName}`}
+                    selected={namedScale.scaleName === selectedScale && (
+                      namedScale.scaleNotes[0] === (selectedScaleRoot || chordNote)
+                      )}
+                      >
+                      {namedScale.scaleNotes[0]} {namedScale.scaleName} ({namedScale.rootScaleNote} {ROOT_SCALE_READABLE_SHORTENINGS[namedScale.rootScale]}): {namedScale.scaleNotes.join(',')}
+                    </option>
+                  )
+                )}
+              </Input>
+            {
+              selectedNamedScale && (
+                <Button
+                  className="ml-3"
+                  onClick={() => {
+                    fillWithKey(selectedNamedScale.rootScaleNote, selectedNamedScale.rootScale)
+                  }}
+                >
+                  Fill
+                </Button>
+              )
+            }
           </Col>
         </Row>
         {
