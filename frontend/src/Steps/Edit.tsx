@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
-import { Button, Col, Row } from "reactstrap";
+import { Alert, Button, Col, Row } from "reactstrap";
 import ChordRow, { ChordRowObject } from '../ChordRow';
 import { MonochromaticPossibleRootScale } from '../ScaleColorer';
 
@@ -19,13 +19,20 @@ const Edit: React.FC<{
   navigateToNextStep,
   fillWithKey,
 }) => {
+  const [alertVisible, setAlertVisible] = useState(false);
+
+  const onDismiss = () => setAlertVisible(false);
+
   return (
     <div>
+      <Alert isOpen={alertVisible} toggle={onDismiss}>
+        Key filled!
+      </Alert>
       {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
         chordRowObject={chordRowObject}
         onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
         monochromaticSchemes={monochromaticSchemes}
-        fillWithKey={fillWithKey}
+        fillWithKey={(keyNote: string, keyScale: string) => { fillWithKey(keyNote, keyScale); setAlertVisible(true); setTimeout(onDismiss, 3000); } }
       />)}
       <Row className='pt-2 flex-row justify-content-center align-items-center'>
         <MdAddCircle color="#EF532B" size="3em" onClick={() => addRows(1)} />

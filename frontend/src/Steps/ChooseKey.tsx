@@ -25,15 +25,8 @@ const ChooseKey: React.FC<{
   setTransposingInstrument,
   transposingKey,
 }) => {
-  const [alertVisible, setAlertVisible] = useState(false);
-
-  const onDismiss = () => setAlertVisible(false);
-
   return (
     <div>
-      <Alert isOpen={alertVisible} toggle={onDismiss}>
-        Key filled!
-      </Alert>
       <Row className="pt-3 border-top justify-content-center">
         <h4 className="mb-0">Fill by key</h4>
       </Row>
