@@ -2,18 +2,18 @@ import { CHROMATIC_NOTES, PossibleRootScale, arrayRotate } from './ChordMapper'
 import tinycolor from 'tinycolor2';
 
 export const circleOfFifths: string[][] = [
-  ['C'],
+  ['C', 'B#'],
   ['G'],
   ['D'],
   ['A'],
-  ['E'],
-  ['B'],
+  ['E', 'Fb'],
+  ['B', 'Cb'],
   ['F#', 'Gb'],
   ['C#', 'Db'],
   ['G#', 'Ab'],
   ['D#', 'Eb'],
   ['A#', 'Bb'],
-  ['F'],
+  ['F', 'E#'],
 ]
 
 export type MonochromaticPossibleRootScale = PossibleRootScale.m | PossibleRootScale.mm | PossibleRootScale.hm;
