@@ -635,10 +635,11 @@ const CHORD_MAPPINGS = [
         name: 'phrygian dominant',
         offset: 0,
       },
-      {
-        name: 'altered', // for tritone sub
-        offset: 0,
-      },
+      // could do altered for tritone sub, but the 5 doesn't fit
+      // {
+      //   name: 'altered', // for tritone sub
+      //   offset: 0,
+      // },
       {
         name: 'lydian dominant', // for tritone sub
         offset: 0,
