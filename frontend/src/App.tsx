@@ -51,13 +51,22 @@ const App: React.FC = () => {
     t: withDefault(StringParam, ''),
     i: withDefault(NumberParam, -1),
     s: withDefault(NumberParam, 0),
+    m: withDefault(StringParam, '0'),
   });
-  const { a, c, t, i, s } = query;
+  const { a, c, t, i, s, m } = query;
 
   const startingChordRowObjects = (c) ? parseCsvifiedChordRowObjects(c) : (a as Array<string> || []).map(parseStringifiedChordRowObject);
   const [chordRowObjects, setChordRowObjects] = useState(startingChordRowObjects);
   if (a) setQuery({ a: undefined }, 'pushIn');
   if (c === '') setQuery({ c: csvifyChordRowObjects(chordRowObjects) }, 'pushIn');
+
+  const [measures, setMeasures] = useState(m.split('.').map((index: string) => parseInt(index)));
+  useEffect(() => {
+    setQuery(
+      { m: measures.join('.') },
+      'pushIn'
+    )
+  }, [measures]);
 
   const prevChordRowObjectsCountRef: React.MutableRefObject<number> = useRef(chordRowObjects.length);
   useEffect(() => {
@@ -236,6 +245,10 @@ const App: React.FC = () => {
             const processedNewChordRows = processGlobalKey(keyNote, 'major', newChordRows);
             if (processedNewChordRows) newChordRows = processedNewChordRows;
           }
+
+          const newMeasures = newSong.music.measures.map((measures) => measures.length);
+
+          setMeasures(newMeasures);
           setChordRowObjects(newChordRows);
           navigateToNextStep(newChordRows);
         } else alert('no song found');
