@@ -23,7 +23,7 @@ import { ChordRowObject, scalesForChordRowObject } from './ChordRow'
 // import ColorWheel from './ColorWheel';
 import Steps, { chooseKeyStepIndex, Step } from './Steps'
 import New from './Steps/New';
-import ChooseKey from './Steps/ChooseKey';
+import ChooseKey, { TransposingKeys } from './Steps/ChooseKey';
 import Edit from './Steps/Edit';
 import { parseStringifiedChordRowObject, csvifyChordRowObjects, parseCsvifiedChordRowObjects } from './JsonCondenser'
 import { MonochromaticPossibleRootScale, regenerateMonochromaticSchemes } from './ScaleColorer';
@@ -45,6 +45,15 @@ const createSongObject = (title: string | null): Song => {
   return { title } as Song;
 }
 
+const transposeNote = (note: string, offset: number): string => {
+  const chromatic_note_index = CHROMATIC_NOTES.findIndex(chromaticNoteArray => chromaticNoteArray.includes(note));
+  if (chromatic_note_index < 0) return note;
+
+  const tranposedNote = CHROMATIC_NOTES[(12 + chromatic_note_index + offset) % 12][0];
+
+  return tranposedNote;
+}
+
 const App: React.FC = () => {
   const [query, setQuery] = useQueryParams({
     a: withDefault(ArrayParam, undefined),
@@ -53,8 +62,9 @@ const App: React.FC = () => {
     i: withDefault(NumberParam, -1),
     s: withDefault(NumberParam, 0),
     m: withDefault(StringParam, '0'),
+    k: withDefault(StringParam, '0'),
   });
-  const { a, c, t, i, s, m } = query;
+  const { a, c, t, i, s, m, k } = query;
 
   const startingChordRowObjects = (c) ? parseCsvifiedChordRowObjects(c) : (a as Array<string> || []).map(parseStringifiedChordRowObject);
   const [chordRowObjects, setChordRowObjects] = useState(startingChordRowObjects);
@@ -120,6 +130,34 @@ const App: React.FC = () => {
     )
   }, [stepIndex]);
 
+  const [transposingKey, setTranposingKey] = useState<TransposingKeys>(k as TransposingKeys);
+
+  useEffect(() => {
+    const tranpositionChange = parseInt(transposingKey) - parseInt(k);
+
+    setQuery(
+      { k: transposingKey },
+      'pushIn'
+    );
+
+    let newChordRows = chordRowObjects.slice();
+
+    newChordRows.forEach((chordRowObject) => {
+      const { chordNote, bassNote, selectedScaleRoot } = chordRowObject;
+      if (chordNote) {
+        chordRowObject.chordNote = transposeNote(chordNote, tranpositionChange);
+      }
+      if (bassNote) {
+        chordRowObject.bassNote = transposeNote(bassNote, tranpositionChange);
+      }
+      if (selectedScaleRoot) {
+        chordRowObject.selectedScaleRoot = transposeNote(selectedScaleRoot, tranpositionChange);
+      }
+    })
+    setChordRowObjects(newChordRows);
+  }, [transposingKey]);
+
+
   const [rgbValues, setRgbValues] = useState([50, 241, 255]);
 
   const [redRgbValue, greenRgbValue, blueRgbValue] = rgbValues;
@@ -127,7 +165,6 @@ const App: React.FC = () => {
   const [monochromaticSchemes, setMonochromaticSchemes] = useState<{ [key in MonochromaticPossibleRootScale]: string }[]>(
     regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue)
   );
-
   const [globalKeyNote, setGlobalKeyNote] = useState('');
   const [globalKeyScale, setGlobalKeyScale] = useState('');
 
@@ -250,6 +287,7 @@ const App: React.FC = () => {
 
           const newMeasures = newSong.music.measures.map((measures) => measures.length);
 
+          clearTransposingKey();
           setMeasures(newMeasures);
           setChordRowObjects(newChordRows);
           navigateToNextStep(newChordRows);
@@ -261,8 +299,13 @@ const App: React.FC = () => {
     })
   }
 
+  const clearTransposingKey = () => {
+    setTranposingKey(TransposingKeys.C);
+  }
+
   const startNewSong = () => {
     const newChordRows = [createChordRowObject()];
+    clearTransposingKey();
     setChordRowObjects(newChordRows);
     setSong(createSongObject(''));
     navigateToNextStep(newChordRows);
@@ -290,6 +333,8 @@ const App: React.FC = () => {
             setGlobalKeyScale={setGlobalKeyScale}
             applyGlobalKey={applyGlobalKey}
             navigateToNextStep={navigateToNextStep}
+            setTransposingInstrument={(newKey) => setTranposingKey(newKey)}
+            transposingKey={transposingKey}
           />
         );
       case Step.e:

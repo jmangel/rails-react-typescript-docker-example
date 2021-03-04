@@ -2,16 +2,28 @@ import React, { useState } from 'react';
 import { Alert, Button, Col, FormText, Input, Label, Row } from "reactstrap";
 import { PossibleRootScale } from '../ChordMapper';
 
+export enum TransposingKeys {
+  C = '0',
+  Bb = '2',
+  Eb = '-3',
+  F = '-5',
+  G = '5',
+};
+
 const ChooseKey: React.FC<{
   setGlobalKeyNote: React.Dispatch<React.SetStateAction<string>>,
   setGlobalKeyScale: React.Dispatch<React.SetStateAction<string>>,
   applyGlobalKey: () => void,
   navigateToNextStep: () => void,
+  setTransposingInstrument: (key: TransposingKeys) => void,
+  transposingKey: TransposingKeys,
 }> = ({
   setGlobalKeyNote,
   setGlobalKeyScale,
   applyGlobalKey,
   navigateToNextStep,
+  setTransposingInstrument,
+  transposingKey,
 }) => {
   const [alertVisible, setAlertVisible] = useState(false);
 
@@ -80,6 +92,31 @@ const ChooseKey: React.FC<{
           >
             Continue
           </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Label for="transposingKey">Tranposing Key</Label>
+          <Input type="select"
+            name="transposingKey"
+            id="transposingKey"
+            onChange={(e) => setTransposingInstrument(e.target.value as TransposingKeys)}
+          >
+            {Object.entries(TransposingKeys).map(
+              (entryArray, index: number) => {
+                const [name, value] = entryArray;
+                return (
+                  <option
+                  key={`option--transposing-key-${index}`}
+                  selected={value === transposingKey}
+                  value={value}
+                  >
+                    {name}
+                  </option>
+                );
+              }
+            )}
+          </Input>
         </Col>
       </Row>
     </div>
