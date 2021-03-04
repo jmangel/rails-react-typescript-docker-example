@@ -2,7 +2,7 @@ import React from 'react';
 
 const SaxophonistLogo = () => {
   return (
-    <svg id="Component_10_1" data-name="Component 10 – 1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="50%" viewBox="0 0 193.151 352.993">
+    <svg id="Saxophonist-Logo" data-name="Saxophonist Logo" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="65%" viewBox="0 0 193.151 352.993">
       <defs>
         <linearGradient id="linear-gradient" x1="0.447" y1="1.011" x2="0.447" y2="0.024" gradientUnits="objectBoundingBox">
           <stop offset="0" stop-color="#ef532b"/>

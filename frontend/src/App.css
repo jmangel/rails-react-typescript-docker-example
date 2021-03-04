@@ -11,6 +11,10 @@ hr {
   border-top: 0.01rem solid white;
 }
 
+@media all and (max-width: 390px) {
+  #Saxophonist-Logo { width: 38%; }
+}
+
 .App {
   text-align: center;
 }
