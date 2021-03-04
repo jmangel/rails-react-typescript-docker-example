@@ -21,7 +21,7 @@ import ChordCarousel from './ChordCarousel';
 import parseChordString from './ChordParser';
 import { ChordRowObject, scalesForChordRowObject } from './ChordRow'
 // import ColorWheel from './ColorWheel';
-import Steps, { chooseKeyStepIndex, Step } from './Steps'
+import Steps, { Step } from './Steps'
 import New from './Steps/New';
 import ChooseKey, { TransposingKeys } from './Steps/ChooseKey';
 import Edit from './Steps/Edit';
@@ -165,14 +165,9 @@ const App: React.FC = () => {
   const [monochromaticSchemes, setMonochromaticSchemes] = useState<{ [key in MonochromaticPossibleRootScale]: string }[]>(
     regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue)
   );
-  const [globalKeyNote, setGlobalKeyNote] = useState('');
-  const [globalKeyScale, setGlobalKeyScale] = useState('');
 
-  const processGlobalKey = (keyNote?: string, keyScale?: string, chordRows?: ChordRowObject[]) => {
-    keyNote = (keyNote || globalKeyNote);
+  const processGlobalKey = (keyNote: string, keyScale: string, chordRows: ChordRowObject[]) => {
     keyNote = keyNote.charAt(0).toUpperCase() + keyNote.slice(1).toLowerCase();
-    keyScale = keyScale || globalKeyScale;
-    chordRows = chordRows || chordRowObjects;
 
     if (keyNote === '' || keyScale === '') return;
     const chromatic_note_index = CHROMATIC_NOTES.findIndex(chromaticNoteArray => chromaticNoteArray.includes(keyNote!.trim()));
@@ -197,16 +192,6 @@ const App: React.FC = () => {
     return newChordRows;
   };
 
-  const applyGlobalKey = () => {
-    const newChordRows = processGlobalKey();
-
-    if (newChordRows) {
-      setChordRowObjects(newChordRows);
-
-      if (allChordsSelected(newChordRows)) setStepIndex(stepIndex + 1);
-    }
-  };
-
   const fillWithKey = (keyNote: string, keyScale: string) => {
     const newChordRows = processGlobalKey(keyNote, keyScale, chordRowObjects);
 
@@ -223,18 +208,8 @@ const App: React.FC = () => {
     setChordRowObjects(newChordRows)
   }
 
-  const allChordsSelected = (chordRowObjects: ChordRowObject[]): boolean => {
-    return chordRowObjects.every(({ selectedScale, chordNote, chordQuality }) => (!chordNote && !chordQuality) || !!selectedScale);
-  }
-
-  const shouldSkipChooseKeyStep = (newStepIndex: number, newChordRows?: ChordRowObject[]): boolean => {
-    return (newStepIndex === chooseKeyStepIndex) && allChordsSelected(newChordRows || chordRowObjects);
-  }
-
-  const navigateToNextStep = (newChordRows?: ChordRowObject[]) => {
-    let newStepIndex = stepIndex + 1;
-    if (shouldSkipChooseKeyStep(newStepIndex, newChordRows)) newStepIndex += 1;
-    setStepIndex(newStepIndex);
+  const navigateToNextStep = () => {
+    setStepIndex(stepIndex + 1);
   }
 
   const navigateToFirstStep = () => {
@@ -242,9 +217,7 @@ const App: React.FC = () => {
   }
 
   const navigateToPreviousStep = () => {
-    let newStepIndex = stepIndex - 1;
-    if (shouldSkipChooseKeyStep(newStepIndex)) newStepIndex -= 1;
-    setStepIndex(newStepIndex);
+    setStepIndex(stepIndex - 1);
   }
 
   const handleFiles = (event: ChangeEvent<HTMLInputElement>) => {
@@ -296,7 +269,7 @@ const App: React.FC = () => {
           clearTransposingKey();
           setMeasures(newMeasures);
           setChordRowObjects(newChordRows);
-          navigateToNextStep(newChordRows);
+          navigateToNextStep();
         } else alert('no song found');
       }
       reader.onerror = () => {
@@ -314,7 +287,7 @@ const App: React.FC = () => {
     clearTransposingKey();
     setChordRowObjects(newChordRows);
     setSong(createSongObject(''));
-    navigateToNextStep(newChordRows);
+    navigateToNextStep();
   }
 
   const addRows = (numNewChordRows: number) => {
@@ -335,9 +308,6 @@ const App: React.FC = () => {
       case Step.k:
         return (
           <ChooseKey
-            setGlobalKeyNote={setGlobalKeyNote}
-            setGlobalKeyScale={setGlobalKeyScale}
-            applyGlobalKey={applyGlobalKey}
             navigateToNextStep={navigateToNextStep}
             setTransposingInstrument={(newKey) => setTranposingKey(newKey)}
             transposingKey={transposingKey}
