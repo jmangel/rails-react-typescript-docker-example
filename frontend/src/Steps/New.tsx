@@ -2,6 +2,7 @@ import React from 'react';
 import { ChangeEvent } from 'react';
 import { Button, Col, FormText, Input, Row } from "reactstrap";
 import SaxophonistLogo from '../SaxophonistLogo';
+import ContinueButton from './ContinueButton';
 
 
 const New: React.FC<{
@@ -21,18 +22,7 @@ const New: React.FC<{
       <Row className="justify-content-center flex-grow-1 align-items-center">
         <SaxophonistLogo />
       </Row>
-      {allowContinue && (
-        <Row className='py-2'>
-          <Button
-            color="link"
-            outline
-            className="w-75 ml-auto mr-auto btn-outline-light"
-            onClick={() => navigateToNextStep()}
-          >
-            Continue
-          </Button>
-        </Row>
-      )}
+      {allowContinue && (<ContinueButton navigateToNextStep={navigateToNextStep} />)}
       <Row className='py-2'>
         <Button
           color="light"

@@ -3,6 +3,7 @@ import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
 import { Alert, Button, Col, Row } from "reactstrap";
 import ChordRow, { ChordRowObject } from '../ChordRow';
 import { MonochromaticPossibleRootScale } from '../ScaleColorer';
+import ContinueButton from './ContinueButton';
 
 const Edit: React.FC<{
   chordRowObjects: ChordRowObject[],
@@ -38,16 +39,7 @@ const Edit: React.FC<{
         <MdAddCircle color="#EF532B" size="3em" onClick={() => addRows(1)} />
         { chordRowObjects.length > 1 && <MdRemoveCircle color="#EF532B" size="3em" onClick={() => addRows(-1)} />}
       </Row>
-      <Row className='py-2'>
-        <Button
-          color="link"
-          outline
-          className="w-75 ml-auto mr-auto btn-outline-light"
-          onClick={() => navigateToNextStep()}
-        >
-          Continue
-        </Button>
-      </Row>
+      <ContinueButton navigateToNextStep={navigateToNextStep} />
     </div>
   );
 }

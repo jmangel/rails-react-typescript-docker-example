@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Col, Input, Row } from "reactstrap";
+import ContinueButton from './ContinueButton';
 
 export enum TransposingKeys {
   C = '0',
@@ -47,16 +48,7 @@ const ChooseKey: React.FC<{
           </Input>
         </Col>
       </Row>
-      <Row className='py-2'>
-        <Button
-          color="link"
-          outline
-          className="w-75 ml-auto mr-auto btn-outline-light"
-          onClick={() => navigateToNextStep()}
-        >
-          Continue
-        </Button>
-      </Row>
+      <ContinueButton navigateToNextStep={navigateToNextStep} />
     </div>
   );
 }
