@@ -47,14 +47,15 @@ const ChooseKey: React.FC<{
           </Input>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <Button
-            onClick={() => navigateToNextStep()}
-          >
-            Continue
-          </Button>
-        </Col>
+      <Row className='py-2'>
+        <Button
+          color="link"
+          outline
+          className="w-75 ml-auto mr-auto btn-outline-light"
+          onClick={() => navigateToNextStep()}
+        >
+          Continue
+        </Button>
       </Row>
     </div>
   );

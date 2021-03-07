@@ -38,14 +38,15 @@ const Edit: React.FC<{
         <MdAddCircle color="#EF532B" size="3em" onClick={() => addRows(1)} />
         { chordRowObjects.length > 1 && <MdRemoveCircle color="#EF532B" size="3em" onClick={() => addRows(-1)} />}
       </Row>
-      <Row>
-        <Col>
-          <Button
-            onClick={() => navigateToNextStep()}
-          >
-            Continue
-          </Button>
-        </Col>
+      <Row className='py-2'>
+        <Button
+          color="link"
+          outline
+          className="w-75 ml-auto mr-auto btn-outline-light"
+          onClick={() => navigateToNextStep()}
+        >
+          Continue
+        </Button>
       </Row>
     </div>
   );
