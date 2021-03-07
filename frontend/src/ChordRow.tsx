@@ -57,7 +57,7 @@ const ChordRow: React.FC<{
   ));
 
   let borderColor = '';
-  let textColor = 'white';
+  let textColor = 'black';
   if (selectedNamedScale) {
     borderColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
 
@@ -76,6 +76,9 @@ const ChordRow: React.FC<{
 
   const rowClassName = `chord-row ${!borderColor && 'border-top' || ''}`;
   const rowStyle = borderColor ? { borderTop: `3px solid ${borderColor}` } : {};
+
+  // const buttonClassName = (!!selectedNamedScale ? 'border-dark' : 'btn-outline-light') + ' w-75'; // SWITCH COMMENT FROM OUTLINE TO LIGHT_FILL
+  const buttonClassName = (!!selectedNamedScale ? 'border-dark ' : '') + 'w-75'; // SWITCH COMMENT FROM OUTLINE TO LIGHT_FILL
   return (
     <Row className={rowClassName} style={rowStyle}>
       <Col>
@@ -147,7 +150,15 @@ const ChordRow: React.FC<{
           scales.length > 0 && (
             <Row className="pb-3">
               <Col xs={12}>
-                <Button className="border-dark" style={{ backgroundColor: borderColor, color: textColor }} onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
+                <Button
+                  className={buttonClassName}
+                  color="light" // SWITCH COMMENT FROM OUTLINE TO LIGHT_FILL
+                  // outline // SWITCH COMMENT FROM OUTLINE TO LIGHT_FILL
+                  style={{ backgroundColor: borderColor, color: textColor }}
+                  onClick={() => setRowExpanded(!rowExpanded)}
+                >
+                    {rowExpanded ? 'Close' : 'More Scales'}
+                  </Button>
               </Col>
             </Row>
           )
