@@ -131,6 +131,7 @@ const ChordRow: React.FC<{
             {
               selectedNamedScale && (
                 <Button
+                  color="primary"
                   className="ml-3"
                   onClick={() => {
                     fillWithKey(selectedNamedScale.rootScaleNote, selectedNamedScale.rootScale)
