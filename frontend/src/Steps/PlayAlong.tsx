@@ -16,8 +16,10 @@ const PlayAlong: React.FC<{
 }) => {
 let copiedChordRows = chordRowObjects.slice();
   return (
-    <div className="d-flex flex-wrap flex-grow-1">
-      <Row>
+    <div className="d-flex flex-wrap flex-grow-1 justify-content-center">
+      <Row
+        style={{minWidth: '100%'}} // unclear why this is needed Play-Along step on desktop, it's a lazy hack
+      >
 
       {
         measures.map((chordCount: number, index: number) => {
