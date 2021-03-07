@@ -76,6 +76,8 @@ const ChordRow: React.FC<{
 
   const rowClassName = `chord-row ${!borderColor && 'border-top' || ''}`;
   const rowStyle = borderColor ? { borderTop: `3px solid ${borderColor}` } : {};
+
+  const buttonClassName = (!!selectedNamedScale ? 'border-dark' : 'btn-outline-light') + ' w-75';
   return (
     <Row className={rowClassName} style={rowStyle}>
       <Col>
@@ -147,7 +149,14 @@ const ChordRow: React.FC<{
           scales.length > 0 && (
             <Row className="pb-3">
               <Col xs={12}>
-                <Button className="border-dark" style={{ backgroundColor: borderColor, color: textColor }} onClick={() => setRowExpanded(!rowExpanded)}>{ rowExpanded ? 'Close' : 'More Scales' }</Button>
+                <Button
+                  className={buttonClassName}
+                  outline
+                  style={{ backgroundColor: borderColor, color: textColor }}
+                  onClick={() => setRowExpanded(!rowExpanded)}
+                >
+                    {rowExpanded ? 'Close' : 'More Scales'}
+                  </Button>
               </Col>
             </Row>
           )
