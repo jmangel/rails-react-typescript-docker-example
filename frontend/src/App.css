@@ -111,6 +111,12 @@ hr {
   background-color: #355C68;
 }
 
+.playback-controls--row {
+  padding-bottom: 1.5rem;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
 .recharts-pie text {
   stroke: black;
   stroke-width: 0.1em;

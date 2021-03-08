@@ -30,6 +30,7 @@ import { parseStringifiedChordRowObject, csvifyChordRowObjects, parseCsvifiedCho
 import { MonochromaticPossibleRootScale, regenerateMonochromaticSchemes } from './ScaleColorer';
 import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
 import PlayAlong from './Steps/PlayAlong';
+import PlaybackControls from './PlayAlong/PlaybackControls';
 
 const createChordRowObject = (): ChordRowObject => {
   return { chordQuality: '' } as ChordRowObject;
@@ -359,6 +360,10 @@ const App: React.FC = () => {
             </span>
             <MdCheck className="mx-2" onClick={() => navigateToNextStep()} />
           </Fragment>
+        );
+      case Step.s:
+        return (
+          <PlaybackControls />
         );
       default:
         return null;
