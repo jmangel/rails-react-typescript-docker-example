@@ -4,19 +4,24 @@ import { GiMetronome } from 'react-icons/gi';
 import { BiMinus, BiPlus } from 'react-icons/bi';
 import { Col, Row } from "reactstrap";
 
-const PlaybackControls: React.FC = () => {
-  const bpm = 100;
+const PlaybackControls: React.FC<{
+  bpm: number,
+  incrementBpm: (bpm: number) => void,
+}> = ({
+  bpm,
+  incrementBpm,
+}) => {
   return (
     <Col className="pt-4">
       <Row className="playback-controls--row">
-          <BiMinus />
+          <BiMinus onClick={() => incrementBpm(-1)} />
           <div className="align-items-center d-flex">
             <GiMetronome size="2em" />
             <span>
               {bpm} BPM
             </span>
           </div>
-          <BiPlus/>
+          <BiPlus onClick={() => incrementBpm(1)} />
       </Row>
       <Row className="playback-controls--row">
         <IoPlayBackSharp size="2em" />

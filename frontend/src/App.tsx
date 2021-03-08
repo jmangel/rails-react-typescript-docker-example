@@ -32,6 +32,8 @@ import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
 import PlayAlong from './Steps/PlayAlong';
 import PlaybackControls from './PlayAlong/PlaybackControls';
 
+const defaultBpm = 100;
+
 const createChordRowObject = (): ChordRowObject => {
   return { chordQuality: '' } as ChordRowObject;
 }
@@ -39,6 +41,7 @@ const createChordRowObject = (): ChordRowObject => {
 interface Song {
   title: string;
   key?: string;
+  bpm?: number;
   music: {
     measures: Array<Array<string>>;
   };
@@ -65,8 +68,9 @@ const App: React.FC = () => {
     s: withDefault(NumberParam, 0),
     m: withDefault(StringParam, '0'),
     k: withDefault(StringParam, '0'),
+    b: withDefault(NumberParam, defaultBpm),
   });
-  const { a, c, t, i, s, m, k } = query;
+  const { a, c, t, i, s, m, k, b } = query;
 
   const startingChordRowObjects = (c) ? parseCsvifiedChordRowObjects(c) : (a as Array<string> || []).map(parseStringifiedChordRowObject);
   const [chordRowObjects, setChordRowObjects] = useState(startingChordRowObjects);
@@ -167,6 +171,13 @@ const App: React.FC = () => {
   const [monochromaticSchemes, setMonochromaticSchemes] = useState<{ [key in MonochromaticPossibleRootScale]: string }[]>(
     regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue)
   );
+
+  const [bpm, setBpm] = useState(b);
+  useEffect(() => {
+    setQuery({
+      b: bpm
+    }, 'pushIn')
+  }, [bpm]);
 
   const processGlobalKey = (keyNote: string, keyScale: string, chordRows: ChordRowObject[]) => {
     keyNote = keyNote.charAt(0).toUpperCase() + keyNote.slice(1).toLowerCase();
@@ -271,6 +282,7 @@ const App: React.FC = () => {
           clearTransposingKey();
           setMeasures(newMeasures);
           setChordRowObjects(newChordRows);
+          if (newSong.bpm) setBpm(newSong.bpm);
           navigateToNextStep();
         } else alert('no song found');
       }
@@ -287,6 +299,7 @@ const App: React.FC = () => {
   const startNewSong = () => {
     const newChordRows = [createChordRowObject()];
     clearTransposingKey();
+    setBpm(defaultBpm);
     setChordRowObjects(newChordRows);
     setSong(createSongObject(''));
     navigateToNextStep();
@@ -363,7 +376,10 @@ const App: React.FC = () => {
         );
       case Step.s:
         return (
-          <PlaybackControls />
+          <PlaybackControls
+            bpm={bpm}
+            incrementBpm={(amount) => { setBpm(bpm + amount)}}
+          />
         );
       default:
         return null;
