@@ -1,5 +1,5 @@
 import React from 'react';
-import { IoPauseSharp, IoPlayBackSharp, IoPlayForwardSharp, IoPlaySharp } from 'react-icons/io5';
+import { IoPauseSharp, IoPlayBackSharp, IoPlaySharp, IoStopSharp } from 'react-icons/io5';
 import { GiMetronome } from 'react-icons/gi';
 import { BiMinus, BiPlus } from 'react-icons/bi';
 import { Col, Row } from "reactstrap";
@@ -10,12 +10,14 @@ const PlaybackControls: React.FC<{
   isPlaying: boolean,
   play: () => void,
   pause: () => void,
+  restartMetronome: () => void,
 }> = ({
   bpm,
   incrementBpm,
   isPlaying,
   play,
   pause,
+  restartMetronome,
 }) => {
   return (
     <Col className="pt-4">
@@ -30,14 +32,14 @@ const PlaybackControls: React.FC<{
           <BiPlus onClick={() => incrementBpm(1)} />
       </Row>
       <Row className="playback-controls--row">
-        <IoPlayBackSharp size="2em" />
+        <IoPlayBackSharp size="2em" onClick={() => restartMetronome()} />
         { isPlaying ? (
             <IoPauseSharp onClick={() => pause()} size="2em" />
           ) : (
             <IoPlaySharp onClick={() => play()}size="2em" />
           )
         }
-        <IoPlayForwardSharp size="2em" />
+        <IoStopSharp size="2em" onClick={() => { pause(); restartMetronome(); }} />
       </Row>
     </Col>
   );

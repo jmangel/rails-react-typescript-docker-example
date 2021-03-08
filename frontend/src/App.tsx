@@ -409,6 +409,7 @@ const App: React.FC = () => {
             isPlaying={isPlaying}
             play={() => startPlayback()}
             pause={() => pausePlayback()}
+            restartMetronome={() => setMetronomeBeatCount(0)}
           />
         );
       default:
