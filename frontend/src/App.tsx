@@ -322,6 +322,7 @@ const App: React.FC = () => {
             addRows={addRows}
             monochromaticSchemes={monochromaticSchemes}
             navigateToNextStep={navigateToNextStep}
+            navigateToPreviousStep={navigateToPreviousStep}
           />
         );
       case Step.s:

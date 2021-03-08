@@ -1,5 +1,10 @@
+:root {
+  --main-bg-color: #023342;
+}
+
+
 body {
-  background-color: #023342;
+  background-color: var(--main-bg-color);
   color: white;
 }
 
@@ -28,14 +33,25 @@ hr {
   pointer-events: none;
 }
 
+.App-footer {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0px;
+  background-color: white;
+  color: var(--main-bg-color);
+}
+
 .App-header {
+  color: white;
   min-height: 10vh;
+}
+
+.App-header, .App-footer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
