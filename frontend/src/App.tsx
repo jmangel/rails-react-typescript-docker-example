@@ -373,7 +373,7 @@ const App: React.FC = () => {
               toggle={toggle}
             />
           ) : renderStep(stepIndex)
-          }
+        }
       </Container>
     </div>
   );
