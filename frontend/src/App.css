@@ -39,6 +39,7 @@ hr {
   bottom: 0px;
   background-color: white;
   color: var(--main-bg-color);
+  margin-top: auto;
 }
 
 .App-header {

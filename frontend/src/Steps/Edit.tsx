@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { MdAddCircle, MdCheck, MdKeyboardArrowLeft, MdRemoveCircle } from 'react-icons/md';
-import { Alert, Button, Col, Row } from "reactstrap";
+import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
+import { Alert, Row } from "reactstrap";
 import ChordRow, { ChordRowObject } from '../ChordRow';
 import { MonochromaticPossibleRootScale } from '../ScaleColorer';
-import ContinueButton from './ContinueButton';
 
 const Edit: React.FC<{
   chordRowObjects: ChordRowObject[],
@@ -40,15 +39,6 @@ const Edit: React.FC<{
       <Row className='py-2 flex-row justify-content-center align-items-center'>
         <MdAddCircle color="#EF532B" size="3em" onClick={() => addRows(1)} />
         { chordRowObjects.length > 1 && <MdRemoveCircle color="#EF532B" size="3em" onClick={() => addRows(-1)} />}
-      </Row>
-      <Row className="App-footer flex-row justify-content-center">
-        <MdKeyboardArrowLeft className="mx-2" onClick={() => navigateToPreviousStep()} />
-        <span className="mx-auto">
-          <div className="py-2">
-            Edit the keys
-          </div>
-        </span>
-        <MdCheck className="mx-2" onClick={() => navigateToNextStep()} />
       </Row>
     </div>
   );

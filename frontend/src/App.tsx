@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState, Fragment } from 'react';
 import {
   Button,
   Col,
   Container,
+  Row,
 } from 'reactstrap';
 import {
   useQueryParams,
@@ -12,7 +13,7 @@ import {
   withDefault,
 } from 'use-query-params';
 // import { SketchPicker } from 'react-color';
-import { MdHome, MdKeyboardArrowLeft } from 'react-icons/md';
+import { MdCheck, MdHome, MdKeyboardArrowLeft } from 'react-icons/md';
 
 const iRealReader = require('ireal-reader');
 
@@ -345,6 +346,25 @@ const App: React.FC = () => {
     }
   }
 
+  const renderFooter = (stepIndex: number): React.ReactElement | null => {
+    switch(Steps[stepIndex]) {
+      case Step.e:
+        return (
+          <Fragment>
+            <MdKeyboardArrowLeft className="mx-2" onClick={() => navigateToPreviousStep()} />
+            <span className="mx-auto">
+              <div className="py-2">
+                Edit the keys
+              </div>
+            </span>
+            <MdCheck className="mx-2" onClick={() => navigateToNextStep()} />
+          </Fragment>
+        );
+      default:
+        return null;
+    }
+  }
+
   return (
     <div className="App">
       <Container fluid className="d-flex flex-column h-100">
@@ -375,6 +395,10 @@ const App: React.FC = () => {
             />
           ) : renderStep(stepIndex)
         }
+        <Row className="App-footer flex-row justify-content-center">
+          {renderFooter(stepIndex)}
+        </Row>
+
       </Container>
     </div>
   );
