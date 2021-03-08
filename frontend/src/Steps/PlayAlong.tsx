@@ -9,10 +9,12 @@ const PlayAlong: React.FC<{
   chordRowObjects: ChordRowObject[],
   measures: number[],
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
+  measurePlaybackIndex: number,
 }> = ({
   chordRowObjects,
   measures,
   monochromaticSchemes,
+  measurePlaybackIndex,
 }) => {
 let copiedChordRows = chordRowObjects.slice();
   return (
@@ -45,8 +47,14 @@ let copiedChordRows = chordRowObjects.slice();
                   const className = `px-0 border-left border-right border-bottom ${!borderColor ? 'border-top' : ''}`;
                   const style = borderColor ? { borderTop: `3px solid ${borderColor}` } : {};
 
+                  const activeMeasureStyle = measurePlaybackIndex === index ? {
+                    backgroundColor: 'white', color: 'black'
+                  } : {
+                    backgroundColor: 'rgb(255,255,255,0.2)'
+                  }
+
                   return (
-                    <Col className={className} style={{...style, backgroundColor: 'rgb(255,255,255,0.2)'}}>
+                    <Col className={className} style={{...style, ...activeMeasureStyle}}>
                       {chordNote}
                       <br />
                       {chordQuality}

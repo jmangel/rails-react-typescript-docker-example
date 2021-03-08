@@ -172,11 +172,37 @@ const App: React.FC = () => {
     regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue)
   );
 
+  const beatsPerMeasure = 4 // TODO: get from import
+
   const [bpm, setBpm] = useState(b);
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [metronomeInterval, setMetronomeInterval] = useState<NodeJS.Timeout | undefined>(undefined);
+  const [metronomeBeatCount, setMetronomeBeatCount] = useState(0);
+
+  const incrementMetronomeCount = () => {
+    setMetronomeBeatCount((beat: number) => (beat + 1) % (beatsPerMeasure * measures.length))
+  }
+
+  const startPlayback = () => {
+    setIsPlaying(true);
+    const newInterval = setInterval(incrementMetronomeCount, (60 / bpm) * 1000);
+      setMetronomeInterval(newInterval);
+  }
+  const pausePlayback = () => {
+    setIsPlaying(false);
+    if (metronomeInterval) clearInterval(metronomeInterval);
+  }
+
   useEffect(() => {
+    if (metronomeInterval) clearInterval(metronomeInterval);
+    if (isPlaying) {
+      const newInterval = setInterval(incrementMetronomeCount, (60 / bpm) * 1000);
+      setMetronomeInterval(newInterval);
+    }
     setQuery({
       b: bpm
-    }, 'pushIn')
+    }, 'pushIn');
   }, [bpm]);
 
   const processGlobalKey = (keyNote: string, keyScale: string, chordRows: ChordRowObject[]) => {
@@ -346,6 +372,7 @@ const App: React.FC = () => {
             chordRowObjects={chordRowObjects}
             measures={measures}
             monochromaticSchemes={monochromaticSchemes}
+            measurePlaybackIndex={Math.floor(metronomeBeatCount / beatsPerMeasure)}
           />
         );
       default:
@@ -379,6 +406,9 @@ const App: React.FC = () => {
           <PlaybackControls
             bpm={bpm}
             incrementBpm={(amount) => { setBpm(bpm + amount)}}
+            isPlaying={isPlaying}
+            play={() => startPlayback()}
+            pause={() => pausePlayback()}
           />
         );
       default:
