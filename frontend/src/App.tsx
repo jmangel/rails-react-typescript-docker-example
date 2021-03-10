@@ -32,6 +32,7 @@ import { MonochromaticPossibleRootScale, regenerateMonochromaticSchemes } from '
 import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
 import PlayAlong from './Steps/PlayAlong';
 import PlaybackControls from './PlayAlong/PlaybackControls';
+import { rawToMeasures } from './RawIRealParser';
 
 const HighClickFile = '../static/AudioClips/high_click.mp3';
 const LowClickFile = '../static/AudioClips/low_click.mp3';
@@ -48,6 +49,7 @@ interface Song {
   bpm?: number;
   music: {
     measures: Array<Array<string>>;
+    raw: string;
   };
 };
 const createSongObject = (title: string | null): Song => {
@@ -297,6 +299,7 @@ const App: React.FC = () => {
         const newSong: Song = playlist.songs[0];
         if (newSong) {
           setSong(newSong);
+          console.warn(rawToMeasures(newSong.music.raw));
           let newChordRows = newSong.music.measures.flatMap((measures) => {
             return measures.map((measure) => {
               const parsedChordString = parseChordString(measure);
