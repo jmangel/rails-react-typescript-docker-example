@@ -184,7 +184,8 @@ const App: React.FC = () => {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [metronomeInterval, setMetronomeInterval] = useState<NodeJS.Timeout | undefined>(undefined);
-  const [metronomeBeatCount, setMetronomeBeatCount] = useState(-1);
+  const startingMetronomeBeat = -1
+  const [metronomeBeatCount, setMetronomeBeatCount] = useState(startingMetronomeBeat);
 
   const [metronomeCountIn, setMetronomeCountIn] = useState(0);
 
@@ -435,7 +436,7 @@ const App: React.FC = () => {
             isPlaying={isPlaying}
             play={() => startPlayback()}
             pause={() => pausePlayback()}
-            restartMetronome={() => setMetronomeBeatCount(0)}
+            restartMetronome={() => setMetronomeBeatCount(startingMetronomeBeat)}
           />
         );
       default:
