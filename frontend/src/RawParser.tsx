@@ -1,12 +1,10 @@
 interface ParsedChord {
+  chordString?: string;
   length?: number;
-  note: string;
-  quality?: string;
-  bassNote?: string;
+  noChord?: boolean;
 }
 interface ParsedMeasure {
-  chords: (string | null | undefined)[];
-  // chords: ParsedChord[];
+  chords: ParsedChord[];
 };
 
 let measures: ParsedMeasure[] = [];
@@ -96,7 +94,7 @@ function setTimeSignature(match: RegExpMatchArray) {
 
 function pushNull() {
   if (measures.length === 0) measures.push({ chords: [] });
-  measures[measures.length - 1].chords.push(null);
+  measures[measures.length - 1].chords.push({ noChord: true });
 }
 
 function repeatLastMeasure() {
@@ -177,7 +175,7 @@ function pushChordInMeasures(match: RegExpMatchArray) {
   } else {
     lastChord = chord.split('/')[0];
   }
-  measures[measures.length - 1].chords.push(chord)
+  measures[measures.length - 1].chords.push({ chordString: chord })
 }
 
 function parse(inputString: string) {
