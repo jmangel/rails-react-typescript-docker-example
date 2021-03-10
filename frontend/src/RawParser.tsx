@@ -1,6 +1,6 @@
 interface ParsedChord {
   chordString?: string;
-  length?: number;
+  beats?: number;
   noChord?: boolean;
 }
 interface ParsedMeasure {
@@ -58,7 +58,7 @@ const rules = [
   { token: ']', description: 'Double bar end', operation: repeatRemainingEndings },
   { token: /N(\d)/, description: 'Numbered endings', matchOperation: setEndRepeatLocation },
   { token: 'Z', description: 'Final bar line', operation: repeatRemainingEndings },
-  { token: /[A-GW]{1}[\+\-\^\dhob#suadlt]*(\/[A-G][#b]?)?/, description: 'Chord', matchOperation: pushChordInMeasures }
+  { token: /[A-GW]{1}[\+\-\^\dhob#suadlt]*(\/[A-G][#b]?)?,?/, description: 'Chord', matchOperation: pushChordInMeasures }
 ];
 
 //chord regex:
@@ -170,12 +170,19 @@ function pushChordInMeasures(match: RegExpMatchArray) {
   if (measures.length === 0) measures.push({chords: []});
 
   let chord = match[0];
-  if (chord.startsWith('W') && lastChord) {
-    chord = chord.replace('W', lastChord)
+
+  const durationSplitChord = chord.split(',');
+  let duration;
+  if (durationSplitChord[1] === '') duration = 1;
+
+  let chordString = durationSplitChord[0];
+
+  if (chordString.startsWith('W') && lastChord) {
+    chordString = chordString.replace('W', lastChord)
   } else {
-    lastChord = chord.split('/')[0];
+    lastChord = chordString.split('/')[0];
   }
-  measures[measures.length - 1].chords.push({ chordString: chord })
+  measures[measures.length - 1].chords.push({ chordString, beats: duration })
 }
 
 function parse(inputString: string) {
