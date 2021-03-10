@@ -184,7 +184,7 @@ const App: React.FC = () => {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [metronomeInterval, setMetronomeInterval] = useState<NodeJS.Timeout | undefined>(undefined);
-  const [metronomeBeatCount, setMetronomeBeatCount] = useState(0);
+  const [metronomeBeatCount, setMetronomeBeatCount] = useState(-1);
 
   const [metronomeCountIn, setMetronomeCountIn] = useState(0);
 
@@ -211,7 +211,6 @@ const App: React.FC = () => {
     setMetronomeCountIn(3);
     const newInterval = setInterval(incrementMetronomeCount, (60 / bpm) * 1000);
       setMetronomeInterval(newInterval);
-    if (metronomeBeatCount === 0) playHighClick(); //hacky, should remove this when we add a count in
   }
   const pausePlayback = () => {
     setIsPlaying(false);
