@@ -1,4 +1,15 @@
-let measures: (string | null | undefined)[][] = [];
+interface ParsedChord {
+  length?: number;
+  note: string;
+  quality?: string;
+  bassNote?: string;
+}
+interface ParsedMeasure {
+  chords: (string | null | undefined)[];
+  // chords: ParsedChord[];
+};
+
+let measures: ParsedMeasure[] = [];
 let startRepeatLocation: number | null | undefined = null;
 let endRepeatLocation: number | null | undefined = null;
 let lastChord: string | null | undefined = null;
@@ -84,8 +95,8 @@ function setTimeSignature(match: RegExpMatchArray) {
 }
 
 function pushNull() {
-  if (measures.length === 0) measures.push([]);
-  measures[measures.length - 1].push(null);
+  if (measures.length === 0) measures.push({ chords: [] });
+  measures[measures.length - 1].chords.push(null);
 }
 
 function repeatLastMeasure() {
@@ -125,8 +136,8 @@ function setCodaLocation() {
 
 function createNewMeasure() {
   //unless the last measure is a blank, insert a new blank measure
-  if (measures.length === 0 || measures[measures.length - 1].length !== 0) {
-    measures.push([]);
+  if (measures.length === 0 || measures[measures.length - 1].chords.length !== 0) {
+    measures.push({chords: []});
   }
 }
 
@@ -158,7 +169,7 @@ function repeatRemainingEndings() {
 }
 
 function pushChordInMeasures(match: RegExpMatchArray) {
-  if (measures.length === 0) measures.push([]);
+  if (measures.length === 0) measures.push({chords: []});
 
   let chord = match[0];
   if (chord.startsWith('W') && lastChord) {
@@ -166,7 +177,7 @@ function pushChordInMeasures(match: RegExpMatchArray) {
   } else {
     lastChord = chord.split('/')[0];
   }
-  measures[measures.length - 1].push(chord)
+  measures[measures.length - 1].chords.push(chord)
 }
 
 function parse(inputString: string) {
@@ -195,8 +206,8 @@ function parse(inputString: string) {
     }
   }
 }
-function removeEmptyMeasures(measures: (string | null | undefined)[][]){
-  return measures.filter(x => x.length !== 0)
+function removeEmptyMeasures(measures: ParsedMeasure[]){
+  return measures.filter(m => m.chords.length !== 0)
 }
 
 const rawToSong = (raw: string) => {
