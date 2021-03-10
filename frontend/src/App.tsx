@@ -302,9 +302,9 @@ const App: React.FC = () => {
           setSong(newSong);
           console.warn(rawToMeasures(newSong.music.raw));
           console.warn(rawToSong(newSong.music.raw));
-          let newChordRows = newSong.music.measures.flatMap((measures) => {
-            return measures.map((measure) => {
-              const parsedChordString = parseChordString(measure);
+          let newChordRows = newSong.music.measures.flatMap((measure) => {
+            return measure.map((chord) => {
+              const parsedChordString = parseChordString(chord);
 
               return {
                 chordNote: parsedChordString[0],
