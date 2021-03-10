@@ -33,6 +33,7 @@ import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
 import PlayAlong from './Steps/PlayAlong';
 import PlaybackControls from './PlayAlong/PlaybackControls';
 import { rawToMeasures } from './RawIRealParser';
+import rawToSong from './RawParser';
 
 const HighClickFile = '../static/AudioClips/high_click.mp3';
 const LowClickFile = '../static/AudioClips/low_click.mp3';
@@ -300,6 +301,7 @@ const App: React.FC = () => {
         if (newSong) {
           setSong(newSong);
           console.warn(rawToMeasures(newSong.music.raw));
+          console.warn(rawToSong(newSong.music.raw));
           let newChordRows = newSong.music.measures.flatMap((measures) => {
             return measures.map((measure) => {
               const parsedChordString = parseChordString(measure);
