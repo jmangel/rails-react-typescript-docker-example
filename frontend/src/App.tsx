@@ -300,11 +300,10 @@ const App: React.FC = () => {
         const newSong: Song = playlist.songs[0];
         if (newSong) {
           setSong(newSong);
-          console.warn(rawToMeasures(newSong.music.raw));
-          console.warn(rawToSong(newSong.music.raw));
-          let newChordRows = newSong.music.measures.flatMap((measure) => {
-            return measure.map((chord) => {
-              const parsedChordString = parseChordString(chord);
+          const parsedSongCustom = rawToSong(newSong.music.raw);
+          let newChordRows = parsedSongCustom.measures.flatMap(({ chords }) => {
+            return chords.map(({ chordString }) => {
+              const parsedChordString = chordString ? parseChordString(chordString) : ['N.C', '', ''];
 
               return {
                 chordNote: parsedChordString[0],
