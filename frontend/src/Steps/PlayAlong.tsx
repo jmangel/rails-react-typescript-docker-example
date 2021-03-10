@@ -1,6 +1,6 @@
 import React from 'react';
 import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
-import { Col, Row } from "reactstrap";
+import { Col, Modal, ModalBody, Row } from "reactstrap";
 import { NamedScale } from '../ChordMapper';
 import ChordRow, { ChordRowObject, scalesForChordRowObject } from '../ChordRow';
 import scaleToHexColor, { MonochromaticPossibleRootScale } from '../ScaleColorer';
@@ -10,11 +10,17 @@ const PlayAlong: React.FC<{
   measures: number[],
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
   measurePlaybackIndex: number,
+  metronomeCountIn: number,
+  isPlaying: boolean,
+  pause: () => void,
 }> = ({
   chordRowObjects,
   measures,
   monochromaticSchemes,
   measurePlaybackIndex,
+  metronomeCountIn,
+  isPlaying,
+  pause,
 }) => {
 let copiedChordRows = chordRowObjects.slice();
   return (
@@ -31,6 +37,21 @@ let copiedChordRows = chordRowObjects.slice();
           return (
             <Col xs={3}>
               <Row className="px-1">
+                <Modal
+                  toggle={() => pause()}
+                  isOpen={isPlaying && metronomeCountIn > 0}
+                  fade={false}
+                  centered
+                  backdropClassName="play-along--count-in-modal--backdrop"
+                  contentClassName="play-along--count-in-modal--content"
+                >
+                  <ModalBody
+                    className="d-flex justify-content-center"
+                    style={{ fontSize: '19em' }}
+                  >
+                      {metronomeCountIn}
+                  </ModalBody>
+                </Modal>
                 {measureChords.map((chordRowObject: ChordRowObject) => {
                   const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot } = chordRowObject;
                   const scales = scalesForChordRowObject(chordRowObject);

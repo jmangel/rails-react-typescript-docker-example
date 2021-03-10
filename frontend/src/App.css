@@ -124,3 +124,12 @@ hr {
   -webkit-font-smoothing: subpixel-antialiased;
   fill: white;
 }
+
+
+.play-along--count-in-modal--backdrop {
+  background-color: rgba(0, 0, 0 , 0.1)!important;
+}
+
+.play-along--count-in-modal--content {
+  background-color: transparent;
+}

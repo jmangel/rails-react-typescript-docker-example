@@ -186,19 +186,29 @@ const App: React.FC = () => {
   const [metronomeInterval, setMetronomeInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [metronomeBeatCount, setMetronomeBeatCount] = useState(0);
 
+  const [metronomeCountIn, setMetronomeCountIn] = useState(0);
+
   const [playHighClick] = useSound(HighClickFile);
   const [playLowClick] = useSound(LowClickFile);
 
   const incrementMetronomeCount = () => {
-    setMetronomeBeatCount((beat: number) => {
-      const newBeat = (beat + 1) % (beatsPerMeasure * measures.length);
-      (newBeat % beatsPerMeasure === 0) ? playHighClick() : playLowClick();
-      return newBeat;
+    setMetronomeCountIn((oldCountIn: number) => {
+      if (oldCountIn > 1) {
+        return (oldCountIn - 1);
+      } else {
+        setMetronomeBeatCount((beat: number) => {
+          const newBeat = (beat + 1) % (beatsPerMeasure * measures.length);
+          (newBeat % beatsPerMeasure === 0) ? playHighClick() : playLowClick();
+          return newBeat;
+        });
+        return 0;
+      }
     })
   }
 
   const startPlayback = () => {
     setIsPlaying(true);
+    setMetronomeCountIn(3);
     const newInterval = setInterval(incrementMetronomeCount, (60 / bpm) * 1000);
       setMetronomeInterval(newInterval);
     if (metronomeBeatCount === 0) playHighClick(); //hacky, should remove this when we add a count in
@@ -387,6 +397,9 @@ const App: React.FC = () => {
             measures={measures}
             monochromaticSchemes={monochromaticSchemes}
             measurePlaybackIndex={Math.floor(metronomeBeatCount / beatsPerMeasure)}
+            metronomeCountIn={metronomeCountIn}
+            isPlaying={isPlaying}
+            pause={() => pausePlayback()}
           />
         );
       default:
