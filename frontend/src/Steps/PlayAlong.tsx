@@ -28,21 +28,25 @@ let copiedChordRows = chordRowObjects.slice();
       className="d-flex flex-wrap flex-grow-1 justify-content-center"
       style={{minWidth: '100%'}} // unclear why this is needed Play-Along step on desktop, it's a lazy hack
     >
-      <Modal
-        toggle={() => pause()}
-        isOpen={isPlaying && metronomeCountIn > 0}
-        fade={false}
-        centered
-        backdropClassName="play-along--count-in-modal--backdrop"
-        contentClassName="play-along--count-in-modal--content"
-      >
-        <ModalBody
-          className="d-flex justify-content-center"
-          style={{ fontSize: '19em' }}
-        >
-            {metronomeCountIn}
-        </ModalBody>
-      </Modal>
+      {
+        (isPlaying && metronomeCountIn > 0) && (
+          <Modal
+            toggle={() => pause()}
+            isOpen
+            fade={false}
+            centered
+            backdropClassName="play-along--count-in-modal--backdrop"
+            contentClassName="play-along--count-in-modal--content"
+          >
+            <ModalBody
+              className="d-flex justify-content-center border-0"
+              style={{ fontSize: '19em' }}
+            >
+                {metronomeCountIn}
+            </ModalBody>
+          </Modal>
+        )
+      }
 
       {
         measures.map((chordCount: number, index: number) => {
