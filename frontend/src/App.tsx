@@ -302,8 +302,10 @@ const App: React.FC = () => {
           setSong(newSong);
           const parsedSongCustom = rawToSong(newSong.music.raw);
           let newChordRows = parsedSongCustom.measures.flatMap(({ chords }) => {
-            return chords.map(({ chordString }) => {
+            return chords.map(({ chordString, beats }) => {
               const parsedChordString = chordString ? parseChordString(chordString) : ['N.C', '', ''];
+
+              const result = beats ? { beats } : {}
 
               return {
                 chordNote: parsedChordString[0],
@@ -312,6 +314,7 @@ const App: React.FC = () => {
                 selectedScale: '',
                 selectedScaleRoot: '',
                 availableTensions: '',
+                ...result
               }
 
             });

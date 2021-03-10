@@ -53,7 +53,7 @@ let copiedChordRows = chordRowObjects.slice();
                   </ModalBody>
                 </Modal>
                 {measureChords.map((chordRowObject: ChordRowObject) => {
-                  const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot } = chordRowObject;
+                  const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot, beats } = chordRowObject;
                   const scales = scalesForChordRowObject(chordRowObject);
 
                   const selectedNamedScale = scales.find((namedScale: NamedScale) => namedScale.scaleName === selectedScale && (
@@ -74,8 +74,10 @@ let copiedChordRows = chordRowObjects.slice();
                     backgroundColor: 'rgb(255,255,255,0.2)'
                   }
 
+                  const colProps = beats ? { xs: beats*3 } : {} // TODO: make sure `xs: beats*3` is made flexible to other time signatures
+
                   return (
-                    <Col className={className} style={{...style, ...activeMeasureStyle}}>
+                    <Col className={className} style={{...style, ...activeMeasureStyle}} {...colProps}>
                       {chordNote}
                       <br />
                       {chordQuality}
