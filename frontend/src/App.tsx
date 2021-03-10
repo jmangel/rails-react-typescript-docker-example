@@ -14,6 +14,7 @@ import {
 } from 'use-query-params';
 // import { SketchPicker } from 'react-color';
 import { MdCheck, MdHome, MdKeyboardArrowLeft } from 'react-icons/md';
+import useSound from 'use-sound';
 
 const iRealReader = require('ireal-reader');
 
@@ -31,6 +32,9 @@ import { MonochromaticPossibleRootScale, regenerateMonochromaticSchemes } from '
 import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
 import PlayAlong from './Steps/PlayAlong';
 import PlaybackControls from './PlayAlong/PlaybackControls';
+
+const HighClickFile = '../static/AudioClips/high_click.mp3';
+const LowClickFile = '../static/AudioClips/low_click.mp3';
 
 const defaultBpm = 100;
 
@@ -182,14 +186,22 @@ const App: React.FC = () => {
   const [metronomeInterval, setMetronomeInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [metronomeBeatCount, setMetronomeBeatCount] = useState(0);
 
+  const [playHighClick] = useSound(HighClickFile);
+  const [playLowClick] = useSound(LowClickFile);
+
   const incrementMetronomeCount = () => {
-    setMetronomeBeatCount((beat: number) => (beat + 1) % (beatsPerMeasure * measures.length))
+    setMetronomeBeatCount((beat: number) => {
+      const newBeat = (beat + 1) % (beatsPerMeasure * measures.length);
+      (newBeat % beatsPerMeasure === 0) ? playHighClick() : playLowClick();
+      return newBeat;
+    })
   }
 
   const startPlayback = () => {
     setIsPlaying(true);
     const newInterval = setInterval(incrementMetronomeCount, (60 / bpm) * 1000);
       setMetronomeInterval(newInterval);
+    if (metronomeBeatCount === 0) playHighClick(); //hacky, should remove this when we add a count in
   }
   const pausePlayback = () => {
     setIsPlaying(false);
