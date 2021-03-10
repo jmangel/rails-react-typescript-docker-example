@@ -51,7 +51,7 @@ let copiedChordRows = chordRowObjects.slice();
 
           return (
             <Col xs={3}>
-              <Row className="px-1">
+              <Row className="p-1 h-100">
                 {measureChords.map((chordRowObject: ChordRowObject) => {
                   const { chordNote, chordQuality, bassNote, selectedScale, selectedScaleRoot, beats } = chordRowObject;
                   const scales = scalesForChordRowObject(chordRowObject);
@@ -65,7 +65,9 @@ let copiedChordRows = chordRowObjects.slice();
                     borderColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
                   }
 
-                  const className = `px-0 border-left border-right border-bottom ${!borderColor ? 'border-top' : ''}`;
+                  const alignmentClassNames = 'd-flex align-items-center justify-content-center'
+
+                  const className = `px-0 border-left border-right border-bottom ${alignmentClassNames} ${!borderColor ? 'border-top' : ''}`;
                   const style = borderColor ? { borderTop: `3px solid ${borderColor}` } : {};
 
                   const activeMeasureStyle = measurePlaybackIndex === index ? {
