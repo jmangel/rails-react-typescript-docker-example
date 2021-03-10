@@ -8,7 +8,7 @@ import {
   Container,
   Row,
 } from 'reactstrap';
-import ChordRow, { ChordRowObject } from './ChordRow'
+import ChordRow, { ChordRowObject, ChordRowObjectRequiredKeys } from './ChordRow'
 import { MonochromaticPossibleRootScale } from './ScaleColorer';
 
 const ChordCarousel: React.FC<{
@@ -16,7 +16,7 @@ const ChordCarousel: React.FC<{
   chordRowObjects: Array<ChordRowObject>,
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
   setExpandedRowIndex: (value: number) => void,
-  onRowChange: (rowIndex: number, newValue: string, key: keyof ChordRowObject) => void,
+  onRowChange: (rowIndex: number, newValue: string, key: ChordRowObjectRequiredKeys) => void,
   toggle: (rowIndex: number) => void,
 }> = ({
   expandedRowIndex,
@@ -55,7 +55,7 @@ const ChordCarousel: React.FC<{
         <Container className="w-75 px-5 pb-5">
           <ChordRow
             chordRowObject={chordRowObject}
-            onRowChange={(newValue: string, key: keyof ChordRowObject) => onRowChange(expandedRowIndex, newValue, key)}
+            onRowChange={(newValue: string, key: ChordRowObjectRequiredKeys) => onRowChange(expandedRowIndex, newValue, key)}
             monochromaticSchemes={monochromaticSchemes}
           />
           <Button className="mt-2" color="info" onClick={() => setExpandedRowIndex(-1)}>Close</Button>

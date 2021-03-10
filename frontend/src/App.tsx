@@ -21,7 +21,7 @@ const iRealReader = require('ireal-reader');
 import './App.css';
 import ChordCarousel from './ChordCarousel';
 import parseChordString from './ChordParser';
-import { ChordRowObject, scalesForChordRowObject } from './ChordRow'
+import { ChordRowObject, ChordRowObjectRequiredKeys, scalesForChordRowObject } from './ChordRow'
 // import ColorWheel from './ColorWheel';
 import Steps, { Step } from './Steps'
 import New from './Steps/New';
@@ -268,7 +268,7 @@ const App: React.FC = () => {
     setMonochromaticSchemes(regenerateMonochromaticSchemes(redRgbValue, greenRgbValue, blueRgbValue));
   }, rgbValues);
 
-  const handleRowChange = (rowIndex: number, newValue: string, key: keyof ChordRowObject): void => {
+  const handleRowChange = (rowIndex: number, newValue: string, key: ChordRowObjectRequiredKeys): void => {
     let newChordRows = chordRowObjects.slice()
     newChordRows[rowIndex][key] = newValue
     setChordRowObjects(newChordRows)

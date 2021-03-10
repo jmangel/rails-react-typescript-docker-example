@@ -1,5 +1,5 @@
 import { MODES, PossibleRootScale, POSSIBLE_ROOT_SCALE_MAPPINGS } from "./ChordMapper";
-import { ChordRowObject, QUERY_STRING_KEY_MAPPINGS } from "./ChordRow";
+import { ChordRowObject, ChordRowObjectRequiredKeys, QUERY_STRING_KEY_MAPPINGS } from "./ChordRow";
 
 const CSV_DELIMITER = '.';
 const CSV_DELIMITER_REGEX = new RegExp(`[${CSV_DELIMITER}|]`, 'g');
@@ -10,7 +10,7 @@ export const parseStringifiedChordRowObject = (stringifiedObject: string): Chord
   let parsedObject = JSON.parse(stringifiedObject)
 
   Object.keys(QUERY_STRING_KEY_MAPPINGS).forEach((fullKeyName) => {
-    const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject];
+    const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as ChordRowObjectRequiredKeys];
     parsedObject[fullKeyName] = parsedObject[shortKey] || '';
 
     if (shortKey === 'ss') {
@@ -67,7 +67,7 @@ export const parseCsvifiedChordRowObjects = (csvifiedObject: string): ChordRowOb
 
     headers.forEach((header, i) => {
       const stringifiedValue = line.split(CSV_DELIMITER_REGEX)[i];
-      chordRowObject[header as keyof ChordRowObject] = stringifiedValue;
+      chordRowObject[header as ChordRowObjectRequiredKeys] = stringifiedValue;
 
       if (header === 'selectedScale') {
         // 'selectedScale' is the only column we have to process
@@ -92,8 +92,8 @@ export const parseCsvifiedChordRowObjects = (csvifiedObject: string): ChordRowOb
 const simplifyChordRowObject = (chordRowObject: ChordRowObject): { [key: string]: string; } => {
   const simplifiedChordRowObject:  { [key: string]: string; } = {};
 
-  (Object.keys(QUERY_STRING_KEY_MAPPINGS) as [keyof ChordRowObject]).forEach((fullKeyName) => {
-    const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as keyof ChordRowObject];
+  (Object.keys(QUERY_STRING_KEY_MAPPINGS) as [ChordRowObjectRequiredKeys]).forEach((fullKeyName) => {
+    const shortKey = QUERY_STRING_KEY_MAPPINGS[fullKeyName as ChordRowObjectRequiredKeys];
     simplifiedChordRowObject[shortKey] = chordRowObject[fullKeyName] || '';
   })
 

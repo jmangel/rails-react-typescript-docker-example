@@ -11,9 +11,14 @@ export interface ChordRowObject {
   selectedScale: string;
   selectedScaleRoot: string;
   availableTensions: string;
+  beats?: number;
 }
 
-export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string } = {
+type RequiredKeys<T> = { [k in keyof T]-?: undefined extends T[k] ? never : k }[keyof T];
+
+export type ChordRowObjectRequiredKeys = RequiredKeys<ChordRowObject>;
+
+export const QUERY_STRING_KEY_MAPPINGS: { [key in ChordRowObjectRequiredKeys]: string } = { // TODO: change back to keyof ChordRowObject
   'chordNote': 'cn',
   'chordQuality': 'cq',
   'bassNote': 'bn',
@@ -29,7 +34,7 @@ export const scalesForChordRowObject = (chordRowObject: ChordRowObject): Array<N
 
 const ChordRow: React.FC<{
   chordRowObject: ChordRowObject,
-  onRowChange: (newValue: string, key: keyof ChordRowObject) => void,
+  onRowChange: (newValue: string, key: ChordRowObjectRequiredKeys) => void,
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
   fillWithKey: (keyNote: string, keyScale: string) => void,
 }> = ({

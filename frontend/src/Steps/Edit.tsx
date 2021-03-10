@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
 import { Alert, Row } from "reactstrap";
-import ChordRow, { ChordRowObject } from '../ChordRow';
+import ChordRow, { ChordRowObject, ChordRowObjectRequiredKeys } from '../ChordRow';
 import { MonochromaticPossibleRootScale } from '../ScaleColorer';
 
 const Edit: React.FC<{
   chordRowObjects: ChordRowObject[],
-  handleRowChange: (rowIndex: number, newValue: string, key: keyof ChordRowObject) => void,
+  handleRowChange: (rowIndex: number, newValue: string, key: ChordRowObjectRequiredKeys) => void,
   addRows: (numNewRows: number) => void,
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
   navigateToNextStep: () => void,
@@ -32,7 +32,7 @@ const Edit: React.FC<{
       </Alert>
       {chordRowObjects.map((chordRowObject, rowIndex) => <ChordRow
         chordRowObject={chordRowObject}
-        onRowChange={(newValue: string, key: keyof ChordRowObject) => handleRowChange(rowIndex, newValue, key)}
+        onRowChange={(newValue: string, key: ChordRowObjectRequiredKeys) => handleRowChange(rowIndex, newValue, key)}
         monochromaticSchemes={monochromaticSchemes}
         fillWithKey={(keyNote: string, keyScale: string) => { fillWithKey(keyNote, keyScale); setAlertVisible(true); setTimeout(onDismiss, 3000); } }
       />)}
