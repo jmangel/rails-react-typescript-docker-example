@@ -71,10 +71,7 @@ let copiedChordRows = chordRowObjects.slice();
                       borderColor = scaleToHexColor(selectedNamedScale.rootScale, selectedNamedScale.rootScaleNote, monochromaticSchemes);
                     }
 
-                    const alignmentClassNames = 'd-flex align-items-center justify-content-center'
-
-                    const className = `px-0 border-left border-right border-bottom ${alignmentClassNames} ${!borderColor ? 'border-top' : ''}`;
-                    const style = borderColor ? { borderTop: `3px solid ${borderColor}` } : {};
+                    const style = borderColor ? { borderTop: `3px solid ${borderColor}` } : { borderTop: `3px solid transparent`};
 
                     const activeMeasureStyle = measurePlaybackIndex === index ? {
                       backgroundColor: 'white', color: 'black'
@@ -85,12 +82,20 @@ let copiedChordRows = chordRowObjects.slice();
                     const colProps = beats ? { xs: beats*3 } : {} // TODO: make sure `xs: beats*3` is made flexible to other time signatures
 
                     return (
-                      <Col className={className} style={{...style, ...activeMeasureStyle}} {...colProps}>
-                        {chordNote}
-                        <br />
-                        {chordQuality}
-                        <br />
-                        {bassNote}
+                      <Col className="px-0 play-along--chord" style={{...style, ...activeMeasureStyle }} {...colProps}>
+                        <Row className="d-flex flex-row-reverse mr-1" style={{ fontSize: '1em', lineHeight: 1 }}>
+                          <div>
+                            {chordQuality}
+                          </div>
+                        </Row>
+                        <Row className="d-flex justify-content-center py-0" style={{ fontSize: '1.5em', lineHeight: 1 }}>
+                          {/* <div> */}
+                            {chordNote}
+                          {/* </div> */}
+                        </Row>
+                        <Row className="d-flex flex-row-reverse mr-1" style={{ fontSize: '1em', lineHeight: 1 }}>
+                          {bassNote || (<br />) }
+                        </Row>
                       </Col>
                     );
                   })}

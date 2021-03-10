@@ -134,3 +134,7 @@ hr {
   background-color: transparent;
   border: 0;
 }
+
+.play-along--chord + .play-along--chord {
+  border-left: 1px solid white;
+}
