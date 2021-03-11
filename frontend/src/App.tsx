@@ -258,6 +258,7 @@ const App: React.FC = () => {
   const incrementMetronomeCount = () => {
     setMetronomeCountIn((oldCountIn: number) => {
       if (oldCountIn > 1) {
+        playLowClick();
         return (oldCountIn - 1);
       } else {
         setMetronomeBeatCount((beat: number) => {
@@ -274,7 +275,8 @@ const App: React.FC = () => {
     setIsPlaying(true);
     setMetronomeCountIn(4);
     const newInterval = setInterval(incrementMetronomeCount, (60 / bpm) * 1000);
-      setMetronomeInterval(newInterval);
+    setMetronomeInterval(newInterval);
+    playLowClick();
   }
   const pausePlayback = () => {
     setIsPlaying(false);
