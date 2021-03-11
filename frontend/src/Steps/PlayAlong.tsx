@@ -57,6 +57,9 @@ let copiedChordRows = chordRowObjects.slice();
             const measureChords = copiedChordRows.slice(0, chordCount);
             copiedChordRows = copiedChordRows.slice(chordCount);
 
+            let uniformColumnSize: number | null;
+            if (measureChords.every((measureChord: ChordRowObject) => measureChord.beats === measureChords[0].beats)) uniformColumnSize = 12 / measureChords.length;
+
             return (
               <Col xs={3}>
                 <Row className="p-1 h-100">
@@ -82,8 +85,10 @@ let copiedChordRows = chordRowObjects.slice();
                     }
 
                     const parsedBeats = beats && parseInt(beats);
-                    // TODO: this doesn't work as expected because a 12-beat measure might still only have 4 chords in iReal Pro
-                    const colProps = parsedBeats ? { xs: parsedBeats * (12 / beatsPerMeasure) } : {}
+                    // use uniformColumnSize if present, otherwise calculate against beatsPerMeasure
+                    // TODO: the expression `(parsedBeats * (12 / beatsPerMeasure))` doesn't work as
+                    // expected because a 12-beat measure might still only have 4 chords in iReal Pro
+                    const colProps = parsedBeats ? { xs: (uniformColumnSize || (parsedBeats * (12 / beatsPerMeasure))) } : {}
 
                     return (
                       <Col className="px-0 play-along--chord" style={{...style, ...activeMeasureStyle }} {...colProps}>
