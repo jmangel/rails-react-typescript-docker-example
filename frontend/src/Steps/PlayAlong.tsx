@@ -51,7 +51,9 @@ let copiedChordRows = chordRowObjects.slice();
         }
 
         {
-          measures.map((chordCount: number, index: number) => {
+          measures.map((memoizedMeasure: number, index: number) => {
+            const chordCount = Math.floor(memoizedMeasure / 100);
+            const timeSignature = memoizedMeasure % 100;
             const measureChords = copiedChordRows.slice(0, chordCount);
             copiedChordRows = copiedChordRows.slice(chordCount);
 

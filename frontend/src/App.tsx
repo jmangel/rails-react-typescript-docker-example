@@ -302,7 +302,7 @@ const App: React.FC = () => {
           setSong(newSong);
           const parsedSongCustom = rawToSong(newSong.music.raw);
           console.warn(parsedSongCustom);
-          let newChordRows = parsedSongCustom.measures.flatMap(({ chords }) => {
+          let newChordRows = parsedSongCustom.measures.flatMap(({ chords }): ChordRowObject[] => {
             return chords.map(({ chordString, beats }) => {
               const parsedChordString = chordString ? parseChordString(chordString) : ['N.C', '', ''];
 
@@ -335,7 +335,7 @@ const App: React.FC = () => {
             if (processedNewChordRows) newChordRows = processedNewChordRows;
           }
 
-          const newMeasures = newSong.music.measures.map((measures) => measures.length);
+          const newMeasures = parsedSongCustom.measures.map(({ chords, timeSignature }) => parseInt(`${chords.length}${timeSignature}`));
 
           clearTransposingKey();
           setMeasures(newMeasures);
