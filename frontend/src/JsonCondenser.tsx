@@ -67,7 +67,7 @@ export const parseCsvifiedChordRowObjects = (csvifiedObject: string): ChordRowOb
 
     headers.forEach((header, i) => {
       const stringifiedValue = line.split(CSV_DELIMITER_REGEX)[i];
-      chordRowObject[header as ChordRowObjectRequiredKeys] = stringifiedValue;
+      chordRowObject[header as keyof ChordRowObject] = stringifiedValue;
 
       if (header === 'selectedScale') {
         // 'selectedScale' is the only column we have to process

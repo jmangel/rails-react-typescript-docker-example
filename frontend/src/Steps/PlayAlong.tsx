@@ -79,7 +79,8 @@ let copiedChordRows = chordRowObjects.slice();
                       backgroundColor: 'rgb(255,255,255,0.2)'
                     }
 
-                    const colProps = beats ? { xs: beats*3 } : {} // TODO: make sure `xs: beats*3` is made flexible to other time signatures
+                    const parsedBeats = beats && parseInt(beats);
+                    const colProps = parsedBeats ? { xs: parsedBeats *3 } : {} // TODO: make sure `xs: beats*3` is made flexible to other time signatures
 
                     return (
                       <Col className="px-0 play-along--chord" style={{...style, ...activeMeasureStyle }} {...colProps}>

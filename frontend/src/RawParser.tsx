@@ -1,6 +1,6 @@
 interface ParsedChord {
   chordString?: string;
-  beats?: number;
+  beats?: string;
   noChord?: boolean;
 }
 interface ParsedMeasure {
@@ -182,7 +182,7 @@ function pushChordInMeasures(match: RegExpMatchArray) {
   } else {
     lastChord = chordString.split('/')[0];
   }
-  measures[measures.length - 1].chords.push({ chordString, beats: duration })
+  measures[measures.length - 1].chords.push({ chordString, beats: duration?.toString() })
 }
 
 function parse(inputString: string) {

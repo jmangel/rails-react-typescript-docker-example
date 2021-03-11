@@ -11,20 +11,21 @@ export interface ChordRowObject {
   selectedScale: string;
   selectedScaleRoot: string;
   availableTensions: string;
-  beats?: number;
+  beats?: string;
 }
 
 type RequiredKeys<T> = { [k in keyof T]-?: undefined extends T[k] ? never : k }[keyof T];
 
 export type ChordRowObjectRequiredKeys = RequiredKeys<ChordRowObject>;
 
-export const QUERY_STRING_KEY_MAPPINGS: { [key in ChordRowObjectRequiredKeys]: string } = { // TODO: change back to keyof ChordRowObject
+export const QUERY_STRING_KEY_MAPPINGS: { [key in keyof ChordRowObject]: string } = { // TODO: change back to keyof ChordRowObject
   'chordNote': 'cn',
   'chordQuality': 'cq',
   'bassNote': 'bn',
   'selectedScale': 'ss',
   'selectedScaleRoot': 'r',
   'availableTensions': 'at',
+  'beats': 'b',
 }
 
 export const scalesForChordRowObject = (chordRowObject: ChordRowObject): Array<NamedScale> => {

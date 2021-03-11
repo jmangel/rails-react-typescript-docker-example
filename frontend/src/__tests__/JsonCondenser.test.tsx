@@ -9,6 +9,7 @@ describe('parseStringifiedChordRowObject', () => {
       'bn': 'myBassNote',
       'ss': 'mySelectedScale',
       'r': 'myRoot',
+      'b': 'my beats',
     }
 
     const expectedChordRowObject: ChordRowObject = {
@@ -18,6 +19,7 @@ describe('parseStringifiedChordRowObject', () => {
       selectedScale: 'mySelectedScale',
       selectedScaleRoot: 'myRoot',
       availableTensions: '',
+      beats: 'my beats',
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
@@ -30,6 +32,7 @@ describe('parseStringifiedChordRowObject', () => {
       'bn': 'myBassNote',
       'ss': 'hm5',
       'r': 'myRoot',
+      'b': 'my beats',
     }
 
     const expectedChordRowObject: ChordRowObject = {
@@ -39,6 +42,7 @@ describe('parseStringifiedChordRowObject', () => {
       selectedScale: 'phrygian dominant',
       selectedScaleRoot: 'myRoot',
       availableTensions: '',
+      beats: 'my beats',
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
@@ -52,6 +56,7 @@ describe('parseStringifiedChordRowObject', () => {
       'ss': 'my ss',
       'r': 'my r',
       'at': 'my at',
+      'b': 'my b',
     }
 
     const expectedChordRowObject: ChordRowObject = {
@@ -61,6 +66,7 @@ describe('parseStringifiedChordRowObject', () => {
       selectedScale: 'my ss',
       selectedScaleRoot: 'my r',
       availableTensions: 'my at',
+      beats: 'my b',
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
@@ -74,6 +80,7 @@ describe('parseStringifiedChordRowObject', () => {
       'ss': 'my selectedScale',
       'r': 'my selectedScaleRoot',
       'at': 'my availableTensions',
+      'b': 'my beats',
     }
 
     const expectedChordRowObject: ChordRowObject = {
@@ -83,6 +90,7 @@ describe('parseStringifiedChordRowObject', () => {
       selectedScale: 'my selectedScale',
       selectedScaleRoot: 'my selectedScaleRoot',
       availableTensions: 'my availableTensions',
+      beats: 'my beats',
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
@@ -96,6 +104,7 @@ describe('parseStringifiedChordRowObject', () => {
       selectedScale: '',
       selectedScaleRoot: '',
       availableTensions: '',
+      beats: '',
     }
 
     expect(parseStringifiedChordRowObject(JSON.stringify({}))).toEqual(expectedChordRowObject);
@@ -109,7 +118,8 @@ describe('parseStringifiedChordRowObject', () => {
         'bn': 'myBassNote',
         'ss': 'mySelectedScale',
         'ssr': 'myRoot',
-        'at': 'myAvailableTensions'
+        'at': 'myAvailableTensions',
+        'b': 'my beats',
       }
 
       const expectedChordRowObject: ChordRowObject = {
@@ -118,7 +128,8 @@ describe('parseStringifiedChordRowObject', () => {
         bassNote: 'myBassNote',
         selectedScale: 'mySelectedScale',
         selectedScaleRoot: 'myRoot',
-        availableTensions: 'myAvailableTensions'
+        availableTensions: 'myAvailableTensions',
+        beats: 'my beats',
       }
 
       expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
@@ -133,6 +144,7 @@ describe('parseStringifiedChordRowObject', () => {
         'at': 'myAvailableTensions',
         'r': 'newRoot',
         'ssr': 'oldRoot',
+        'b': 'myBeats',
       }
 
       const expectedChordRowObject: ChordRowObject = {
@@ -142,6 +154,7 @@ describe('parseStringifiedChordRowObject', () => {
         selectedScale: 'mySelectedScale',
         selectedScaleRoot: 'newRoot',
         availableTensions: 'myAvailableTensions',
+        beats: 'myBeats',
       }
 
       expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
@@ -154,6 +167,7 @@ describe('parseStringifiedChordRowObject', () => {
         'bn': 'myBassNote',
         'ss': 'phrygian dominant',
         'r': 'myRoot',
+        'b': 'myBeats'
       }
 
       const expectedChordRowObject: ChordRowObject = {
@@ -163,10 +177,33 @@ describe('parseStringifiedChordRowObject', () => {
         selectedScale: 'phrygian dominant',
         selectedScaleRoot: 'myRoot',
         availableTensions: '',
+        beats: 'myBeats'
       }
 
       expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
     });
+
+    it('handles empty beats', () => {
+      const objectToStringify = {
+        'cn': 'myChordNote',
+        'cq': 'myQuality',
+        'bn': 'myBassNote',
+        'ss': 'mySelectedScale',
+        'r': 'myRoot',
+      }
+
+      const expectedChordRowObject: ChordRowObject = {
+        chordNote: 'myChordNote',
+        chordQuality: 'myQuality',
+        bassNote: 'myBassNote',
+        selectedScale: 'mySelectedScale',
+        selectedScaleRoot: 'myRoot',
+        availableTensions: '',
+        beats: '',
+      }
+
+      expect(parseStringifiedChordRowObject(JSON.stringify(objectToStringify))).toEqual(expectedChordRowObject);
+    })
   })
 })
 
@@ -179,9 +216,10 @@ describe('csvifyChordRowObject', () => {
       selectedScale: 'phrygian dominant',
       selectedScaleRoot: 'myRoot',
       availableTensions: '',
+      beats: 'myBeats'
     }
 
-    const expectedCsv = 'myChordNote.myQuality.myBassNote.hm5.myRoot.'
+    const expectedCsv = 'myChordNote.myQuality.myBassNote.hm5.myRoot..myBeats'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -194,9 +232,10 @@ describe('csvifyChordRowObject', () => {
       chordNote: 'myChordNote',
       selectedScaleRoot: 'myRoot',
       bassNote: 'myBassNote',
+      beats: 'myBeats'
     }
 
-    const expectedCsv = 'myChordNote.myQuality.myBassNote.hm5.myRoot.'
+    const expectedCsv = 'myChordNote.myQuality.myBassNote.hm5.myRoot..myBeats'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -209,9 +248,10 @@ describe('csvifyChordRowObject', () => {
       selectedScale: 'my ss',
       selectedScaleRoot: 'my r',
       availableTensions: 'my at',
+      beats: 'my b',
     }
 
-    const expectedCsv = 'my cn.my cq.my bn.my ss.my r.my at'
+    const expectedCsv = 'my cn.my cq.my bn.my ss.my r.my at.my b'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -224,9 +264,10 @@ describe('csvifyChordRowObject', () => {
       selectedScale: 'my selectedScale',
       selectedScaleRoot: 'my selectedScaleRoot',
       availableTensions: 'my availableTensions',
+      beats: 'my beats',
     }
 
-    const expectedCsv = 'my chordNote.my chordQuality.my bassNote.my selectedScale.my selectedScaleRoot.my availableTensions'
+    const expectedCsv = 'my chordNote.my chordQuality.my bassNote.my selectedScale.my selectedScaleRoot.my availableTensions.my beats'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -239,9 +280,10 @@ describe('csvifyChordRowObject', () => {
       selectedScale: '',
       selectedScaleRoot: '',
       availableTensions: '',
+      beats: '',
     }
 
-    const expectedCsv = '.....'
+    const expectedCsv = '......'
 
     expect(csvifyChordRowObject(chordRowObject)).toEqual(expectedCsv);
   })
@@ -257,6 +299,7 @@ describe('csvifyChordRowObjects', () => {
         selectedScale: 'phrygian dominant',
         selectedScaleRoot: 'myRoot',
         availableTensions: '',
+        beats: 'my beats',
       },
       {
         chordNote: 'my cn',
@@ -265,6 +308,7 @@ describe('csvifyChordRowObjects', () => {
         selectedScale: 'my ss',
         selectedScaleRoot: 'my r',
         availableTensions: 'my at',
+        beats: 'my beats',
       },
       {
         chordNote: 'my chordNote',
@@ -273,6 +317,7 @@ describe('csvifyChordRowObjects', () => {
         selectedScale: 'my selectedScale',
         selectedScaleRoot: 'my selectedScaleRoot',
         availableTensions: 'my availableTensions',
+        beats: 'my beats',
       },
       {
         chordNote: '',
@@ -281,13 +326,14 @@ describe('csvifyChordRowObjects', () => {
         selectedScale: '',
         selectedScaleRoot: '',
         availableTensions: '',
+        beats: '',
       },
     ]
 
-    let expectedCsv = `myChordNote.myQuality.myBassNote.hm5.myRoot.
-    my cn.my cq.my bn.my ss.my r.my at
-    my chordNote.my chordQuality.my bassNote.my selectedScale.my selectedScaleRoot.my availableTensions
-    .....`.replace(/\n  +/g, '\n');
+    let expectedCsv = `myChordNote.myQuality.myBassNote.hm5.myRoot..my beats
+    my cn.my cq.my bn.my ss.my r.my at.my beats
+    my chordNote.my chordQuality.my bassNote.my selectedScale.my selectedScaleRoot.my availableTensions.my beats
+    ......`.replace(/\n  +/g, '\n');
 
     expect(csvifyChordRowObjects(chordRowObjects)).toEqual(expectedCsv);
   })
@@ -303,6 +349,7 @@ describe('parseCsvifiedChordRowObjects', () => {
         selectedScale: 'phrygian dominant',
         selectedScaleRoot: 'myRoot',
         availableTensions: '',
+        beats: 'my beats'
       },
       {
         chordNote: 'my cn',
@@ -311,6 +358,7 @@ describe('parseCsvifiedChordRowObjects', () => {
         selectedScale: 'my ss',
         selectedScaleRoot: 'my r',
         availableTensions: 'my at',
+        beats: 'my beats'
       },
       {
         chordNote: 'my chordNote',
@@ -319,6 +367,7 @@ describe('parseCsvifiedChordRowObjects', () => {
         selectedScale: 'my selectedScale',
         selectedScaleRoot: 'my selectedScaleRoot',
         availableTensions: 'my availableTensions',
+        beats: 'my beats'
       },
       {
         chordNote: '',
@@ -327,18 +376,67 @@ describe('parseCsvifiedChordRowObjects', () => {
         selectedScale: '',
         selectedScaleRoot: '',
         availableTensions: '',
+        beats: ''
       },
     ]
 
-    let csv = `myChordNote.myQuality.myBassNote.hm5.myRoot.
-    my cn.my cq.my bn.my ss.my r.my at
-    my chordNote.my chordQuality.my bassNote.my selectedScale.my selectedScaleRoot.my availableTensions
-    .....`.replace(/\n  +/g, '\n');
+    let csv = `myChordNote.myQuality.myBassNote.hm5.myRoot..my beats
+    my cn.my cq.my bn.my ss.my r.my at.my beats
+    my chordNote.my chordQuality.my bassNote.my selectedScale.my selectedScaleRoot.my availableTensions.my beats
+    ......`.replace(/\n  +/g, '\n');
 
     expect(parseCsvifiedChordRowObjects(csv)).toEqual(expectedChordRowObjects);
   })
 
   it('backwards compatible with | delimiter', () => {
+    const expectedChordRowObjects: ChordRowObject[] = [
+      {
+        chordNote: 'myChordNote',
+        chordQuality: 'myQuality',
+        bassNote: 'myBassNote',
+        selectedScale: 'phrygian dominant',
+        selectedScaleRoot: 'myRoot',
+        availableTensions: '',
+        beats: 'my beats',
+      },
+      {
+        chordNote: 'my cn',
+        chordQuality: 'my cq',
+        bassNote: 'my bn',
+        selectedScale: 'my ss',
+        selectedScaleRoot: 'my r',
+        availableTensions: 'my at',
+        beats: 'my beats',
+      },
+      {
+        chordNote: 'my chordNote',
+        chordQuality: 'my chordQuality',
+        bassNote: 'my bassNote',
+        selectedScale: 'my selectedScale',
+        selectedScaleRoot: 'my selectedScaleRoot',
+        availableTensions: 'my availableTensions',
+        beats: 'my beats',
+      },
+      {
+        chordNote: '',
+        chordQuality: '',
+        bassNote: '',
+        selectedScale: '',
+        selectedScaleRoot: '',
+        availableTensions: '',
+        beats: '',
+      },
+    ]
+
+    let csv = `myChordNote|myQuality|myBassNote|hm5|myRoot||my beats
+    my cn|my cq|my bn|my ss|my r|my at|my beats
+    my chordNote|my chordQuality|my bassNote|my selectedScale|my selectedScaleRoot|my availableTensions|my beats
+    ||||||`.replace(/\n  +/g, '\n');
+
+    expect(parseCsvifiedChordRowObjects(csv)).toEqual(expectedChordRowObjects);
+  })
+
+  it('backwards compatible with missing beats', () => {
     const expectedChordRowObjects: ChordRowObject[] = [
       {
         chordNote: 'myChordNote',
