@@ -16,7 +16,7 @@ import {
 import { MdCheck, MdHome, MdKeyboardArrowLeft } from 'react-icons/md';
 import useSound from 'use-sound';
 
-const iRealReader = require('ireal-reader');
+// const iRealReader = require('ireal-reader');
 
 import './App.css';
 import ChordCarousel from './ChordCarousel';
@@ -32,8 +32,7 @@ import { MonochromaticPossibleRootScale, regenerateMonochromaticSchemes } from '
 import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
 import PlayAlong from './Steps/PlayAlong';
 import PlaybackControls from './PlayAlong/PlaybackControls';
-import { rawToMeasures } from './RawIRealParser';
-import rawToSong, { deobfuscate, makeSong, myRealReader } from './RawParser';
+import { myRealReader } from './RawParser';
 
 const HighClickFile = '../static/AudioClips/high_click.mp3';
 const LowClickFile = '../static/AudioClips/low_click.mp3';
@@ -356,18 +355,21 @@ const App: React.FC = () => {
         if (!evt.target?.result || typeof evt.target?.result !== 'string') {
           return alert('error reading file: no result')
         }
-        const playlist = iRealReader(evt.target?.result);
-        const myParsedSong = myRealReader(evt.target?.result);
-        console.warn(myParsedSong);
-
-        console.warn(playlist.songs);
-        const newSong: Song = playlist.songs[0];
-        if (newSong) {
+        // const playlist = iRealReader(evt.target?.result);
+        const myParsedPlaylist = myRealReader(evt.target?.result);
+        const myParsedSong = myParsedPlaylist.songs && myParsedPlaylist.songs[0];
+        if (myParsedSong) {
+          let newSong: Song = {
+            ...myParsedSong,
+            music: {
+              ...myParsedSong.music,
+              measures: myParsedSong.music.measures.map(measure => measure.chords.map((chord) => chord.chordString!)),
+            },
+          };
           setSong(newSong);
-          const parsedSongCustom = rawToSong(newSong.music.raw);
-          console.warn(parsedSongCustom);
+          console.warn(newSong);
           console.warn(myParsedSong);
-          let newChordRows = parsedSongCustom.measures.flatMap(({ chords }): ChordRowObject[] => {
+          let newChordRows = myParsedSong.music.measures.flatMap(({ chords }): ChordRowObject[] => {
             return chords.map(({ chordString, beats }) => {
               const parsedChordString = chordString ? parseChordString(chordString) : ['N.C', '', ''];
 
@@ -400,7 +402,7 @@ const App: React.FC = () => {
             if (processedNewChordRows) newChordRows = processedNewChordRows;
           }
 
-          const newMeasures = parsedSongCustom.measures.map(({ chords, timeSignature }) => parseInt(`${chords.length}${timeSignature}`));
+          const newMeasures = myParsedSong.music.measures.map(({ chords, timeSignature }) => parseInt(`${chords.length}${timeSignature}`));
 
           clearTransposingKey();
           setMeasures(newMeasures);

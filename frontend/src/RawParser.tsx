@@ -292,7 +292,15 @@ const parseMusic = (data: string) => {
 
 export const makeSong = (data: string) => {
   const parts = data.split(/=+/).filter(x => x != ""); //split on one or more equal signs, remove the blanks
-  let title, composer, style, key, transpose, music, compStyle, bpm, repeats = null;
+  let title: string = '';
+  let composer: string = '';
+  let style: string = '';
+  let key: string = '';
+  let transpose: string = '';
+  let music: string = '';
+  let compStyle: string = '';
+  let bpm: string = '';
+  let repeats: string = '';
 
   if (parts.length === 7) {
     [title, composer, style, key, music, bpm, repeats] = parts;
@@ -312,11 +320,11 @@ export const makeSong = (data: string) => {
     composer,
     style,
     key,
-    transpose: transpose ? parseInt(transpose) : null,
-    music: music && parseMusic(music),
+    transpose: transpose ? parseInt(transpose) : undefined,
+    music: parseMusic(music),
     compStyle,
-    bpm: bpm ? parseInt(bpm) : null,
-    repeats: repeats ? parseInt(repeats) : null
+    bpm: bpm ? parseInt(bpm) : undefined,
+    repeats: repeats ? parseInt(repeats) : undefined
   }
 }
 
