@@ -238,3 +238,58 @@ const rawToSong = (raw: string) => {
 }
 
 export default rawToSong;
+
+// Obfuscate...
+// IN:  [T44C   |G   |C   |G   Z
+// OUT: 1r34LbKcu7[T44CXyQ|GXyQ|CXyQ|GXyQZ
+export const obfuscate = (string: string) => {
+  string = string.replace(/   /g, 'XyQ'); // obfuscating substitution
+  string = string.replace(/ \|/g, 'LZ'); // obfuscating substitution
+  string = string.replace(/\| x/g, 'Kcl'); // obfuscating substitution
+  string = hussle(string);	// hussle
+  string = string.replace(/^/, '1r34LbKcu7'); // add magix prefix
+  return string;
+}
+
+// Deobfuscate...
+// IN:  1r34LbKcu7[T44CXyQ|GXyQ|CXyQ|GXyQZ
+// OUT: [T44C   |G   |C   |G   Z
+export const deobfuscate = (string: string) => {
+  string = string.replace(/^1r34LbKcu7/g, ''); // remove magix prefix
+  string = hussle(string);	// hussle
+  string = string.replace(/XyQ/g, '   '); // obfuscating substitution
+  string = string.replace(/LZ/g, ' |'); // obfuscating substitution
+  string = string.replace(/Kcl/g, '| x'); // obfuscating substitution
+  return string;
+}
+
+// Symmetric husseling.
+const hussle = (string: string) => {
+    let result = '';
+
+    while (string.length > 50) {
+
+      // Treat 50-byte segments.
+      const segment =  string.substr(0, 50);
+      string = string.slice(50);
+      if ( string.length < 2 ) {
+        result += segment;
+        continue;
+      }
+
+      // Obfuscate a 50-byte segment.
+      result += reverse(  segment.substr(5,5) ) +
+         segment.substr(5,5) +
+        reverse(  segment.substr(6,4) ) +
+         segment.substr(4,2) +
+        reverse(  segment.substr(0,4) ) +
+         segment.substr(0,5) +
+        reverse(  segment.substr(0,5) );
+    }
+
+    return result + string;
+}
+
+const reverse = (s: string): string => {
+  return s.split("").reverse().join("");
+}
