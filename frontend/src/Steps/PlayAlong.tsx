@@ -84,11 +84,11 @@ let copiedChordRows = chordRowObjects.slice();
                       backgroundColor: 'rgb(255,255,255,0.2)'
                     }
 
-                    const parsedBeats = beats && parseInt(beats);
+                    const parsedNumSpaces = parseInt(beats);
                     // use uniformColumnSize if present, otherwise calculate against beatsPerMeasure
-                    // TODO: the expression `(parsedBeats * (12 / beatsPerMeasure))` doesn't work as
+                    // TODO: the expression `(parsedNumSpaces * (12 / beatsPerMeasure))` doesn't work as
                     // expected because a 12-beat measure might still only have 4 chords in iReal Pro
-                    const colProps = parsedBeats ? { xs: (uniformColumnSize || (parsedBeats * (12 / beatsPerMeasure))) } : {}
+                    const colProps = parsedNumSpaces ? { xs: (uniformColumnSize || (parsedNumSpaces * (12 / beatsPerMeasure))) } : {}
 
                     return (
                       <Col className="px-0 play-along--chord" style={{...style, ...activeMeasureStyle }} {...colProps}>

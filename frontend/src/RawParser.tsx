@@ -1,6 +1,6 @@
 interface ParsedChord {
   chordString?: string;
-  beats?: string;
+  beats: string;
   noChord?: boolean;
 }
 interface ParsedMeasure {
@@ -173,18 +173,20 @@ function pushChordInMeasures(match: RegExpMatchArray) {
 
   let chord = match[0];
 
-  const durationSplitChord = chord.split(',');
-  let duration;
-  if (durationSplitChord[1] !== undefined) duration = 1;
+  const trimmedChord = chord.trimEnd();
+  const numSpaces = chord.length - trimmedChord.length;
+  const beats = numSpaces + 1;
 
-  let chordString = durationSplitChord[0];
+  const commaSplitChord = trimmedChord.split(',');
+
+  let chordString = commaSplitChord[0];
 
   if (chordString.startsWith('W') && lastChord) {
     chordString = chordString.replace('W', lastChord)
   } else {
     lastChord = chordString.split('/')[0];
   }
-  measures[measures.length - 1].chords.push({ chordString, beats: duration?.toString() })
+  measures[measures.length - 1].chords.push({ chordString, beats: beats.toString() })
 }
 
 function parse(inputString: string) {

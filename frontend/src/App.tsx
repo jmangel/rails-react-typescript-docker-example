@@ -373,8 +373,6 @@ const App: React.FC = () => {
             return chords.map(({ chordString, beats }) => {
               const parsedChordString = chordString ? parseChordString(chordString) : ['N.C', '', ''];
 
-              const result = beats ? { beats } : {}
-
               return {
                 chordNote: parsedChordString[0],
                 chordQuality: parsedChordString[1],
@@ -382,7 +380,7 @@ const App: React.FC = () => {
                 selectedScale: '',
                 selectedScaleRoot: '',
                 availableTensions: '',
-                ...result
+                beats,
               }
 
             });
