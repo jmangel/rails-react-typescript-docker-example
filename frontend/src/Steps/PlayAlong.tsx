@@ -1,13 +1,14 @@
 import React from 'react';
 import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
 import { Col, Modal, ModalBody, Row } from "reactstrap";
+import { MeasureInfo } from '../App';
 import { NamedScale } from '../ChordMapper';
 import ChordRow, { ChordRowObject, scalesForChordRowObject } from '../ChordRow';
 import scaleToHexColor, { MonochromaticPossibleRootScale } from '../ScaleColorer';
 
 const PlayAlong: React.FC<{
   chordRowObjects: ChordRowObject[],
-  measures: number[],
+  measureInfos: MeasureInfo[],
   monochromaticSchemes: { [key in MonochromaticPossibleRootScale]: string }[],
   measurePlaybackIndex: number,
   metronomeCountIn: number,
@@ -15,7 +16,7 @@ const PlayAlong: React.FC<{
   pause: () => void,
 }> = ({
   chordRowObjects,
-  measures,
+  measureInfos,
   monochromaticSchemes,
   measurePlaybackIndex,
   metronomeCountIn,
@@ -51,9 +52,8 @@ let copiedChordRows = chordRowObjects.slice();
         }
 
         {
-          measures.map((memoizedMeasure: number, index: number) => {
-            const chordCount = Math.floor(memoizedMeasure / 100);
-            const timeSignature = memoizedMeasure % 100;
+          measureInfos.map((memoizedMeasure: MeasureInfo, index: number) => {
+            const { chordCount, beatsPerMeasure } = memoizedMeasure;
             const measureChords = copiedChordRows.slice(0, chordCount);
             copiedChordRows = copiedChordRows.slice(chordCount);
 
@@ -82,7 +82,8 @@ let copiedChordRows = chordRowObjects.slice();
                     }
 
                     const parsedBeats = beats && parseInt(beats);
-                    const colProps = parsedBeats ? { xs: parsedBeats *3 } : {} // TODO: make sure `xs: beats*3` is made flexible to other time signatures
+                    // TODO: this doesn't work as expected because a 12-beat measure might still only have 4 chords in iReal Pro
+                    const colProps = parsedBeats ? { xs: parsedBeats * (12 / beatsPerMeasure) } : {}
 
                     return (
                       <Col className="px-0 play-along--chord" style={{...style, ...activeMeasureStyle }} {...colProps}>

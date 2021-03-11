@@ -66,6 +66,31 @@ const transposeNote = (note: string, offset: number): string => {
   return tranposedNote;
 }
 
+export interface MeasureInfo {
+  beatsPerMeasure: number;
+  subdivisions: number;
+  chordCount: number;
+}
+
+const mapMemoizedMeasuresToMeasureInfos = (memoizedMeasures: number[]): MeasureInfo[] => {
+  return memoizedMeasures.map((memoizedMeasure) => {
+    if (memoizedMeasure < 10) return {
+      chordCount: memoizedMeasure,
+      beatsPerMeasure: 4,
+      subdivisions: 4
+    }; // backward compatibility
+    const memoizedMeasureString = memoizedMeasure.toString();
+    const chordCount = parseInt(memoizedMeasureString.slice(0, -2));
+    const memoizedTimeSignature = memoizedMeasureString.slice(-2);
+    const [beatsPerMeasure, subdivisions] = memoizedTimeSignature.startsWith('12') ? [12, 8] : [parseInt(memoizedTimeSignature[0]), parseInt(memoizedTimeSignature[1])];
+    return {
+      beatsPerMeasure,
+      subdivisions,
+      chordCount,
+    };
+  });
+}
+
 const App: React.FC = () => {
   const [query, setQuery] = useQueryParams({
     a: withDefault(ArrayParam, undefined),
@@ -85,7 +110,9 @@ const App: React.FC = () => {
   if (c === '') setQuery({ c: csvifyChordRowObjects(chordRowObjects) }, 'pushIn');
 
   const [measures, setMeasures] = useState(m.split('.').map((index: string) => parseInt(index)));
+  const [measureInfos, setMeasureInfos] = useState(mapMemoizedMeasuresToMeasureInfos(measures))
   useEffect(() => {
+    setMeasureInfos(mapMemoizedMeasuresToMeasureInfos(measures));
     setQuery(
       { m: measures.join('.') },
       'pushIn'
@@ -402,7 +429,7 @@ const App: React.FC = () => {
         return (
           <PlayAlong
             chordRowObjects={chordRowObjects}
-            measures={measures}
+            measureInfos={measureInfos}
             monochromaticSchemes={monochromaticSchemes}
             measurePlaybackIndex={Math.floor(metronomeBeatCount / beatsPerMeasure)}
             metronomeCountIn={metronomeCountIn}
