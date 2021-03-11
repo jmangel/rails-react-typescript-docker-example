@@ -11,7 +11,7 @@ export interface ChordRowObject {
   selectedScale: string;
   selectedScaleRoot: string;
   availableTensions: string;
-  beats?: string;
+  beats: string;
 }
 
 type RequiredKeys<T> = { [k in keyof T]-?: undefined extends T[k] ? never : k }[keyof T];
