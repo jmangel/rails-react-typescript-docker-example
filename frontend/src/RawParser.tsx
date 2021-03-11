@@ -224,3 +224,114 @@ const rawToSong = (raw: string) => {
 }
 
 export default rawToSong;
+
+const musicPrefix = "1r34LbKcu7";
+
+// Obfuscate...
+// IN:  [T44C   |G   |C   |G   Z
+// OUT: 1r34LbKcu7[T44CXyQ|GXyQ|CXyQ|GXyQZ
+export const obfuscate = (string: string) => {
+  string = string.replace(/   /g, 'XyQ'); // obfuscating substitution
+  string = string.replace(/ \|/g, 'LZ'); // obfuscating substitution
+  string = string.replace(/\| x/g, 'Kcl'); // obfuscating substitution
+  string = hussle(string);	// hussle
+  string = string.replace(/^/, musicPrefix); // add magix prefix
+  return string;
+}
+
+// Deobfuscate...
+// IN:  1r34LbKcu7[T44CXyQ|GXyQ|CXyQ|GXyQZ
+// OUT: [T44C   |G   |C   |G   Z
+export const deobfuscate = (string: string) => {
+  string = string.replace(new RegExp(`^${musicPrefix}`, 'g'), ''); // remove magix prefix
+  string = hussle(string);	// hussle
+  string = string.replace(/XyQ/g, '   '); // obfuscating substitution
+  string = string.replace(/LZ/g, ' |'); // obfuscating substitution
+  string = string.replace(/Kcl/g, '| x'); // obfuscating substitution
+  return string;
+}
+
+// Symmetric husseling.
+const hussle = (string: string) => {
+    let result = '';
+
+    while (string.length > 50) {
+
+      // Treat 50-byte segments.
+      const segment =  string.substr(0, 50);
+      string = string.slice(50);
+      if ( string.length < 2 ) {
+        result += segment;
+        continue;
+      }
+
+      // Obfuscate a 50-byte segment.
+      result += reverse(  segment.substr(45,5) ) +
+         segment.substr(5,5) +
+        reverse(  segment.substr(26,14) ) +
+         segment.substr(24,2) +
+        reverse(  segment.substr(10,14) ) +
+         segment.substr(40,5) +
+        reverse(  segment.substr(0,5) );
+    }
+
+    return result + string;
+}
+
+const reverse = (s: string): string => {
+  return s.split("").reverse().join("");
+}
+
+const parseMusic = (data: string) => {
+  // const parts = data.split(musicPrefix);
+  // return parser(unscramble.ireal(parts[1]));
+  // console.warn('will deobfuscate', data)
+
+  return rawToSong(deobfuscate(data));
+}
+
+export const makeSong = (data: string) => {
+  const parts = data.split(/=+/).filter(x => x != ""); //split on one or more equal signs, remove the blanks
+  let title, composer, style, key, transpose, music, compStyle, bpm, repeats = null;
+
+  if (parts.length === 7) {
+    [title, composer, style, key, music, bpm, repeats] = parts;
+  }
+  if (parts.length === 8 && parts[4].startsWith(musicPrefix)) {
+    [title, composer, style, key, music, compStyle, bpm, repeats] = parts;
+  }
+  if (parts.length === 8 && parts[5].startsWith(musicPrefix)) {
+    [title, composer, style, key, transpose, music, bpm, repeats] = parts;
+  }
+  if (parts.length === 9) {
+    [title, composer, style, key, transpose, music, compStyle, bpm, repeats] = parts;
+  }
+
+  return {
+    title,
+    composer,
+    style,
+    key,
+    transpose: transpose ? parseInt(transpose) : null,
+    music: music && parseMusic(music),
+    compStyle,
+    bpm: bpm ? parseInt(bpm) : null,
+    repeats: repeats ? parseInt(repeats) : null
+  }
+}
+
+const protocolRegex = /.*?irealb:\/\/([^"]*)/;
+
+export const myRealReader = (data: string) => {
+  const percentEncoded = protocolRegex.exec(data);
+  if (!percentEncoded) return {};
+  // console.warn('percentEncoded[1]', percentEncoded[1])
+  const percentDecoded = decodeURIComponent(percentEncoded[1]);
+  // console.warn('percentDecoded', percentDecoded);
+  const parts = percentDecoded.split("===");  //songs are separated by ===
+
+  return {
+    name: (parts.length > 1) ? parts.pop() : undefined,
+    songs: parts.map(x => makeSong(x))
+  }
+}

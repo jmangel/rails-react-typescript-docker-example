@@ -33,7 +33,7 @@ import { CHROMATIC_NOTES, PossibleRootScale } from './ChordMapper';
 import PlayAlong from './Steps/PlayAlong';
 import PlaybackControls from './PlayAlong/PlaybackControls';
 import { rawToMeasures } from './RawIRealParser';
-import rawToSong from './RawParser';
+import rawToSong, { deobfuscate, makeSong, myRealReader } from './RawParser';
 
 const HighClickFile = '../static/AudioClips/high_click.mp3';
 const LowClickFile = '../static/AudioClips/low_click.mp3';
@@ -353,10 +353,12 @@ const App: React.FC = () => {
       var reader = new FileReader();
       reader.readAsText(file, "UTF-8");
       reader.onload = (evt: ProgressEvent<FileReader>) => {
-        if (!evt.target?.result) {
+        if (!evt.target?.result || typeof evt.target?.result !== 'string') {
           return alert('error reading file: no result')
         }
         const playlist = iRealReader(evt.target?.result);
+        const myParsedSong = myRealReader(evt.target?.result);
+        console.warn(myParsedSong);
 
         console.warn(playlist.songs);
         const newSong: Song = playlist.songs[0];
@@ -364,6 +366,7 @@ const App: React.FC = () => {
           setSong(newSong);
           const parsedSongCustom = rawToSong(newSong.music.raw);
           console.warn(parsedSongCustom);
+          console.warn(myParsedSong);
           let newChordRows = parsedSongCustom.measures.flatMap(({ chords }): ChordRowObject[] => {
             return chords.map(({ chordString, beats }) => {
               const parsedChordString = chordString ? parseChordString(chordString) : ['N.C', '', ''];
