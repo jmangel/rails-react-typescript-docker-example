@@ -99,6 +99,15 @@ const beatIndexToMeasureIndex = (measureInfos: MeasureInfo[], beatIndex: number)
   })
 }
 
+const beatIsOnNewMeasure = (measureInfos: MeasureInfo[], beatIndex: number): boolean => {
+  if (beatIndex === 0) return true;
+  let runningBeatIndex = 0;
+  return measureInfos.some((measureInfo: MeasureInfo) => {
+    runningBeatIndex += measureInfo.beatsPerMeasure;
+    return beatIndex === runningBeatIndex;
+  })
+}
+
 const App: React.FC = () => {
   const [query, setQuery] = useQueryParams({
     a: withDefault(ArrayParam, undefined),
@@ -253,7 +262,7 @@ const App: React.FC = () => {
       } else {
         setMetronomeBeatCount((beat: number) => {
           const newBeat = (beat + 1) % totalSongBeatCount;
-          (newBeat % beatsPerMeasure === 0) ? playHighClick() : playLowClick();
+          beatIsOnNewMeasure(measureInfos, newBeat) ? playHighClick() : playLowClick();
           return newBeat;
         });
         return 0;
