@@ -301,6 +301,7 @@ const App: React.FC = () => {
         if (newSong) {
           setSong(newSong);
           const parsedSongCustom = rawToSong(newSong.music.raw);
+          console.warn(parsedSongCustom);
           let newChordRows = parsedSongCustom.measures.flatMap(({ chords }) => {
             return chords.map(({ chordString, beats }) => {
               const parsedChordString = chordString ? parseChordString(chordString) : ['N.C', '', ''];
