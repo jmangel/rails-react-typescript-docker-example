@@ -5,6 +5,7 @@ interface ParsedChord {
 }
 interface ParsedMeasure {
   chords: ParsedChord[];
+  timeSignature: string;
 };
 
 let measures: ParsedMeasure[] = [];
@@ -13,7 +14,7 @@ let endRepeatLocation: number | null | undefined = null;
 let lastChord: string | null | undefined = null;
 let codaLocation: number | null | undefined = null;
 let segnoLocation: number | null | undefined = null;
-let timeSignature: string | null | undefined = null;
+let timeSignature: string = '44';
 let thirdEndingImminent = false;
 let dcAlCodaImminent = false;
 let dsAlCodaImminent = false;
@@ -27,7 +28,7 @@ function resetVars() {
   lastChord = null;
   codaLocation = null;
   segnoLocation = null;
-  timeSignature = null;
+  timeSignature = '44';
   thirdEndingImminent = false;
   dcAlCodaImminent = false;
   dsAlCodaImminent = false;
@@ -90,10 +91,11 @@ function checkForRepeats(match: RegExpMatchArray) {
 
 function setTimeSignature(match: RegExpMatchArray) {
   timeSignature = match[1];
+  measures[measures.length - 1].timeSignature = timeSignature
 }
 
 function pushNull() {
-  if (measures.length === 0) measures.push({ chords: [] });
+  if (measures.length === 0) measures.push({ chords: [], timeSignature });
   measures[measures.length - 1].chords.push({ noChord: true });
 }
 
@@ -135,7 +137,7 @@ function setCodaLocation() {
 function createNewMeasure() {
   //unless the last measure is a blank, insert a new blank measure
   if (measures.length === 0 || measures[measures.length - 1].chords.length !== 0) {
-    measures.push({chords: []});
+    measures.push({ chords: [], timeSignature });
   }
 }
 
@@ -167,7 +169,7 @@ function repeatRemainingEndings() {
 }
 
 function pushChordInMeasures(match: RegExpMatchArray) {
-  if (measures.length === 0) measures.push({chords: []});
+  if (measures.length === 0) measures.push({ chords: [], timeSignature: timeSignature });
 
   let chord = match[0];
 
