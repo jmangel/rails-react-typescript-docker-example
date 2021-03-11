@@ -272,7 +272,7 @@ const App: React.FC = () => {
 
   const startPlayback = () => {
     setIsPlaying(true);
-    setMetronomeCountIn(3);
+    setMetronomeCountIn(4);
     const newInterval = setInterval(incrementMetronomeCount, (60 / bpm) * 1000);
       setMetronomeInterval(newInterval);
   }
