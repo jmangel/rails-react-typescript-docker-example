@@ -59,7 +59,7 @@ const rules = [
   { token: ']', description: 'Double bar end', operation: repeatRemainingEndings },
   { token: /N(\d)/, description: 'Numbered endings', matchOperation: setEndRepeatLocation },
   { token: 'Z', description: 'Final bar line', operation: repeatRemainingEndings },
-  { token: /[A-GW]{1}[\+\-\^\dhob#suadlt]*(\/[A-G][#b]?)?,?/, description: 'Chord', matchOperation: pushChordInMeasures }
+  { token: /[A-GW]{1}[\+\-\^\dhob#suadlt]*(\/[A-G][#b]?)?,? */, description: 'Chord', matchOperation: pushChordInMeasures }
 ];
 
 //chord regex:
@@ -175,7 +175,7 @@ function pushChordInMeasures(match: RegExpMatchArray) {
 
   const durationSplitChord = chord.split(',');
   let duration;
-  if (durationSplitChord[1] === '') duration = 1;
+  if (durationSplitChord[1] !== undefined) duration = 1;
 
   let chordString = durationSplitChord[0];
 
