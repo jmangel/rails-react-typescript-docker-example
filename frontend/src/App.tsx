@@ -118,9 +118,20 @@ const App: React.FC = () => {
   if (c === '') setQuery({ c: csvifyChordRowObjects(chordRowObjects) }, 'pushIn');
 
   const [measures, setMeasures] = useState(m.split('.').map((index: string) => parseInt(index)));
-  const [measureInfos, setMeasureInfos] = useState(mapMemoizedMeasuresToMeasureInfos(measures))
+  const [measureInfos, setMeasureInfos] = useState(mapMemoizedMeasuresToMeasureInfos(measures));
+  let runningSum = 0;
+  measureInfos.forEach((measureInfo) => {
+    runningSum += measureInfo.beatsPerMeasure;
+  })
+  const [totalSongBeatCount, setTotalSongBeatCount] = useState(runningSum);
   useEffect(() => {
-    setMeasureInfos(mapMemoizedMeasuresToMeasureInfos(measures));
+    const newMeasureInfos = mapMemoizedMeasuresToMeasureInfos(measures);
+    setMeasureInfos(newMeasureInfos);
+    let runningSum = 0;
+    newMeasureInfos.forEach((measureInfo) => {
+      runningSum += measureInfo.beatsPerMeasure;
+    })
+    setTotalSongBeatCount(runningSum);
     setQuery(
       { m: measures.join('.') },
       'pushIn'
@@ -241,7 +252,7 @@ const App: React.FC = () => {
         return (oldCountIn - 1);
       } else {
         setMetronomeBeatCount((beat: number) => {
-          const newBeat = (beat + 1) % (beatsPerMeasure * measures.length);
+          const newBeat = (beat + 1) % totalSongBeatCount;
           (newBeat % beatsPerMeasure === 0) ? playHighClick() : playLowClick();
           return newBeat;
         });
