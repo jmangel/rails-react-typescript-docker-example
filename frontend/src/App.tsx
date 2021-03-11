@@ -91,6 +91,14 @@ const mapMemoizedMeasuresToMeasureInfos = (memoizedMeasures: number[]): MeasureI
   });
 }
 
+const beatIndexToMeasureIndex = (measureInfos: MeasureInfo[], beatIndex: number): number => {
+  let runningBeatIndex = 0;
+  return measureInfos.findIndex((measureInfo: MeasureInfo) => {
+    runningBeatIndex += measureInfo.beatsPerMeasure;
+    return beatIndex < runningBeatIndex;
+  })
+}
+
 const App: React.FC = () => {
   const [query, setQuery] = useQueryParams({
     a: withDefault(ArrayParam, undefined),
@@ -216,6 +224,11 @@ const App: React.FC = () => {
   const [metronomeInterval, setMetronomeInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const startingMetronomeBeat = -1
   const [metronomeBeatCount, setMetronomeBeatCount] = useState(startingMetronomeBeat);
+
+  const [metronomeMeasureCount, setMetronomeMeasureCount] = useState(beatIndexToMeasureIndex(measureInfos, metronomeBeatCount));
+  useEffect(() => {
+    setMetronomeMeasureCount(beatIndexToMeasureIndex(measureInfos, metronomeBeatCount));
+  }, [metronomeBeatCount, measureInfos])
 
   const [metronomeCountIn, setMetronomeCountIn] = useState(0);
 
@@ -431,7 +444,7 @@ const App: React.FC = () => {
             chordRowObjects={chordRowObjects}
             measureInfos={measureInfos}
             monochromaticSchemes={monochromaticSchemes}
-            measurePlaybackIndex={Math.floor(metronomeBeatCount / beatsPerMeasure)}
+            measurePlaybackIndex={metronomeMeasureCount}
             metronomeCountIn={metronomeCountIn}
             isPlaying={isPlaying}
             pause={() => pausePlayback()}
