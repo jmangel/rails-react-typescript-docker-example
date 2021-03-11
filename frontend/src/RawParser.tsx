@@ -1,3 +1,5 @@
+import ChordRow from "./ChordRow";
+
 interface ParsedChord {
   chordString?: string;
   beats?: string;
@@ -54,7 +56,7 @@ const rules = [
   { token: '}', description: 'End repeat marker', operation: repeatEverythingToEndRepeatLocation },
   { token: 'LZ|', description: 'Bar line', operation: createNewMeasure },
   { token: '|', description: 'Bar line', operation: createNewMeasure },
-  { token: 'LZ', description: 'Bar line', operation: createNewMeasure },
+  { token: 'LZ', description: 'Bar line', operation: () => { handleLZ(); createNewMeasure(); }},
   { token: '[', description: 'Double bar start', operation: createNewMeasure },
   { token: ']', description: 'Double bar end', operation: repeatRemainingEndings },
   { token: /N(\d)/, description: 'Numbered endings', matchOperation: setEndRepeatLocation },
@@ -141,6 +143,12 @@ function createNewMeasure() {
   }
 }
 
+function handleLZ() {
+  console.warn('handleLZ');
+
+  // measures.forEach((measure) => measure.chords.forEach((chord) => console.warn(chord.chordString)));
+}
+
 function repeatEverythingToEndRepeatLocation() {
   if (!endRepeatLocation) {
     endRepeatLocation = measures.length;
@@ -176,6 +184,7 @@ function pushChordInMeasures(match: RegExpMatchArray) {
   const durationSplitChord = chord.split(',');
   let duration;
   if (durationSplitChord[1] !== undefined) duration = 1;
+  console.warn(durationSplitChord);
 
   let chordString = durationSplitChord[0];
 
@@ -196,6 +205,11 @@ function parse(inputString: string) {
 
     if (typeof rule.token === 'string' && inputString.startsWith(rule.token)) {
       if (rule.operation) rule.operation();
+      if (rule.token === 'LZ') {
+        console.warn(measures);
+        console.log(measures.slice());
+      }
+
       parse(inputString.substring(rule.token.length).trim());
       break;
     } else if (rule.token instanceof RegExp) {
