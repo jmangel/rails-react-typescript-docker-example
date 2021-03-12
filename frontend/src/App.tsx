@@ -366,7 +366,7 @@ const App: React.FC = () => {
           setSong(newSong);
           let newChordRows = myParsedSong.music.measures.flatMap(({ chords }): ChordRowObject[] => {
             return chords.map(({ chordString, beats }) => {
-              const parsedChordString = chordString ? parseChordString(chordString) : ['N.C', '', ''];
+              const parsedChordString = chordString ? parseChordString(chordString) : ['NC', '', ''];
 
               return {
                 chordNote: parsedChordString[0],
