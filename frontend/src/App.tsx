@@ -16,8 +16,6 @@ import {
 import { MdCheck, MdHome, MdKeyboardArrowLeft } from 'react-icons/md';
 import useSound from 'use-sound';
 
-// const iRealReader = require('ireal-reader');
-
 import './App.css';
 import ChordCarousel from './ChordCarousel';
 import parseChordString from './ChordParser';
@@ -355,7 +353,6 @@ const App: React.FC = () => {
         if (!evt.target?.result || typeof evt.target?.result !== 'string') {
           return alert('error reading file: no result')
         }
-        // const playlist = iRealReader(evt.target?.result);
         const myParsedPlaylist = myRealReader(evt.target?.result);
         const myParsedSong = myParsedPlaylist.songs && myParsedPlaylist.songs[0];
         if (myParsedSong) {
@@ -367,8 +364,6 @@ const App: React.FC = () => {
             },
           };
           setSong(newSong);
-          console.warn(newSong);
-          console.warn(myParsedSong);
           let newChordRows = myParsedSong.music.measures.flatMap(({ chords }): ChordRowObject[] => {
             return chords.map(({ chordString, beats }) => {
               const parsedChordString = chordString ? parseChordString(chordString) : ['N.C', '', ''];

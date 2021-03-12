@@ -41,25 +41,26 @@ const rules = [
   { token: /\*\w/, description: 'Section marker' },
   { token: /<(.*?)>/, description: 'Comments inside carets', matchOperation: checkForRepeats },
   { token: /T(\d+)/, description: 'Time signature', matchOperation: setTimeSignature },
-  { token: 'x', description: 'Repeat previous measure in current measure', operation: repeatLastMeasure },
-  { token: 'Kcl', description: 'Repeat previous measure and create new measure', operation: repeatLastMeasureAndAddNew },
-  { token: 'r|XyQ', description: 'Repeat previous two measures', operation: repeatLastTwoMeasures },
+  { token: 'x', description: 'Repeat previous measure in current measure', operation: repeatLastMeasure, startsNewMeasure: true },
+  { token: 'Kcl', description: 'Repeat previous measure and create new measure', operation: repeatLastMeasureAndAddNew, startsNewMeasure: true },
+  { token: 'r|XyQ', description: 'Repeat previous two measures', operation: repeatLastTwoMeasures, startsNewMeasure: true },
   { token: /Y+/, description: 'Vertical spacers' },
   { token: 'n', description: 'No Chord (N.C)', operation: pushNull },
   { token: 'p', description: 'Pause slash' },
   { token: 'U', description: 'Ending measure for player' },
   { token: 'S', description: 'Segno', operation: setSegnoLocation },
   { token: 'Q', description: 'Coda', operation: setCodaLocation },
-  { token: '{', description: 'Start repeat marker', operation: setStartRepeatLocation },
-  { token: '}', description: 'End repeat marker', operation: repeatEverythingToEndRepeatLocation },
-  { token: 'LZ|', description: 'Bar line', operation: createNewMeasure },
-  { token: '|', description: 'Bar line', operation: createNewMeasure },
-  { token: 'LZ', description: 'Bar line', operation: createNewMeasure },
-  { token: '[', description: 'Double bar start', operation: createNewMeasure },
-  { token: ']', description: 'Double bar end', operation: repeatRemainingEndings },
+  { token: '{', description: 'Start repeat marker', operation: setStartRepeatLocation, startsNewMeasure: true },
+  { token: '}', description: 'End repeat marker', operation: repeatEverythingToEndRepeatLocation, startsNewMeasure: true },
+  { token: 'LZ|', description: 'Bar line', operation: createNewMeasure, startsNewMeasure: true },
+  { token: '|', description: 'Bar line', operation: createNewMeasure, startsNewMeasure: true },
+  { token: 'LZ', description: 'Bar line', operation: createNewMeasure, startsNewMeasure: true },
+  { token: '[', description: 'Double bar start', operation: createNewMeasure, startsNewMeasure: true },
+  { token: ']', description: 'Double bar end', operation: repeatRemainingEndings, startsNewMeasure: true },
   { token: /N(\d)/, description: 'Numbered endings', matchOperation: setEndRepeatLocation },
-  { token: 'Z', description: 'Final bar line', operation: repeatRemainingEndings },
-  { token: /[A-GW]{1}[\+\-\^\dhob#suadlt]*(\/[A-G][#b]?)?,? */, description: 'Chord', matchOperation: pushChordInMeasures }
+  { token: 'Z', description: 'Final bar line', operation: repeatRemainingEndings, startsNewMeasure: true },
+  { token: /[A-GW]{1}[\+\-\^\dhob#suadlt]*(\/[A-G][#b]?)?,? */, description: 'Chord', matchOperation: pushChordInMeasures },
+  { token: ' ', description: 'blank space', operation: addBlankSpaceToPreviousMeasure },
 ];
 
 //chord regex:
@@ -189,6 +190,15 @@ function pushChordInMeasures(match: RegExpMatchArray) {
   measures[measures.length - 1].chords.push({ chordString, beats: beats.toString() })
 }
 
+function addBlankSpaceToPreviousMeasure() {
+  const lastMeasure = measures[measures.length - 1];
+  if (!lastMeasure) return;
+  const lastChord = lastMeasure.chords[lastMeasure.chords.length - 1];
+  if (!lastChord?.beats) return;
+
+  lastChord.beats = (parseInt(lastChord.beats) + 1).toString();
+}
+
 function parse(inputString: string) {
   // loop through the rules until one of them applies to the beginning of the string
   // chop off the match and parse again
@@ -198,13 +208,17 @@ function parse(inputString: string) {
 
     if (typeof rule.token === 'string' && inputString.startsWith(rule.token)) {
       if (rule.operation) rule.operation();
-      parse(inputString.substring(rule.token.length).trim());
+      let nextStringToParse = inputString.substring(rule.token.length);
+      // if we started a new measure, we want to make sure we don't
+      // add beats to the wrong chord with spaces, so we trim them
+      if (rule.startsNewMeasure) nextStringToParse = nextStringToParse.trim();
+      parse(nextStringToParse);
       break;
     } else if (rule.token instanceof RegExp) {
       const match = inputString.match(rule.token);
       if (match && match.index === 0) {
         if (rule.matchOperation) rule.matchOperation(match);
-        parse(inputString.substring(match[0].length).trim());
+        parse(inputString.substring(match[0].length));
         break;
       }
     }
@@ -285,14 +299,10 @@ const reverse = (s: string): string => {
 }
 
 const parseMusic = (data: string) => {
-  // const parts = data.split(musicPrefix);
-  // return parser(unscramble.ireal(parts[1]));
-  // console.warn('will deobfuscate', data)
-
   return rawToSong(deobfuscate(data));
 }
 
-export const makeSong = (data: string) => {
+const makeSong = (data: string) => {
   const parts = data.split(/=+/).filter(x => x != ""); //split on one or more equal signs, remove the blanks
   let title: string = '';
   let composer: string = '';
@@ -335,9 +345,7 @@ const protocolRegex = /.*?irealb:\/\/([^"]*)/;
 export const myRealReader = (data: string) => {
   const percentEncoded = protocolRegex.exec(data);
   if (!percentEncoded) return {};
-  // console.warn('percentEncoded[1]', percentEncoded[1])
   const percentDecoded = decodeURIComponent(percentEncoded[1]);
-  // console.warn('percentDecoded', percentDecoded);
   const parts = percentDecoded.split("===");  //songs are separated by ===
 
   return {
