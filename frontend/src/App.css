@@ -1,6 +1,4 @@
-:root {
-  --main-bg-color: #023342;
-}
+@import "./styles/Global.css";
 
 
 body {
