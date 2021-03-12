@@ -190,6 +190,8 @@ const App: React.FC = () => {
   const [stepIndex, setStepIndex] = useState(s);
 
   useEffect(() => {
+    pausePlayback();
+    setMetronomeBeatCount(startingMetronomeBeat);
     setQuery(
       { s: stepIndex },
       'pushIn'
