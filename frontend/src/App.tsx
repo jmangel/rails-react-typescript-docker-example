@@ -416,6 +416,7 @@ const App: React.FC = () => {
 
   const startNewSong = () => {
     const newChordRows = [createChordRowObject()];
+    setMeasures([144]); // start with 1 chord per measure in 4/4 time
     clearTransposingKey();
     setBpm(defaultBpm);
     setChordRowObjects(newChordRows);
