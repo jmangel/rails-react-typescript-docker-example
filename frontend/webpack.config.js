@@ -43,8 +43,8 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: "./static/manifest.json",
-          to:   "./static/manifest.json",
+          from: "./static/**/*",
+          to:   "./",
           // transform (content, _) {
           //     return modify(content)
           // }
