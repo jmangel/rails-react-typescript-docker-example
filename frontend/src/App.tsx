@@ -32,8 +32,8 @@ import PlayAlong from './Steps/PlayAlong';
 import PlaybackControls from './PlayAlong/PlaybackControls';
 import { myRealReader } from './RawParser';
 
-const HighClickFile = '../static/AudioClips/high_click.mp3';
-const LowClickFile = '../static/AudioClips/low_click.mp3';
+const HighClickFile = 'static/AudioClips/high_click.mp3';
+const LowClickFile = 'static/AudioClips/low_click.mp3';
 
 const defaultBpm = 100;
 
