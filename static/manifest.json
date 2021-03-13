@@ -1,0 +1,41 @@
+{
+  "name": "Scalify",
+  "short_name": "Scalify",
+  "icons": [
+    {
+      "src": "img/saxophonist_logo.svg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "img/saxophonist_logo.svg",
+      "sizes": "512x512"
+    }
+  ],
+  // "start_url": "http://192.168.0.26:3001/",
+  "shortcuts": [
+    {
+      "name": "INEMM",
+      "short_name": "Play Later",
+      "description": "View the list of podcasts you saved for later",
+      "url": "/?b=60&c=Ab.%5E..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.%5E..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.%5E..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.%5E..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..1%0ADb.%5E..m4.Db..1%0AC.-7..m3.C..2%0ABb.-7..m2.Bb..2%0AC.-7..m3.C..2%0ABb.-7..m2.Bb..2%0ABb.7b5..mm4.Bb..4%0ABb.-7..m2.Bb..2%0AA.7..mm4.A..2%0AAb.%5E..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.%5E..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..1%0ADb.%5E..m4.Db..1%0AC.-7..m3.C..2%0ABb.-7..m2.Bb..2%0AC.-7..m3.C..2%0ABb.-7..m2.Bb..2%0ABb.7b5..mm4.Bb..4%0ABb.-7..m2.Bb..2%0AA.7..mm4.A..1%0AD.7..mm4.D..1%0ADb.%5E7..m4.Db..2%0AC.-7..m3.C..2%0ABb.-7..m2.Bb..2%0AEb.7..m5.Eb..2%0AAb.%5E7..m1.Ab..2%0AEb.7..m5.Eb..2%0AAb.%5E7..m1.Ab..2%0AEb.7b9.....2%0AAb.%5E..m1.Ab..2%0ABb.-7..m2.Bb..2%0AB.-7..m2.B..2%0AC.-7..m3.C..1%0ADb.%5E7..m4.Db..1%0AC.-7..m3.C..4%0ABb.-7..m2.Bb..2%0AEb.7..m5.Eb..2%0AAb.%5E..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.%5E..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..1%0ADb.%5E..m4.Db..1%0AC.-7..m3.C..2%0ABb.-7..m2.Bb..2%0AC.-7b5..m7.C..2%0AF.7%239..d6.F..2%0ABb.-7..m2.Bb..2%0AEb.7..m5.Eb..2%0AC.-7b5..m7.C..2%0AF.7%239..d6.F..2%0ABb.-7..m2.Bb..2%0AEb.7..m5.Eb..2%0AAb.%5E..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0ANC......%0AAb.%5E7..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.6..m1.Ab..2%0AAb.%5E7%235..hm3.Ab..2%0AAb.%5E7..m1.Ab..1%0AAb.%5E7%235..hm3.Ab..1%0AAb.6..m1.Ab..1%0AAb.%5E7%235..hm3.Ab..1%0AAb.%5E..m1.Ab..4&i=-1&m=244.244.244.244.244.244.244.344.244.244.144.244.244.244.244.344.244.244.144.344.244.244.244.244.244.344.144.244.244.244.244.344.244.244.244.244.244.244.244.144.244.244.444.144&s=3&t=It%20Never%20Entered%20My%20Mind%20-%20Workin%27%20-%20Hal%20Leonard%20-%20My%20Revision",
+      "icons": [{
+        "src": "img/saxophonist_logo.svg",
+        "sizes": "192x192"
+      }]
+    },
+    {
+      "name": "View Subscriptions",
+      "short_name": "Subscriptions",
+      "description": "View the list of podcasts you listen to",
+      "url": "/?b=100&c=A.-7..m6.A..4%0AD.-7..m2.D..4%0AG.7..m5.G..4%0AC.%5E7..m1.C..4%0AF.%5E7..m4.F..4%0AB.h7..m7.B..4%0AE.7b9..hm5.E..4%0AA.-7..m6.A..2%0AA.7..mm5.A..2%0AD.-7..m2.D..4%0AG.7..m5.G..4%0AC.%5E7..m1.C..2%0AF.7..mm4.F..2%0AE.-7..m3.E..2%0AA.7..mm5.A..2%0AD.-7..m2.D..4%0AG.7..m5.G..4%0AC.%5E7..m1.C..4%0AB.h7..m7.B..2%0AE.7b9..hm5.E..2%0AA.-7..m6.A..4%0AD.-7..m2.D..4%0AG.7..m5.G..4%0AC.%5E7..m1.C..4%0AF.%5E7..m4.F..4%0AB.h7..m7.B..4%0AE.7b9..hm5.E..4%0AA.-7..m6.A..2%0AA.7..mm5.A..2%0AD.-7..m2.D..4%0AG.7..m5.G..4%0AE.-7..m3.E..4%0AA.7..mm5.A..4%0AD.-7..m2.D..4%0AG.7..m5.G..4%0AC.%5E7..m1.C..4%0AB.h7..m7.B..2%0AE.7b9..hm5.E..2&i=-1&k=0&m=144.144.144.144.144.144.144.244.144.144.244.244.144.144.144.244.144.144.144.144.144.144.144.244.144.144.144.144.144.144.144.244&s=3&t=Fly%20Me%20To%20The%20Moon",
+      "icons": [{
+        "src": "img/saxophonist_logo.svg",
+        "sizes": "192x192"
+      }]
+    }
+  ],
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#023342",
+  "theme_color": "white"
+}
