@@ -49,6 +49,13 @@ module.exports = {
           //     return modify(content)
           // }
         },
+        {
+          from: "./src/styles/**/*",
+          to:   "./",
+          // transform (content, _) {
+          //     return modify(content)
+          // }
+        },
       ],
       options: {
         concurrency: 100,
